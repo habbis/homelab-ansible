@@ -1,0 +1,14 @@
+frontend http-in
+    bind *:80
+    bind *:443 ssl crt /etc/ssl/{{ ssl_cert }}.pem
+    mode http
+    redirect scheme https if !{ ssl_fc } # Redirect http requests to https
+    use_backend backend_servers
+
+# define backend
+backend backend_servers
+        mode http
+        # balance with roundrobin
+        #balance            roundrobin
+        # define backend servers
+        server             node01 {{ ansible_eth0.ipv4.address }}:3000 check

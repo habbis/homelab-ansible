@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: yes
+  vars_files:
+    - ../../defaults/main.yml
+  #vars:
+
+
+  tasks:
+    - name: "Include ansible_role_ntp_client"
+      include_role:
+        name: "ansible_role_ansible_role_ntp_client"
+
+  #roles:
+    #- role: habbis.ansible_role_ntp_client

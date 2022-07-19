@@ -1,0 +1,144 @@
+---
+- name: Install packages for netbox
+  ansible.builtin.package:
+    name: 
+      - redis-server
+      - python3 
+      - python3-pip 
+      - python3-venv 
+      - python3-dev 
+      - build-essential 
+      - libxml2-dev 
+      - libxslt1-dev 
+      - libffi-dev 
+      - libpq-dev 
+      - libssl-dev 
+      - zlib1g-dev
+      - apache2
+    state: present
+
+- name: download netbox {{ netbox_version }} and untar 
+  ansible.builtin.unarchive:
+    src: "https://github.com/netbox-community/netbox/archive/v{{ netbox_version }}.tar.gz"
+    dest: /opt
+    remote_src: yes
+  when: netbox_upgrade or netbox_setup
+
+- name: add netbox group
+  ansible.builtin.group:
+    name: netbox
+    state: present
+
+- name: add netbox user
+  ansible.builtin.user:
+    name: netbox
+    group: netbox
+
+- name: Create a symbolic link netbox
+  ansible.builtin.file:
+    src: "/opt/netbox-{{ netbox_version }}"
+    dest: /opt/netbox
+    owner: netbox
+    group: netbox
+    state: link
+  when: netbox_setup
+
+
+- name: add netbox configuration.py
+  ansible.builtin.template:
+    src: configuration.py.j2
+    dest: /opt/netbox/netbox/netbox/configuration.py
+    owner: netbox
+    group: netbox
+    mode: '0644'
+  when: netbox_setup
+
+- name: run upgrade script
+  command: /opt/netbox/upgrade.sh
+  when: netbox_upgrade or netbox_setup 
+
+- name: Create a symbolic link netbox housekeeping task
+  ansible.builtin.file:
+    src: "/opt/netbox/contrib/netbox-housekeeping.sh"
+    dest: /etc/cron.daily/netbox-housekeeping
+    owner: netbox
+    group: netbox
+    state: link
+  when: netbox_setup
+
+- name: copy netbox gunicorn
+  ansible.builtin.copy:
+    src: /opt/netbox/contrib/gunicorn.py
+    dest: /opt/netbox/gunicorn.py
+    owner: netbox
+    group: netbox
+    remote_src: yes
+  when: netbox_setup
+
+- name: copy netbox systemd servie
+  ansible.builtin.copy:
+    src: /opt/netbox/contrib/netbox.service
+    dest: /etc/systemd/system/netbox.service
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+  when: netbox_setup
+
+- name: copy netbox-rq systemd servie
+  ansible.builtin.copy:
+    src: /opt/netbox/contrib/netbox-rq.service
+    dest: /etc/systemd/system/netbox-rq.service
+    owner: root
+    group: root
+    mode: '0644'
+    remote_src: yes
+  when: netbox_setup
+
+- name: give netbox dir rigt user permission
+  command: chown -R netbox:netbox /opt/netbox
+  when: netbox_setup
+
+- name: start, enable, netbox servies
+  ansible.builtin.systemd:
+    name: netbox
+    enabled: yes
+    state: started
+  when: netbox_setup
+
+- name: start, enable, netbox-rq servies
+  ansible.builtin.systemd:
+    name: netbox-rq
+    enabled: yes
+    state: started
+  when: netbox_setup
+
+- name: add netbox apache config
+  ansible.builtin.template:
+    src: apache_netbox.conf.j2
+    dest: /etc/apache2/sites-available/netbox.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: netbox_setup
+
+- name: enable apache modules
+  command: a2enmod proxy proxy_http headers
+  when: netbox_setup
+
+- name: enable nginx vhost
+  command: a2ensite netbox
+  when: netbox_setup
+
+- name: delete default apache site
+  ansible.builtin.file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+  when: netbox_setup
+
+- name: restart apache2 servies 
+  ansible.builtin.systemd:
+    name: apache2
+    enabled: yes
+    state: restarted
+  when: netbox_setup

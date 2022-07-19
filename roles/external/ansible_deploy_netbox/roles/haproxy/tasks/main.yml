@@ -1,0 +1,15 @@
+- name: Install haproxy
+  ansible.builtin.package:
+    name: 
+      - haproxy
+    state: present
+
+- name: deploy haproxy conf
+  ansible.builtin.template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: '0644'
+  when: netbox_setup 
+

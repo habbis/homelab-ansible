@@ -1,0 +1,37 @@
+---
+- include_tasks: setup-RedHat.yml
+  when: ( ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum" )
+
+- include_tasks: setup-Debian.yml
+  when: (ansible_distribution == "Debian" or ansible_pkg_mgr == "apt")
+
+- name: copy jenkins cli
+  ansible.builtin.copy:
+    src: files/cli/jenkins-cli.jar
+    dest: /usr/local/bin/jenkins-cli.jar
+    #owner: root
+    #group: root
+    #mode: '0644'
+  #when: jenkins_lts
+
+- name: copy jenkins cli
+  ansible.builtin.copy:
+    src: files/scripts/jenkins_plugin_upgrade.sh
+    dest: /usr/local/jenkins_plugin_upgrade.sh
+    #owner: root
+    #group: root
+    #mode: '0644'
+  #when: jenkins_lts
+
+
+- name: add jenkins auto plugin upgrade cronjob
+  ansible.builtin.cron:
+    name: "jenkins_plugin_upgrade"
+    minute: "0"
+    hour: "11"
+    day: "1"
+    user: root
+    job: "/usr/local/jenkins_plugin_upgrade.sh > /dev/null"
+    state: present
+
+

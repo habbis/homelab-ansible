@@ -1,0 +1,45 @@
+---
+- name: apt update for debian/ubuntu
+  apt:
+    update_cache: yes
+  when: (ansible_pkg_mgr == "apt")
+
+- name: Install chrony
+  package:
+    name:
+      - chrony
+    state: present
+
+- name: setup client ntp chronyd config rhel
+  ansible.builtin.template:
+    src: templates/chrony.conf.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "dnf")
+
+- name: setup client ntp chronyd config debian/ubuntu
+  ansible.builtin.template:
+    src: templates/chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_pkg_mgr == "apt")
+
+- name: restart of chrony rhel
+  ansible.builtin.service:
+    name: chronyd
+    state: started
+    enabled: yes
+  when: (ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "dnf")
+  ignore_errors: yes
+
+- name: start chrony debian/ubuntu
+  ansible.builtin.service:
+    name: chrony
+    state: started
+    enabled: yes
+  when: (ansible_pkg_mgr == "apt")
+  ignore_errors: yes

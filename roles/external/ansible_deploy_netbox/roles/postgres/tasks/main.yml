@@ -1,0 +1,59 @@
+---
+- name: Install postges server and python package
+  ansible.builtin.package:
+    name: 
+      - postgresql
+      - python3-psycopg2
+    state: present
+
+- name: start, enable, postgres servies
+  ansible.builtin.systemd:
+    name: postgresql
+    enabled: yes
+    state: started
+
+- name: deploy postgres.conf with tuning
+  ansible.builtin.template:
+    src: postgresql.conf.j2
+    dest: "{{ postgres_conf }}"
+    owner: postgres
+    group: postgres
+    mode: '0644'
+  when: netbox_setup
+
+- name: Create {{ postgres_database }}
+  community.postgresql.postgresql_db:
+    name: "{{ postgres_database }}"
+    state: present
+  become_user: postgres
+  when: netbox_setup
+
+- name: create {{ postgres_user }} give access to {{ postgre_database }}
+  community.postgresql.postgresql_user:
+    db: "{{ postgres_database }}"
+    name: "{{ postgres_user }}"
+    password: "{{ postgres_user_password }}"
+    priv: ALL
+    expires: infinity
+    state: present
+  become_user: postgres
+  when: netbox_setup
+
+- name: Grant user {{ postgres_user }} access to {{ postgres_database}}
+  community.postgresql.postgresql_pg_hba:
+    dest: "{{ postgres_pq_hba_conf }}"
+    contype: host
+    users: "{{ postgres_user }}"
+    source: "{{ netbox_host }}/{{ netbox_netmask }}"
+    databases: "{{ postgres_database }}"
+    method: "{{ postgres_auth_method }}"
+    state: present
+  become_user: postgres
+  when: netbox_setup
+
+- name: restart postgres servies so tuning can take effect
+  ansible.builtin.systemd:
+    name: postgresql
+    enabled: yes
+    state: restarted
+  when: netbox_setup

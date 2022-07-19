@@ -1,0 +1,55 @@
+---
+- name: copy jenkins lts key
+  ansible.builtin.copy:
+    src: files/rhel/rhel_lts_jenkins.io.key
+    dest: /tmp/jenkins.io.key
+    owner: root
+    group: root
+    mode: '0644'
+  when: jenkins_lts
+
+- name: copy jenkins lts yum repo
+  ansible.builtin.copy:
+    src: files/rhel/rhel_lts_jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo 
+    owner: root
+    group: root
+    mode: '0644'
+  when: jenkins_lts
+
+- name: copy jenkins weekly key
+  ansible.builtin.copy:
+    src: files/rhel/rhel_weekly_jenkins.io.key
+    dest: /tmp/jenkins.io.key
+    owner: root
+    group: root
+    mode: '0644'
+  when: jenkins_weekly
+
+- name: copy jenkins weekly yum repo
+  ansible.builtin.copy:
+    src: files/rhel/rhel_lts_jenkins.repo
+    dest: /etc/yum.repos.d/jenkins.repo
+    owner: root
+    group: root
+    mode: '0644'
+  when: jenkins_weekly
+
+- name: Import jenkins gpg
+  ansible.builtin.rpm_key:
+    key: /tmp/jenkins.io.key
+    state: present
+
+- name: install jenkins
+  ansible.builtin.yum:
+    pkg:
+    - fontconfig
+    - java-11-openjdk
+    - jenkins
+
+- name: start, enable jenkins
+  ansible.builtin.systemd:
+    name: jenkins
+    enabled: yes
+    state: started
+  ignore_errors: yes

@@ -1,0 +1,4 @@
+---
+# variables
+
+ntp_server: 0.no.pool.ntp.org

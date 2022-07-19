@@ -24,3 +24,30 @@
 - src: git+https://github.com/AutomationWithAnsible/ansible-nginx.git
   version: "v1.0.3"
   name: ansible-nginx
+
+- src: git+https://github.com/habbis/ansible_role_gitea.git
+  name: ansible_role_gitea
+
+- src: git+https://github.com/habbis/ansible_role_ntp_client.git
+  name: ansible_role_ntp_client
+
+- src: git+https://github.com/habbis/ansible_role_ntp_server.git
+  name: ansible_role_ntp_server
+
+- src: git+https://github.com/habbis/ansible_role_jenkins.git
+  name: ansible_role_jenkins
+
+- src: git+https://github.com/habbis/ansible_role_postgresql.git
+  name: ansible_role_postgres
+
+- src: git+https://github.com/habbis/ansible_deploy_netbox.git
+  name: ansible_deploy_netbox
+
+
+  
+
+
+
+
+
+

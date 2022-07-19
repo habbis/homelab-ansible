@@ -1,0 +1,20 @@
+# add to the end
+# define frontend ( any name is OK for [http-in] )
+frontend http-in
+        # listen 80 port
+        bind *:80
+        bind *:443  ssl crt /etc/ssl/habbfarm.net.pem
+
+        # set default backend
+        default_backend    backend_servers
+        # send X-Forwarded-For header
+        option             forwardfor
+        # http to https
+        http-request redirect scheme https unless { ssl_fc }
+
+# define backend
+backend backend_servers
+        # balance with roundrobin
+        balance            roundrobin
+        # define backend servers
+        server             node01 {{ netbox_host }}:80 check
