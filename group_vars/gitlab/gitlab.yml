@@ -21,3 +21,13 @@ gitlab_ldap_method: "ssl"
 gitlab_ldap_bind_dn: "uid=bind,cn=sysaccounts,cn=etc,dc=no,dc=habbfarm,dc=net"
 gitlab_ldap_password: "password"
 gitlab_ldap_base: "cn=users,cn=accounts,dc=no,dc=no,dc=habbfarm,dc=net"
+
+# SMTP Configuration
+#gitlab_smtp_enable: true
+#gitlab_smtp_address: "unix@habbestad.tech"
+#gitlab_smtp_port: "587"
+#gitlab_smtp_user_name: "unix@habbestad.tech"
+#gitlab_smtp_password: "smtp password"
+#gitlab_smtp_authentication: "login"
+#gitlab_smtp_enable_starttls_auto: true
+#gitlab_smtp_tls: true
