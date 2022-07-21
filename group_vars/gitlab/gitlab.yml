@@ -1,0 +1,13 @@
+---
+gitlab_domain: repo01.no.habbfarm.net
+gitlab_external_url: "https://{{ gitlab_domain }}/"
+
+gitlab_backup_path: "/var/opt/gitlab/backups"
+gitlab_edition: "gitlab-ce"
+
+
+gitlab_redirect_http_to_https: true
+#gitlab_ssl_certificate: "/etc/ssl/no.habbfarm.net.crt"
+#gitlab_ssl_certificate_key: "/etc/ssl/no.habbfarm.net.key"
+gitlab_ssl_certificate: "/etc/ssl/no.habbfarm.net.all.pem"
+gitlab_ssl_certificate_key: "/etc/ssl/no.habbfarm.net.all.pem"

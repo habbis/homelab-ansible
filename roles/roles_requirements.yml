@@ -43,6 +43,9 @@
 - src: git+https://github.com/habbis/ansible_deploy_netbox.git
   name: ansible_deploy_netbox
 
+- src: git+https://github.com/geerlingguy/ansible-role-gitlab.git
+  name: ansible-role-gitlab
+
 
   
 

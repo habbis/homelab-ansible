@@ -1,0 +1,8 @@
+---
+
+- name: gitlab.yml | All roles
+  hosts: gitlab
+  sudo: True
+
+  roles:
+    - { role: ansible-role-gitlab,                   tags: ["gitlab"] }
