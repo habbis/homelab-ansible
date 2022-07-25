@@ -1,0 +1,11 @@
+---
+
+- name: template-play.yml | All roles
+  hosts: gitlab
+  gather_facts: yes
+  #remote_user: root
+  remote_user: ansible
+  become: yes
+
+  roles:
+    - { role: ansible-role-gitlab,                   tags: ["gitlab"] }
