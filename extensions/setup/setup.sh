@@ -53,7 +53,10 @@ echo "This script install python packages defined in '$PYTHON_REQUIREMNTS_FILE' 
 #echo "Since we only support global packages installation for now we need root password."
 #echo "You will be asked for your password."
 python3 -m venv ~/venv-ansible
-sudo -H pip install --no-cache-dir  --upgrade --requirement "$PYTHON_REQUIREMNTS_FILE"
+source ~/venv-ansible/bin/activate
+~/venv-ansible/bin/pip3 install --upgrade pip
+~/venv-ansible/bin/pip3 install --no-cache-dir  --upgrade --requirement "$PYTHON_REQUIREMNTS_FILE"
+#sudo -H pip install --no-cache-dir  --upgrade --requirement "$PYTHON_REQUIREMNTS_FILE"
 
 
 #Touch vpass
