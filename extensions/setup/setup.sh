@@ -23,8 +23,8 @@ msg_warning() {
     printf "\n"
 }
 
- Check if root
- Since we need to make sure paths are okay we need to run as normal user he will use ansible
+# Check if root
+# Since we need to make sure paths are okay we need to run as normal user he will use ansible
 [[ "$(whoami)" == "root" ]] && msg_exit "Please run as a normal user not root"
 
 # Check python
