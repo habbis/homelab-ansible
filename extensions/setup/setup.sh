@@ -22,23 +22,10 @@ msg_warning() {
     printf "$COLOR_YEL$@$COLOR_END"
     printf "\n"
 }
-# Check your environment 
-#system=$(uname)
 
-#if [ "$system" == "Linux" ]; then
-#    distro=$(lsb_release -i)
-#    if [[ $distro == *"Ubuntu"* ]] || [[ $distro == *"Debian"* ]] ;then
-#        msg_warning "Your running Debian based linux.\n You might need to install 'sudo apt-get install -y python3-venv python3-pip\n."
-#        # TODO: check if ubuntu and install build-essential, and python-dev
-#    else
-#        msg_warning "Your linux system was not test"
-#    fi
-#fi
-
-
-# Check if root
-# Since we need to make sure paths are okay we need to run as normal user he will use ansible
-#[[ "$(whoami)" == "root" ]] && msg_exit "Please run as a normal user not root"
+ Check if root
+ Since we need to make sure paths are okay we need to run as normal user he will use ansible
+[[ "$(whoami)" == "root" ]] && msg_exit "Please run as a normal user not root"
 
 # Check python
 [[ -z "$(which python3)" ]] && msg_exit "Opps python3 is not installed or not in your path."
@@ -50,13 +37,11 @@ msg_warning() {
 # Install 
 # By default we upgrade all packges to latest. if we need to pin packages use the python_requirements
 echo "This script install python packages defined in '$PYTHON_REQUIREMNTS_FILE' "
-#echo "Since we only support global packages installation for now we need root password."
-#echo "You will be asked for your password."
 python3 -m venv ~/venv-ansible
 source ~/venv-ansible/bin/activate
 ~/venv-ansible/bin/pip3 install --upgrade pip
 ~/venv-ansible/bin/pip3 install --no-cache-dir  --upgrade --requirement "$PYTHON_REQUIREMNTS_FILE"
-#sudo -H pip install --no-cache-dir  --upgrade --requirement "$PYTHON_REQUIREMNTS_FILE"
+~/venv-ansible/bin/ansible-galaxy collection install community.general
 
 
 #Touch vpass
