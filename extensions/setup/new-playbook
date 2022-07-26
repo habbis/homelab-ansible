@@ -1,0 +1,38 @@
+#! /usr/bin/env python3
+"""
+python create a new ansible playbook
+"""
+from __future__ import print_function
+#import sys
+import argparse
+from curses.panel import new_panel
+import os
+import shutil
+
+def main():
+    arg_parser  = argparse.ArgumentParser(description=__doc__)
+    arg_parser.add_argument("-n", "--name", dest="new_playbook_name", help="name of new playbook and variable folder for that playbook",required=True)
+
+     # We parse the args here to do some additional
+    # obscure checks
+    parsed_args = arg_parser.parse_args()
+
+    template_playbook = "template-play"
+    new_playbook = parsed_args.new_playbook_name
+
+
+    try:
+        os.chdir('../../plays')
+        # create new playbook
+        shutil.copy(f"{template_playbook}.yml", f"{new_playbook}.yml")
+        os.chdir('../group_vars')
+        os.mkdir(f"{new_playbook}")
+        # create variable dir and file
+        os.chdir(f'../group_vars/{new_playbook}')
+        with open(f"{new_playbook}.yml", "w") as file:
+            file.write("---")
+    except:
+      print("creating new playbook failed") 
+
+if __name__ == "__main__":
+    main()
