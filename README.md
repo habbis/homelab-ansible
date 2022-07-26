@@ -56,7 +56,7 @@ This is the directory layout of this repository with an explanation.
         internal/             # All the roles that are not public
 
     extension/
-        setup/                 # All the setup files for updating roles and ansible dependencies
+        setup/                 # All the setup files for updating roles and ansible dependencies and script to create new playbook
 
 
 ## 2. How to Manage Roles
@@ -140,6 +140,14 @@ Code in this repo is functional and tested. To run it, you need to install ansib
 ```
 ./extensions/setup/role_update.sh
 ```
+
+* To create a new playbook under plays and create variable files under group_vars
+
+```
+./extensions/setup/new-playbook -m yourname
+```
+
+
 * Go to the plays directory and then execute the following command ( do not forget to change the host address in the development.ini )
 ```
 ansible-playbook -i ../development.ini webservers.yml
