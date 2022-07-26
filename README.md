@@ -147,6 +147,17 @@ Code in this repo is functional and tested. To run it, you need to install ansib
 ./extensions/setup/new-playbook -m yourname
 ```
 
+* To create encrypt a file with ansible-vault
+
+```
+ansible-vault create  yourfile
+```
+
+* Edit encrypted file
+
+```
+ansible-vault edit  yourfile
+```
 
 * Go to the plays directory and then execute the following command ( do not forget to change the host address in the development.ini )
 ```
