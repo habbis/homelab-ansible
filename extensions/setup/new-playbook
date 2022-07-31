@@ -3,11 +3,9 @@
 python create a new ansible playbook
 """
 from __future__ import print_function
-#import sys
 import argparse
-from curses.panel import new_panel
 import os
-import shutil
+from os.path import exists as file_exists
 
 def main():
     arg_parser  = argparse.ArgumentParser(description=__doc__)
@@ -21,18 +19,26 @@ def main():
     new_playbook = parsed_args.new_playbook_name
 
 
-    try:
-        os.chdir('../../plays')
-        # create new playbook
-        shutil.copy(f"{template_playbook}.yml", f"{new_playbook}.yml")
+    os.chdir('../../plays')
+    # create new playbook
+    if file_exists(f"{new_playbook}.yml"):
+        print(f"The playbook {new_playbook}.yml exists")
+        exit()
+    else: 
+        with open(f"{template_playbook}.yml", "r+") as file1, open(f"{new_playbook}.yml", "w") as file2:
+             file_read = file1.read()
+             replace_txt = file_read.replace("template-play.yml", f"{new_playbook}.yml")
+             file2.write(replace_txt)
+    if os.path.isdir(f"../group_vars/{new_playbook}"):
+         print(f"The variable dir {new_playbook} exists")
+         exit()
+    else:
         os.chdir('../group_vars')
+        # create variable dir
         os.mkdir(f"{new_playbook}")
-        # create variable dir and file
         os.chdir(f'../group_vars/{new_playbook}')
         with open(f"{new_playbook}.yml", "w") as file:
-            file.write("---")
-    except:
-      print("creating new playbook failed") 
+             file.write("---")
 
 if __name__ == "__main__":
     main()
