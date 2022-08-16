@@ -46,11 +46,20 @@
 - src: git+https://github.com/geerlingguy/ansible-role-gitlab.git
   name: ansible-role-gitlab
 
+- src: git+https://github.com/cloudalchemy/ansible-prometheus.git
+  name: ansible-prometheus
 
-  
+- src: git+https://github.com/cloudalchemy/ansible-node-exporter.git
+  name: ansible-node-exporter
 
+- src: git+https://github.com/robertdebock/ansible-role-zabbix_repository.git
+  version: "5.0.4"
+  name: ansible-role-zabbix_agent
 
+- src: git+https://github.com/robertdebock/ansible-role-zabbix_agent.git
+  version: "4.1.7"
+  name: ansible-role-zabbix_agent
 
-
-
-
+- src: git+https://github.com/robertdebock/ansible-role-zabbix_server.git
+  version: "4.0.3"
+  name: ansible-role-zabbix_server
