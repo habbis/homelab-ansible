@@ -40,6 +40,8 @@ def main():
         os.chdir(f'../group_vars/{new_playbook}')
         with open(f"{new_playbook}.yml", "w") as file:
              file.write("---")
+        with open(f"{new_playbook}-password.yml", "w") as file:
+             file.write("---")
 
 if __name__ == "__main__":
     main()

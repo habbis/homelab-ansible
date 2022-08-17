@@ -159,6 +159,12 @@ ansible-vault create  yourfile
 ansible-vault edit  yourfile
 ```
 
+* To encrypt a existing file
+```
+ansible-vault encrypt group_vars/gitea/yourfile-password.yml
+```
+
+
 * Go to the plays directory and then execute the following command ( do not forget to change the host address in the development.ini )
 ```
 ansible-playbook -i ../development.ini webservers.yml
