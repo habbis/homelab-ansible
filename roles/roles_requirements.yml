@@ -63,3 +63,6 @@
 - src: git+https://github.com/robertdebock/ansible-role-zabbix_server.git
   version: "4.0.3"
   name: ansible-role-zabbix_server
+
+- src: git+https://github.com/habbis/ansible_role_server_lite.git
+  name: ansible_role_server_lite

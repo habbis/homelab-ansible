@@ -1,0 +1,11 @@
+---
+
+- name: standard_setup.yml | All roles
+  hosts: all
+  gather_facts: yes
+  #remote_user: root
+  remote_user: ansible
+  become: yes
+
+  roles:
+    - { role: ansible_role_server_lite,                   tags: ["server_lite"] }
