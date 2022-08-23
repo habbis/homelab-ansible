@@ -8,4 +8,4 @@
   become: yes
 
   roles:
-    - { role: ansible-role-gitlab,                   tags: ["gitlab"] }
+    - { role: ansible_role_gitea,                   tags: ["gitea"] }

@@ -40,9 +40,6 @@
 - src: git+https://github.com/habbis/ansible_role_postgresql.git
   name: ansible_role_postgres
 
-- src: git+https://github.com/habbis/ansible_deploy_netbox.git
-  name: ansible_deploy_netbox
-
 - src: git+https://github.com/geerlingguy/ansible-role-gitlab.git
   name: ansible-role-gitlab
 

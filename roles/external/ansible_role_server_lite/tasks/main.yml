@@ -72,7 +72,18 @@
     groups: admins
     append: yes
 
-- name: set authorized keys from github to users
+- name: remove authorized keys from github
+  authorized_key:
+    user: "{{ item }}"
+    state: absent
+    key: https://github.com/habbis.keys
+    #key: https://repo01.no.habbfarm.net/habbfarm/habbfarm_authorized_keys/raw/branch/master/authorized_keys.keys
+  loop:
+    - root
+    - ansible
+  #ignore_errors: yes
+
+- name: set authorized keys from gitea server
   authorized_key:
     user: "{{ item }}"
     state: present
@@ -81,7 +92,7 @@
   loop:
     - root
     - ansible
-  ignore_errors: yes
+  #ignore_errors: yes
 
 
 - name: reload sshd
