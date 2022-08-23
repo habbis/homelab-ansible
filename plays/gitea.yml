@@ -1,7 +1,7 @@
 ---
 
 - name: gitea.yml | All roles
-  hosts: gitlab
+  hosts: gitea
   gather_facts: yes
   #remote_user: root
   remote_user: ansible
