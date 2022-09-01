@@ -29,6 +29,7 @@ If infrastructures are to be treated as a code than projects that manage them mu
 This is the directory layout of this repository with an explanation.
 
 
+    ansible.cfg               # Ansible.cfg file that holds all ansible config
     production.ini            # inventory file for production stage
     development.ini           # inventory file for development stage
     test.ini                  # inventory file for test stage
@@ -45,9 +46,9 @@ This is the directory layout of this repository with an explanation.
             postgresql.yml    # Each file will correspond to a role i.e. postgresql
             postgresql-password.yml   # Encrypted password file
     plays/
-        ansible.cfg           # Ansible.cfg file that holds all ansible config
         webservers.yml        # playbook for webserver tier
         postgresql.yml        # playbook for postgresql tier
+        template-play.yml     # template playbook for new playbook used by script new-playbook
 
     roles/
         roles_requirements.yml# All the information about the roles

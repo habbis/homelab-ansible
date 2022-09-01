@@ -1,0 +1,15 @@
+---
+
+- name: ansible-semaphore.yml | All roles
+  hosts: hf-t-ansible01
+  gather_facts: yes
+  #remote_user: root
+  remote_user: ansible
+  become: yes
+  vars_files:
+    - ../group_vars/ansible-semaphore/ansible-semaphore.yml
+    - ../group_vars/ansible-semaphore/ansible-semaphore-password.yml
+
+
+  roles:
+    - { role: ansible_role_postgres,                   tags: ["postgres"] }

@@ -6,6 +6,10 @@
   #remote_user: root
   remote_user: ansible
   become: yes
+  vars_files:
+    - ../group_vars/template-play/template-play.yml
+    - ../group_vars/template-play/template-play-password.yml
+
 
   roles:
     - { role: ansible-role-gitlab,                   tags: ["gitlab"] }

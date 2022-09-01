@@ -1,7 +1,7 @@
 ---
 
 - name: gitlab.yml | All roles
-  hosts: gitlab
+  hosts: hf-t-test01
   gather_facts: yes
   #remote_user: root
   remote_user: ansible
