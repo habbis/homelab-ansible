@@ -1,0 +1,29 @@
+---
+dns_server: 10.17.2.2
+dns_server_port: 5300
+zone: no.habbfarm.net
+
+nameservers: 10.17.2.2 10.17.2.3
+
+vmname: hf-test
+vm_count: 1
+ip_count_start: 9
+vmip: 10.31.22
+gateway: 10.31.22.1
+netmask: 24
+vlanid: 22
+bridge: vmbr0
+
+proxmox_node: hf-pve02
+ram: 1024
+cpu: 1
+storage: local-ceph
+template: deb11-tmpl-vm
+# yes for full clone no for linked clone
+linked_or_full_clone: true
+#disk_type:
+
+dns_record: true
+deploy_vm: true
+remove_dns_record: false
+remove_vm: false

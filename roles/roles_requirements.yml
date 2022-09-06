@@ -63,3 +63,6 @@
 
 - src: git+https://github.com/habbis/ansible_role_server_lite.git
   name: ansible_role_server_lite
+
+- src: git+https://github.com/habbis/ansible_role_proxmox_deploy_vm.git
+  name: ansible_role_proxmox_deploy_vm

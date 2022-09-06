@@ -1,0 +1,15 @@
+---
+
+- name: hf-test1.yml | All roles
+  hosts: hf-test1
+  gather_facts: yes
+  #remote_user: root
+  remote_user: ansible
+  become: yes
+  vars_files:
+    - ../group_vars/hf-test1/hf-test1.yml
+    - ../group_vars/hf-test1/hf-test1-password.yml
+
+
+  roles:
+    - { role: ansible_role_proxmox_deploy_vm,                   tags: ["proxmox_deply"] }

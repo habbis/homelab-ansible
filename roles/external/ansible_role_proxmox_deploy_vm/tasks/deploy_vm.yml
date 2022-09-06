@@ -1,0 +1,48 @@
+- name: Create new VM  using cloud-init with a username and password
+  community.general.proxmox_kvm:
+    node: "{{ proxmox_node }}"
+    api_user: "{{ proxmox_username}}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_hostname }}"
+    clone: "{{ template }}"
+    name: "{{ vmname }}.{{ zone }}"
+    memory: "{{ ram }}"
+    cpu: "{{ cpu }}"
+    balloon: "{{ ram }}"
+    storage: "{{ storage }}"
+    timeout: 900
+    state: present
+  delegate_to: localhost
+  when: deploy_vm
+
+- name: updarte setting static_ip
+  community.general.proxmox_kvm:
+    node: "{{ proxmox_node }}"
+    api_user: "{{ proxmox_username}}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_hostname }}"
+    name: "{{ vmname }}.{{ zone }}"
+    hotplug: 'network,disk,cpu,memory,usb'
+    numa_enabled: yes
+    searchdomains: '{{ zone }}'
+    nameservers: "{{ nameservers }}"
+    net:
+      net0: 'virtio,bridge={{ bridge }},tag={{ vlanid }}'
+    ipconfig:
+      ipconfig0: 'ip={{ vmip }}/{{ netmask }},gw={{ gateway }}'
+    update: yes
+    state: present
+  delegate_to: localhost
+  when: deploy_vm
+
+- name: start vm
+  community.general.proxmox_kvm:
+    node: "{{ proxmox_node }}"
+    api_user: "{{ proxmox_username}}"
+    api_password: "{{ proxmox_password }}"
+    api_host: "{{ proxmox_hostname }}"
+    name: "{{ vmname }}.{{ zone }}"
+    state: started
+    timeout: 30
+  delegate_to: localhost
+  when: deploy_vm

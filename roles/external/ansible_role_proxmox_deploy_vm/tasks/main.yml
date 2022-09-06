@@ -1,0 +1,9 @@
+---
+- include_tasks: add_dns_record.yml
+  when: dns_record
+- include_tasks: deploy_vm.yml
+  when: deploy_vm
+- include_tasks: remove_dns_record.yml
+  when: remove_dns_record
+- include_tasks: remove_vm.yml
+  when: remove_vm

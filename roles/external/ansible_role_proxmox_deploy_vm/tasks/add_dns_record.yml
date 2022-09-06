@@ -1,0 +1,14 @@
+- name: add A record vm
+  community.general.nsupdate:
+    key_name: "{{ keyname }}"
+    key_secret: "{{ keysecret }}"
+   #key_algorithm: hmac-sha256
+    server: "{{ dns_server }}"
+    port: "{{ dns_server_port }}"
+    zone: "{{ zone }}"
+    record: "{{ vmname }}"
+    value: ["{{ vmip }}"]
+    type: "A"
+    state: present
+  delegate_to: localhost
+  when: dns_record
