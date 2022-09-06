@@ -35,12 +35,9 @@ def main():
          exit()
     else:
         os.chdir('../group_vars')
-        # create variable dir
-        os.mkdir(f"{new_playbook}")
-        os.chdir(f'../group_vars/{new_playbook}')
         with open(f"{new_playbook}.yml", "w") as file:
              file.write("---")
-        with open(f"{new_playbook}-password.yml", "w") as file:
+        with open(f"{new_playbook}-secrets.yml", "w") as file:
              file.write("---")
 
 if __name__ == "__main__":

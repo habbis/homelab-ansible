@@ -7,8 +7,8 @@
   remote_user: ansible
   become: yes
   vars_files:
-    - ../group_vars/template-play/template-play.yml
-    - ../group_vars/template-play/template-play-password.yml
+    - ../group_vars/template-play.yml
+    - ../group_vars/template-play-secrets.yml
 
 
   roles:

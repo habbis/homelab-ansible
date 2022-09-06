@@ -8,7 +8,7 @@ If infrastructures are to be treated as a code than projects that manage them mu
 * Naming
 * Staging
 * Complexity of plays
-* Encryption of data (e.g. passwords, certificates)
+* Encryption of data (e.g. secretss, certificates)
 * Installation of ansible and module dependencies
 
 
@@ -20,7 +20,7 @@ If infrastructures are to be treated as a code than projects that manage them mu
 * Use variables in the roles instead of hard-coding
 * Keep the names consistent between groups, plays, variables, and roles
 * Different environments (development, test, production) must be close as possible, if not equal
-* Do not put your password or certificates as plain text in your git repo, use ansible-vault for encrypting
+* Do not put your secrets or certificates as plain text in your git repo, use ansible-vault for encrypting
 * Use tags in your play
 * Keep all your ansible dependencies in a single place and make the installation dead-simple
 
@@ -33,21 +33,14 @@ This is the directory layout of this repository with an explanation.
     production.ini            # inventory file for production stage
     development.ini           # inventory file for development stage
     test.ini                  # inventory file for test stage
-    vpass                     # ansible-vault password file
+    vpass                     # ansible-vault secrets file commend out in ansible.cfg if used by ci/cd
                               # This file should not be committed into the repository
                               # therefore file is in ignored by git
     group_vars/
-        all/                  # variables under this directory belongs all the groups
-            apt.yml           # ansible-apt role variable file for all groups
-        webservers/           # here we assign variables to webservers groups
-            apt.yml           # Each file will correspond to a role i.e. apt.yml
-            nginx.yml         # ""
-        postgresql/           # here we assign variables to postgresql groups
-            postgresql.yml    # Each file will correspond to a role i.e. postgresql
-            postgresql-password.yml   # Encrypted password file
+            yourplaybook_variables.yml    # Each file will correspond to a role i.e. postgresql
+            yourplaybook-secrets.yml   # Encrypted secrets file
     plays/
-        webservers.yml        # playbook for webserver tier
-        postgresql.yml        # playbook for postgresql tier
+        yourplaybook.yml        # playbook for webserver tier
         template-play.yml     # template playbook for new playbook used by script new-playbook
 
     roles/
@@ -69,6 +62,12 @@ It is a bad habit to manage the roles that are developed by other developers, in
   version: "v1.0.1"
 ```
 
+Can also look like this.
+```
+- src: git+https://github.com/cloudalchemy/ansible-node-exporter.git
+  name: ansible-node-exporter
+```
+
 Roles can be downloaded/updated with this command:
 
 ```
@@ -84,9 +83,13 @@ Therefore do not add any tasks to your main play. Your play should only consist 
 ```
 ---
 
-- name: postgresql.yml | All roles
-  hosts: postgresql
+- name: template-play.yml | All roles
+  hosts: template-play
   sudo: True
+  vars_files:
+    -  ../group_vars/template-play.yml
+    -  ../group_vars/template-play-secrets.yml
+
 
   roles:
     - { role: common,                   tags: ["common"] }
@@ -105,12 +108,12 @@ Variables are wonderful, they allow you to use all this existing code by just se
 
 
 ## 6. Name consistency
-If you want to maintain your code, keep the name consistent between your plays, inventories, roles and group variables. Use the name of the roles to separate different variables in each group. For instance, if you are using the role nginx under webservers play, variables that belong to nginx should be located under *group_vars/webservers/nginx.yml*. What this effectively means is that  group_vars supports directory and every file inside the group will be loaded. You can, of course, put all of them in a single file as well, but this is messy, therefore don't do it.
+If you want to maintain your code, keep the name consistent between your plays, inventories, roles and group variables. Use the name of the roles to separate different variables in each group. For instance, if you are using the role nginx under webservers play, variables that belong to nginx should be located under *group_vars/nginx.yml*. What this effectively means is that  group_vars supports directory and every file inside the group will be loaded. You can, of course, put all of them in a single file as well, but this is messy, therefore don't do it.
 
 
 ## 7. Encrypting Passwords and Certificates
-It is most likely that you will have a password or certificates in your repository. It is not a good practice to put them in a repository as plain text. You can use [ansible-vault](http://docs.ansible.com/playbooks_vault.html) to encrypt sensitive data. You can refer to [postgresql-password.yml](https://github.com/enginyoyen/ansible-best-practises/blob/master/group_vars/postgresql/postgresql-password.yml) in group variables to see the encrypted file and [postgresql-password-plain.yml](https://github.com/enginyoyen/ansible-best-practises/blob/master/group_vars/postgresql/postgresql-password-plain.yml) to see the plain text file, commented out.
-To decrypt the file, you need the vault password, which you can place in your root directory but it MUST NOT be committed to your git repository. You should share the password with your coworkers with some other method than committing to git a repo.
+It is most likely that you will have a secrets or certificates in your repository. It is not a good practice to put them in a repository as plain text. You can use [ansible-vault](http://docs.ansible.com/playbooks_vault.html) to encrypt sensitive data. You can refer to [postgresql-secrets.yml](https://github.com/enginyoyen/ansible-best-practises/blob/master/group_vars/postgresql/postgresql-secrets.yml) in group variables to see the encrypted file and [postgresql-secrets-plain.yml](https://github.com/enginyoyen/ansible-best-practises/blob/master/group_vars/postgresql/postgresql-secrets-plain.yml) to see the plain text file, commented out.
+To decrypt the file, you need the vault secrets, which you can place in your root directory but it MUST NOT be committed to your git repository. You should share the secrets with your coworkers with some other method than committing to git a repo.
 
 There is also [git-crypt](https://github.com/AGWA/git-crypt) that allow you to work with a key or GPG. It's more transparent on daily work than `ansible-vault`
 
@@ -151,7 +154,7 @@ Code in this repo is functional and tested. To run it, you need to install ansib
 * To create encrypt a file with ansible-vault
 
 ```
-ansible-vault create  yourfile
+ansible-vault create yourfile
 ```
 
 * Edit encrypted file
@@ -162,13 +165,13 @@ ansible-vault edit  yourfile
 
 * To encrypt a existing file
 ```
-ansible-vault encrypt group_vars/gitea/yourfile-password.yml
+ansible-vault encrypt group_vars/yourfile-secrets.yml
 ```
 
 
 * Go to the plays directory and then execute the following command ( do not forget to change the host address in the development.ini )
 ```
-ansible-playbook -i ../development.ini webservers.yml
+ansible-playbook -i development.ini play/webservers.yml
 ```
 
 
