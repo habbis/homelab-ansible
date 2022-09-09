@@ -1,0 +1,15 @@
+---
+
+- name: pve_standard_setup.yml | All roles
+  hosts: hf-pve
+  gather_facts: yes
+  #remote_user: root
+  remote_user: ansible
+  become: yes
+  vars_files:
+    - ../group_vars/pve_standard_setup.yml
+    - ../group_vars/pve_standard_setup-secrets.yml
+
+
+  roles:
+    - { role: ansible_role_server_lite,                   tags: ["pve_server_lite"] }
