@@ -71,30 +71,34 @@
     shell: /bin/bash
     groups: admins
     append: yes
+    
+    - name: set authorized keys from gitea server
+  authorized_key:
+    user: root
+    state: present
+    key: https://repo01.no.habbfarm.net/habbfarm/habbfarm_authorized_keys/raw/branch/master/authorized_keys.keys
+    path: /root/.ssh/authorized_keys2
+  #ignore_errors: yes
+  
+- name: set authorized keys from gitea server
+  authorized_key:
+    user: ansible
+    state: present
+    key: https://repo01.no.habbfarm.net/habbfarm/habbfarm_authorized_keys/raw/branch/master/authorized_keys.keys
+    path: /home/ansible/.ssh/authorized_keys2
+  #ignore_errors: yes
 
 - name: remove authorized keys from github
   authorized_key:
     user: "{{ item }}"
     state: absent
     key: https://github.com/habbis.keys
-    #key: https://repo01.no.habbfarm.net/habbfarm/habbfarm_authorized_keys/raw/branch/master/authorized_keys.keys
   loop:
     - root
     - ansible
   #ignore_errors: yes
-
-- name: set authorized keys from gitea server
-  authorized_key:
-    user: "{{ item }}"
-    state: present
-    #key: https://github.com/habbis.keys
-    key: https://repo01.no.habbfarm.net/habbfarm/habbfarm_authorized_keys/raw/branch/master/authorized_keys.keys
-  loop:
-    - root
-    - ansible
-  #ignore_errors: yes
-
-
+  
 - name: reload sshd
   service:
     name: sshd
+    state: restarted
