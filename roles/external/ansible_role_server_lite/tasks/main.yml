@@ -72,7 +72,7 @@
     groups: admins
     append: yes
     
-    - name: set authorized keys from gitea server
+- name: set authorized keys from gitea server
   authorized_key:
     user: root
     state: present
