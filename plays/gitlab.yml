@@ -6,7 +6,7 @@
   remote_user: root
   #remote_user: ansible
   #become: yes
-    - ../group_vars/gitlab.yml
+  #  - ../group_vars/gitlab.yml
     #- ../group_vars/gitlab-secrets.yml
 
   roles:
