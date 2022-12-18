@@ -3,9 +3,9 @@
 - name: gitlab.yml | All roles
   hosts: all
   gather_facts: yes
-  #remote_user: root
-  remote_user: ansible
-  become: yes
+  remote_user: root
+  #remote_user: ansible
+  #become: yes
     - ../group_vars/gitlab.yml
     #- ../group_vars/gitlab-secrets.yml
 
