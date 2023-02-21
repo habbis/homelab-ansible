@@ -19,8 +19,8 @@ def main():
     new_playbook = parsed_args.new_playbook_name
 
 
-    #os.chdir('../../plays')
-    os.chdir('plays')
+    #os.chdir('../../playbook')
+    os.chdir('playbook')
     # create new playbook
     if file_exists(f"{new_playbook}.yml"):
         print(f"The playbook {new_playbook}.yml exists")

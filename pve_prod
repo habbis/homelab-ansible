@@ -1,30 +1,6 @@
 # This is inventory file for production stage
 
 
-[hf-pve02]
-hf-pve02.no.habbfarm.net
-
-[hf-pve03]
-10.31.1.88
-
-[hf-pve02]
-hf-pve02.no.habbfarm.net
-
-[hf-pve04]
-hf-pve04.no.habbfarm.net
-
-[hf-pve05]
-hf-pve05.no.habbfarm.net
-
-[hf-pve06]
-hf-pve06.no.habbfarm.net
-
-[hf-pve08]
-10.31.1.91
-
-[hf-pve07]
-10.31.1.87
-
 [hf-pve]
 hf-pve02.no.habbfarm.net
 10.31.1.88
