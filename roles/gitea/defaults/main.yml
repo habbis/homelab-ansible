@@ -1,0 +1,5 @@
+---
+# gitea
+gitea_version: 1.18.1
+gitea_fqdn: git.habbfarm.net
+gitea_ssh_fqdn: git-ssh.habbfarm.net

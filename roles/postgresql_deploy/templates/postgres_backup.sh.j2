@@ -1,0 +1,7 @@
+#!/bin/bas
+
+LOG="/mnt/backup/postgres_backup_log"
+
+(% for database in  postgres_databases  %)
+pg_dump {{ database }} | pigz > /mnt/backup/"$(date +%d-%m-%Y)"_postgres_backup_{{ database }}.gz 2> $LOG
+(% endfor %)

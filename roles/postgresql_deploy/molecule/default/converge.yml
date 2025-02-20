@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: yes
+  #vars_files:
+  #  - ../../defaults/main.yml
+  #vars:
+
+
+  tasks:
+    #- name: "Include hf_postgresql_deploy"
+    #  include_role:
+    #    name: "hf_postgresql_deploy"
+
+  roles:
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

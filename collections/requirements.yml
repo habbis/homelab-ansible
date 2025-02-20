@@ -1,0 +1,8 @@
+---
+collections:
+  - name: community.general
+  - name: netbox.netbox
+  - name: pfsensible.core
+  - name: robertdebock.roles
+  - name: freeipa.ansible_freeipa
+  #- name: community.general.proxmox

@@ -1,0 +1,9 @@
+---
+- name: configure firewalld
+  hosts: all
+  remote_user: ansible
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: firewalld

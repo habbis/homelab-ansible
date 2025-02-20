@@ -1,4 +1,0 @@
----
-# single A record for ntp server pointing to this record.
-ntp_pool: pool.habbfarm.net
-

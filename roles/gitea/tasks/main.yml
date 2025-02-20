@@ -1,0 +1,115 @@
+---
+- name: Download gitea
+  ansible.builtin.get_url:
+    url: "https://dl.gitea.io/gitea/{{gitea_version}}/gitea-{{gitea_version}}-linux-amd64"
+    dest: /usr/local/bin/gitea
+    mode: '0755'
+
+- name: add git group
+  ansible.builtin.group:
+    name: git
+    state: present
+
+- name: add git user
+  ansible.builtin.user:
+    name: git
+    group: git
+
+- name: gitea data dir
+  ansible.builtin.file:
+    path: /var/lib/gitea
+    owner: git
+    group: git
+    state: directory
+    recurse: yes
+    mode: '0750'
+
+- name: gitea custom dir
+  ansible.builtin.file:
+    path: /var/lib/gitea/custom
+    owner: git
+    group: git
+    state: directory
+    recurse: yes
+    mode: '0750'
+
+- name: gitea data dir
+  ansible.builtin.file:
+    path: /var/lib/gitea/data
+    owner: git
+    group: git
+    state: directory
+    recurse: yes
+    mode: '0750'
+
+- name: gitea log dir
+  ansible.builtin.file:
+    path: /var/lib/gitea/log
+    owner: git
+    group: git
+    state: directory
+    recurse: yes
+    mode: '0750'
+
+- name: gitea etc dir
+  ansible.builtin.file:
+    path: /etc/gitea
+    owner: git
+    group: git
+    state: directory
+    recurse: yes
+    mode: '0750'
+
+- name: gitea service
+  ansible.builtin.template:
+    src: templates/gitea.service.j2
+    dest: /etc/systemd/system/gitea.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: start, enable, daemon reload gitea servies
+  ansible.builtin.systemd:
+    name: gitea
+    daemon_reload: yes
+    enabled: yes
+    state: started
+
+- name: secure permissions gitea /etc
+  ansible.builtin.file:
+    path: /etc/gitea
+    owner: git
+    group: git
+    mode: '750'
+
+- name: generate LFS_JWT_SECRET
+  shell: gitea generate secret JWT_SECRET
+  register:  gitea_LFS_JWT_SECRET
+
+- name: generate INTERNAL_TOKEN
+  shell: gitea generate secret INTERNAL_TOKEN
+  register:  gitea_INTERNAL_TOKEN
+
+- name: deploy gitea app.ini
+  ansible.builtin.template:
+    src: templates/gitea_app.ini.j2
+    dest: /etc/gitea/app.ini
+    owner: git
+    group: git
+    mode: '0640'
+
+- name: gitea delete admin user and password
+  shell: "sudo -u git bash -c '/usr/local/bin/gitea admin user delete --id 1 --email admin@locale.net --username {{ gitea_admin }} -c /etc/gitea/app.ini'"
+  ignore_errors: True
+
+- name: gitea create admin user and password
+  shell: "sudo -u git bash -c 'gitea admin user create --username {{ gitea_admin }} --password {{ gitea_admin_password }} --email admin@locale.net --admin -c /etc/gitea/app.ini'"
+
+#- name: open gitea port
+#  ansible.posix.firewalld:
+#    zone: dmz
+#    port: 3000/tcp
+#    permanent: true
+#    state: enabled
+#  when: ansible_pkg_mgr == "dnf"
+

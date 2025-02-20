@@ -1,13 +1,13 @@
 ---
 
 - name: gitlab.yml | All roles
-  hosts: all
+  hosts: hf-t-test01
   gather_facts: yes
-  remote_user: root
-  #remote_user: ansible
-  #become: yes
-  #  - ../group_vars/gitlab.yml
+  #remote_user: root
+  remote_user: ansible
+  become: yes
+    - ../group_vars/gitlab.yml
     #- ../group_vars/gitlab-secrets.yml
 
   roles:
-    - { role: ansible-role-gitlab,                   tags: ["gitlab"] }
+    - {role: ansible-role-gitlab,tags: ["gitlab"]}

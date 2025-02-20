@@ -1,0 +1,9 @@
+---
+teleport_backup_user: false
+teleport_backup_server: false
+keepalived_main: false
+keepalived_backup: false
+teleport_version: 13.3.2
+cluster_name: tele.local.net
+proxy_ip_address: 192.168.1.2
+web_ip_address: 192.168.1.2

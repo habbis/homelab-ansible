@@ -1,0 +1,74 @@
+---
+
+- name: Install packages ubuntu and debian
+  package:
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+      - virtualenv
+      - libpq-devel
+      - nginx
+    state: present
+    update_cache: yes
+  when: (ansible_pkg_mgr == "apt")
+  tags: package
+
+- name: Install packages centos and RHEL
+  package:
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+      - virtualenv
+      - nginx
+    state: present
+  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
+
+- name: add user called alerta
+  ansible.builtin.user:
+    name: alerta
+    shell: /bin/bash
+    home: /opt/alerta
+    groups: www-data
+    append: yes
+  when: (ansible_pkg_mgr == "apt")
+
+- name: create alerta dirs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: alerta
+    group: alerta
+    recurse: yes
+    state: directory
+  loop:
+    - "/opt/alerta/cli/{{ alerta_cli_version }}"
+    - "/opt/alerta/server/{{ alerta_server_version }}"
+    - "/opt/alerta/webui/{{ alerta_webui_version }}"
+
+- name: Install alerta cli info python venv
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    virtualenv: "/opt/alerta/cli/{{ alerta_cli_version }}/venv"
+  loop:
+    - pip
+    - "alerta=={{ alerta_cli_version }}"
+  become_user: alerta
+
+- name: Install alerta-server info python venv
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    virtualenv: "/opt/alerta/server/{{ alerta_server_version }}/venv"
+  loop:
+    - pip
+    - psycopg2
+    - "alerta-server=={{ alerta_server_version }}"
+  become_user: alerta
+
+- name: download and unarchive alerta-webui
+  ansible.builtin.unarchive:
+    src: "https://github.com/alerta/alerta-webui/releases/download/{{ alerta_webui_version }}/alerta-webui.tar.gz"
+    dest: "/opt/alerta/webui/{{ alerta_webui_version }}"
+    remote_src: yes
+  become_user: alerta
+

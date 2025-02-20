@@ -1,0 +1,10 @@
+# system wide proxy
+export http_proxy="http://{{ proxy_server }}:{{ proxy_port }}"
+export https_proxy="http://{{ proxy_server }}:{{ proxy_port }}"
+export ftp_proxy="http://{{ proxy_server }}:{{ proxy_port }}"
+export no_proxy="0.0.0.0/0,.habbfarm.net,.no.habbfarm.net"
+# curl
+export HTTP_PROXY="http://{{ proxy_server }}:{{ proxy_port }}"
+export HTTPS_PROXY="http://{{ proxy_server }}:{{ proxy_port }}"
+export FTP_PROXY="http://{{ proxy_server }}:{{ proxy_port }}"
+export NO_PROXY="0.0.0.0/0,.habbfarm.net,.no.habbfarm.net"

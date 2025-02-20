@@ -1,0 +1,14 @@
+---
+# variables
+proxy_server: hf-proxy.no.habbfarm.net
+proxy_port: 8888
+ntp_pool:  pool.habbfarm.net
+#ntp_pool:  no.pool.ntp.org
+centos_repo_server: hf-mirror.no.habbfarm.net
+sshd_config: sshd_config.j2
+# selinux stat allowed , enforcing , permissive , disabled
+selinux_state: enforcing
+local_yum_repo: false
+apt_proxy: false
+# sssd
+ldap_group: hf-user

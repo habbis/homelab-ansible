@@ -1,0 +1,20 @@
+---
+
+- name: setup hf-desktop servers
+  hosts: bastion_vpn
+  gather_facts: yes
+  remote_user: ansible
+  become: yes
+  vars:
+    - wg_internet_access: true
+    - wg_internal_network: 172.16.0.0/24
+    - wg_port: 51825
+    - interface: eth0
+
+
+  roles:
+    - habbfarm.wireguard_server
+
+  environment:
+    http_proxy: http://hf-proxy.no.habbfarm.net:8888
+    https_proxy: http://hf-proxy.no.habbfarm.net:8888

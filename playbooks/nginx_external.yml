@@ -1,0 +1,32 @@
+---
+
+- name: setup nginx for external use main
+  hosts: nginx_external_main
+  gather_facts: yes
+  remote_user: ansible
+  tags: nginx_main
+  become: yes
+  #vars_files:
+  #  - secrets/vault.yml
+  vars:
+    - keepalived_main: true
+    - keepalived_backup: false
+
+
+  roles:
+    - hf_nginx_external
+
+- name: setup nginx for external use backup
+  hosts: nginx_external_backup
+  gather_facts: yes
+  remote_user: ansible
+  become: yes
+  tags: nginx_backup
+  #vars_files:
+  #  - secrets/vault.yml
+  vars:
+    - keepalived_main: false
+    - keepalived_backup: true
+
+  roles:
+    - hf_nginx_external

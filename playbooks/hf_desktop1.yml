@@ -1,0 +1,24 @@
+---
+
+- name: setup hf-desktop servers
+  hosts: hf_desktop1
+  gather_facts: yes
+  remote_user: ansible
+  become: yes
+  vars:
+    - docker_compose_version: v2.25.0
+    #- docker_repo_url: https://mirror.no.habbfarm.net/repository/ubuntu/
+    - docker_add_repo: true
+    - docker_users: cuser
+  vars_files:
+    - secrets/vault.yml
+
+
+  roles:
+    - habbfarm.vnc
+    - role: geerlingguy.docker
+    - role: docker_proxy_config
+
+  environment:
+    http_proxy: http://hf-proxy.no.habbfarm.net:8888
+    https_proxy: http://hf-proxy.no.habbfarm.net:8888

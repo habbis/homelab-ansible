@@ -1,0 +1,14 @@
+---
+
+- name: deploy rke2 proxy config
+  hosts: all
+  gather_facts: yes
+  #remote_user: root
+  remote_user: ansible
+  become: yes
+  vars:
+    - rke2_kube_control: true
+
+
+  roles:
+    - {role: hf_rke2_proxy_setup, tags: ["rke2_control_proxy"]}

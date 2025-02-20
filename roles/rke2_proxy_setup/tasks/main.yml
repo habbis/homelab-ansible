@@ -1,0 +1,20 @@
+---
+
+- name: set proxy env rk2 kube control
+  ansible.builtin.template:
+    src: rke2-server.j2
+    dest: /etc/default/rke2-server
+    owner: root
+    group: root
+    mode: '0644'
+  when: rke2_kube_control
+
+
+- name: set proxy env rk2 kube node
+  ansible.builtin.template:
+    src: rke2-agent.j2
+    dest: /etc/default/rke2-agent
+    owner: root
+    group: root
+    mode: '0644'
+  when: rke2_kube_node

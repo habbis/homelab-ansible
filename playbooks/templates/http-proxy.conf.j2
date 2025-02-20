@@ -1,0 +1,4 @@
+[Service]
+Environment=HTTP_PROXY=http://hf-proxy.no.habbfarm.net:8888
+Environment=HTTPS_PROXY=http://hf-proxy.no.habbfarm.net:8888
+Environment=NO_PROXY=0.0.0.0/0,.habbfarm.net,.no.habbfarm.net,localhost,127.0.0.1,{{ ansible_facts.fqdn }}

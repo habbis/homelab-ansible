@@ -1,0 +1,7 @@
+---
+
+# deploy proxy kube control
+rke2_kube_control: false
+
+# deploy proxy kube node
+rke2_kube_node: false

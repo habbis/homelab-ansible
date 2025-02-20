@@ -1,0 +1,13 @@
+---
+
+- name: setup ntp server
+  hosts: ntp
+  gather_facts: yes
+  remote_user: ansible
+  become: true
+  #vars_files:
+  #  - secrets/vault.yml
+
+
+  roles:
+    - role: habbfarm.ntp_server
