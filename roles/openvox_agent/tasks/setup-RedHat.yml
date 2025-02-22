@@ -1,0 +1,40 @@
+---
+
+- name: Add gitlab runner GPG key.
+  rpm_key:
+    key: "{{ puppet_dnf_gpg_key }}"
+    state: present
+
+- name: /etc/yum.repos.d/puppet8-release.repo
+  ansible.builtin.template:
+    src: puppet8-release.repo.j2
+    dest: /etc/yum
+
+- name: Remove lock
+  community.general.dnf_versionlock:
+    state: absent
+    name: puppet-agent
+
+- name: Install the dnf versionlock plugin
+  ansible.builtin.dnf:
+    name:
+      - python3-dnf-plugin-versionlock
+    state: installed
+
+- name: Install puppet-agent
+  ansible.builtin.dnf:
+    name:
+      - puppet-agent-{{ puppet_agent_version }}-1
+    state: installed
+
+- name: Prevent puppet-agent from being updated
+  community.general.dnf_versionlock:
+    state: present
+    name:
+      - puppet-agent-{{ puppet_agent_version }}-1
+
+- name: Start and enable puppet-agent
+  ansible.builtin.service:
+    name: puppet
+    enabled: yes
+    state: started

@@ -1,0 +1,31 @@
+---
+- name: Download puppet
+  get_url:
+    url: "https://apt.puppetlabs.com/{{ debian_debfile }}"
+    dest: "/tmp/{{ debian_debfile }}"
+  when: (ansible_distribution == "Debian")
+
+- name: fix missing
+  command: apt update -y --fix-missing
+  when: (fix_apt_missing and ansible_pkg_mgr == "apt")
+
+- name: Install {{ debian_debfile }}
+  apt:
+    deb: "/tmp/{{ debian_debfile }}"
+  when: ansible_distribution == "Debian"
+
+- name: fix missing
+  command: apt update -y --fix-missing
+  when: (fix_apt_missing and ansible_pkg_mgr == "apt")
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install puppetserver and puppet-agent
+  ansible.builtin.package:
+    name:
+      - puppetserver
+      - puppet-agent
+    state: latest
+  when: ansible_pkg_mgr == "apt"

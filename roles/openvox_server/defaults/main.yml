@@ -1,0 +1,13 @@
+---
+debian_debfile: openvox8-release-debian12.deb
+openvox_dnf_gpg_key: https://s3.osuosl.org/openvox-yum/GPG-KEY-openvox.pub
+openvox_server_version: 8.8.0
+openvox_agent_version: 8.12.1
+delete_openvox_ssl_dir: false
+apt_purge: false
+yum_purge: false
+run_puppet_agent: false
+fix_hosts: false
+# if having problem with
+# apt update repo problem.
+fix_apt_missing: false

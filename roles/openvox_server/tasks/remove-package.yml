@@ -1,0 +1,21 @@
+---
+# remove puppet
+- name: Remove puppet  package
+  apt:
+    name: openvox8-release
+    purge: yes
+    state: absent
+  when: apt_purge
+
+- name: Remove puppet7 agent package
+  apt:
+    name: openvox-agent
+    purge: yes
+    state: absent
+  when: apt_purge
+
+- name: remove puppet
+  yum:
+    name: openbox-agent
+    state: absent
+  when: yum_purge

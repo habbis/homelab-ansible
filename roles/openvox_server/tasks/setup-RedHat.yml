@@ -1,0 +1,30 @@
+---
+- name: Add gitlab runner GPG key.
+  rpm_key:
+    key: "{{ openvox_dnf_gpg_key }}"
+    state: present
+
+- name: /etc/yum.repos.d/openvox8-release.repo
+  ansible.builtin.template:
+    src: openvox8-release.repo.j2
+    dest: /etc/yum.repos.d/openvox8-release.repo
+    mode: '0644'
+
+- name: Install the dnf versionlock plugin
+  ansible.builtin.dnf:
+    name:
+      - python3-dnf-plugin-versionlock
+    state: installed
+
+- name: install openvoxserver and openvox-agent
+  ansible.builtin.yum:
+    name:
+      - "openvoxserver-{{ openvox_server_version }}-1"
+      - "openvox-agent-{{ openvox_agent_version }}-1"
+    state: present
+
+- name: Prevent openvox-agent from being updated
+  community.general.dnf_versionlock:
+    state: present
+    name:
+      - "openvox-agent-{{ openvox_agent_version }}-1"

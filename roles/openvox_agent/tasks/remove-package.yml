@@ -1,0 +1,27 @@
+---
+# remove puppet
+- name: Remove puppet  package
+  apt:
+    name: puppet7-release
+    purge: yes
+    state: absent
+  when: apt_purge
+
+- name: Remove puppet7 agent package
+  apt:
+    name: puppet-agent
+    purge: yes
+    state: absent
+  when: apt_purge
+
+- name: remove a "{{ rpmfile }}"
+  yum:
+    name: "/tmp/{{ rpmfile }}"
+    state: absent
+  when: yum_purge
+
+- name: remove "{{ package }}"
+  yum:
+    name: "{{ package }}"
+    state: absent
+  when: yum_purge
