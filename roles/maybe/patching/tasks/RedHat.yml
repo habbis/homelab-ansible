@@ -1,0 +1,33 @@
+---
+
+- name: ensure yum-utils is installed
+  yum:
+    name: yum-utils
+    state: present
+
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+  when: upgrade_all
+
+- name: upgrade all packages security related except kernel
+  yum:
+    name: '*'
+    state: latest
+    security: true
+    exclude: kernel*
+  when: upgrade_security
+
+- name: check if services need restarting
+  command: needs-restarting -r
+  changed_when: "needs_reboot.rc == 1"
+  failed_when: "needs_reboot.rc > 1"
+  register: needs_reboot
+  when: not patch_reboot
+
+- name: Reboot nodes
+  reboot:
+    reboot_timeout: 600
+  when: (patch_reboot == true and needs_reboot)
+

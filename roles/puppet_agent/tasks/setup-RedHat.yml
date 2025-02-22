@@ -1,0 +1,48 @@
+---
+- name: Download "{{ rpmfile_release8 }}"
+  get_url:
+    url: "https://yum.puppet.com/{{ rpmfile_release8 }}"
+    dest: "/tmp/{{ rpmfile_release8 }}"
+  when: (rpmfile_release8 and ansible_distribution_major_version == "8")
+
+- name: Download "{{ rpmfile_release8 }}"
+  get_url:
+    url: "https://yum.puppet.com/{{ rpmfile_release8 }}"
+    dest: "/tmp/{{ rpmfile_release8 }}"
+  when: (rpmfile_release8 and ansible_distribution_major_version == "8")
+
+- name: Install a "{{ rpmfile_release8 }}"·
+  yum:
+    name: "/tmp/{{ rpmfile_release8 }}"
+    state: present
+  when: (rpmfile_release8 and ansible_distribution_major_version == "8")
+
+- name: install "{{ package }}"
+  yum:
+    name: "{{ package }}"
+    state: present
+  when: (rpmfile_release8 and ansible_distribution_major_version == "8")
+
+- name: Download "{{ rpmfile_release9 }}"
+  get_url:
+    url: "https://yum.puppet.com/{{ rpmfile_release9 }}"
+    dest: "/tmp/{{ rpmfile_release9 }}"
+  when: (rpmfile_release9 and ansible_distribution_major_version == "9")
+
+- name: Download "{{ rpmfile_release9 }}"
+  get_url:
+    url: "https://yum.puppet.com/{{ rpmfile_release9 }}"
+    dest: "/tmp/{{ rpmfile_release9 }}"
+  when: (rpmfile_release9 and ansible_distribution_major_version == "9")
+
+- name: Install a "{{ rpmfile_release9 }}"·
+  yum:
+    name: "/tmp/{{ rpmfile_release9 }}"
+    state: present
+  when: (rpmfile_release9 and ansible_distribution_major_version == "9")
+
+- name: install "{{ package }}"
+  yum:
+    name: "{{ package }}"
+    state: present
+  when: (rpmfile_release9 and ansible_distribution_major_version == "9")

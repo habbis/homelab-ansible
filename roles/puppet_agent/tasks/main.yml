@@ -1,0 +1,59 @@
+---
+# tasks file for ansible_role_puppet_agent
+
+- include_tasks: fix-hostfile.yml
+  when: fix_hosts
+
+- include_tasks: remove-package.yml
+  when: ( apt_purge or yum_purge)
+
+- include_tasks: setup-RedHat.yml
+  when: ( ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum" )
+
+- include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+# setup puppet conf
+- name: set puppet conf
+  ansible.builtin.template:
+    src: templates/puppet.conf.j2
+    dest: /etc/puppetlabs/puppet/puppet.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "apt")
+
+# enable and start service
+- name: Enable "{{ service }}"
+  ansible.builtin.service:
+    name: "{{ service }}"
+    enabled: yes
+  ignore_errors: yes
+
+- name: Enable "{{ service }}"
+  ansible.builtin.service:
+    name: "{{ service }}"
+    state: started
+  ignore_errors: yes
+
+- name: check puppet agent lock exist
+  ansible.builtin.stat:
+    path: /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock
+  register: puppet_agent_lock
+
+- name: Remove puppet agent lock if exist·
+  ansible.builtin.file:
+    path: /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock
+    state: absent
+  #when: puppet_agent_lock | bool == true
+  when: puppet_agent_lock | bool == true
+
+- name: Remove puppet agent ssl dir if set to "true" in vars file
+  ansible.builtin.file:
+    path: /etc/puppetlabs/puppet/ssl
+    state: absent
+  when: delete_puppet_ssl_dir
+
+- name: Run puppet agent and fail if anything goes wrong
+  community.general.puppet:
+  when: run_puppet_agent

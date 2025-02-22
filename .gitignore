@@ -20,3 +20,5 @@ playbooks/habbfarm-infrastructure
 .vscode
 roles/external/*
 collections/ansible_collections/
+playbooks/secrets
+secrets

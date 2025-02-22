@@ -1,0 +1,22 @@
+---
+- name: Install vnc package debian
+  ansible.builtin.apt:
+    name:
+      - tigervnc-standalone-server
+      - tigervnc-common
+    update_cache: yes
+    state: present
+
+- name: Install desktop packages debian
+  ansible.builtin.apt:
+    name:
+      - xfce4
+      - xfce4-goodies
+    state: present
+
+- name: add vnc debian user
+  ansible.builtin.user:
+    name: "{{ username }}"
+    shell: /bin/bash
+    groups: cdrom,sudo,dip,plugdev
+  when: add_vnc_user

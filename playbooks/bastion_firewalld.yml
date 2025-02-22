@@ -1,9 +1,0 @@
----
-- name: configure firewalld
-  hosts: hf_linbast
-  remote_user: ansible
-  become: yes
-  gather_facts: yes
-
-  roles:
-    - role: firewalld_bastion
