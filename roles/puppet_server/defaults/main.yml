@@ -1,13 +1,8 @@
 ---
-# defaults file for ansible_role_puppet_server
-puppet_server: hf-puppet2.no.habbfarm.net
-# ubuntu 22.04
-ubuntu_debfile: puppet7-release-jammy.deb
-# debain 12
-debian_debfile: puppet7-release-bookworm.deb
-# rhel 9
-rpmfile_release: puppet7-release-el-9.noarch.rpm
-
+debian_debfile: puppet8-release-bookworm.deb
+puppet_dnf_gpg_key: https://yum.puppet.com/RPM-GPG-KEY-puppet
+puppet_server_version: 8.7.0
+puppet_agent_version: 8.10.0
 delete_puppet_ssl_dir: false
 apt_purge: false
 yum_purge: false

@@ -29,14 +29,12 @@
     name: puppetserver
     enabled: yes
     state: started
-  ignore_errors: yes
 
 - name: Enable and start puppet-agent
   ansible.builtin.service:
     name: puppet
     enabled: yes
     state: started
-  ignore_errors: yes
 
 - include_tasks: setup-puppetserver.yml
 

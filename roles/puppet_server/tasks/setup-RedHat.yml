@@ -1,29 +1,30 @@
 ---
-- name: Download {{ rpmfile_release9 }}
-  get_url:
-    url: "https://yum.puppet.com/{{ rpmfile_release }}"
-    dest: "/tmp/{{ rpmfile_release }}"
-  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
-
-- name: Install a {{ rpmfile_release9 }}
-  ansible.builtin.yum:
-    name: "/tmp/{{ rpmfile_release }}"
-    disable_gpg_check: true
+- name: Add gitlab runner GPG key.
+  rpm_key:
+    key: "{{ puppet_dnf_gpg_key }}"
     state: present
-  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
+
+- name: /etc/yum.repos.d/puppet8-release.repo
+  ansible.builtin.template:
+    src: puppet8-release.repo.j2
+    dest: /etc/yum.repos.d/puppet8-release.repo
+    mode: '0644'
+
+- name: Install the dnf versionlock plugin
+  ansible.builtin.dnf:
+    name:
+      - python3-dnf-plugin-versionlock
+    state: installed
 
 - name: install puppetserver and puppet-agent
   ansible.builtin.yum:
     name:
-      - puppetserver
-      - puppet-agent
+      - "puppetserver-{{ puppet_server_version }}-1"
+      - "puppet-agent-{{ puppet_agent_version }}-1"
     state: present
 
-- ansible.posix.firewalld:
-    zone: dmz
-    port: 8140/tcp
-    permanent: true
-    state: enabled
-
-- name: reload firewalld
-  shell: firewall-cmd --reload
+- name: Prevent puppet-agent from being updated
+  community.general.dnf_versionlock:
+    state: present
+    name:
+      - "puppet-agent-{{ puppet_agent_version }}-1"

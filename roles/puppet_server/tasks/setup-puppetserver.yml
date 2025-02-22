@@ -32,6 +32,9 @@
 - name: install r10k
   command: /opt/puppetlabs/puppet/bin/gem install r10k
 
+- name: install hiera-eyaml
+  command: /opt/puppetlabs/puppet/bin/gem install hiera-eyaml
+
 - name: set r10k config
   ansible.builtin.template:
     src: templates/r10k.yaml.j2
