@@ -1,55 +1,67 @@
 #!/bin/bash
-set -e
-#TODO: Support python virtual environments for now global
+MINIMUM_PYTHON="3.9"
+PYTHON_VERSIONS=$(compgen -c python3 |grep -Eo 'python3\.[0-9]+' | sort -V | uniq)
+WORKING_PYTHON=""
+WORKING_VERSION=""
+virtualenvDir=~/ansible-virtual-env
 
-COLOR_END='\e[0m'
-COLOR_RED='\e[0;31m' # Red
-COLOR_YEL='\e[0;33m' # Yellow
-# This current directory.
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-ROOT_DIR=$(cd "$DIR/../../" && pwd)
+if ! [[ "$0" != "$BASH_SOURCE" ]]; then
+  echo 'script need to be sourced, use source scripts/setup.sh'
+  exit 1
+fi
 
-PYTHON_REQUIREMNTS_FILE="$DIR/requirements.txt"
+echo "finding the latest python version to use will fail if it is below the minimum version, currently ${MINIMUM_PYTHON}"
+for PYTHON in $PYTHON_VERSIONS; do
+   VERSION=$($PYTHON -c 'import sys; print(".".join(map(str, sys.version_info[:2])))' 2>/dev/null || echo "")
+    if [[ -n "$VERSION" && "$(printf '%s\n' "$MINIMUM_PYTHON" "$VERSION" | sort -V | tail -n1)" == "$VERSION" ]]; then
+      WORKING_PYTHON=$PYTHON
+      WORKING_VERSION=$VERSION
+    fi
+done
 
-msg_exit() {
-    printf "$COLOR_RED$@$COLOR_END"
-    printf "\n"
-    printf "Exiting...\n"
-    exit 1
-}
+if [[ -z "$WORKING_PYTHON" ]]; then
+  echo "error no suitable python version (>= $MIN_PYTHON) found." >&2
+  echo 'install it with your package manager, like apt install python${MIN_PYTHON}-venv' >&2
+  return 1
+fi
+python_executable=$WORKING_PYTHON
+echo "selected Python executable $python_executable"
 
-msg_warning() {
-    printf "$COLOR_YEL$@$COLOR_END"
-    printf "\n"
-}
+${python_executable} --version >/dev/null
+if [ $? != 0 ]; then
+  echo "error Could not find ${python_executable} make sure it is installed with your package manager and is added to your PATH" >&2
+  return 1
+fi
 
-# Check if root
-# Since we need to make sure paths are okay we need to run as normal user he will use ansible
-[[ "$(whoami)" == "root" ]] && msg_exit "Please run as a normal user not root"
+venvCreated=false
+echo "trying to determine whether to create a new virtual environment"
+if [ ! -d ${virtualenvDir} ]; then
+  echo "creating the virtual environment at ${virtualenvDir}"
+  ${python_executable} -m venv ${virtualenvDir}
+  venvCreated=true
+else
+  echo "virtual environment ${virtualenvDir} already exists."
+fi
 
-# Check python
-[[ -z "$(which python3)" ]] && msg_exit "Opps python3 is not installed or not in your path."
-# Check pip
-[[ -z "$(which pip3)" ]] && msg_exit "pip3 is not installed!\nYou can try'install pip3'"
-# Check python file
-[[ ! -f "$PYTHON_REQUIREMNTS_FILE" ]]  && msg_exit "python_requirements '$PYTHON_REQUIREMNTS_FILE' does not exist or permssion issue.\nPlease check and rerun."
+echo "entering the virtual environment ${virtualenvDir}"
+source ${virtualenvDir}/bin/activate
+echo "updating pip"
+pip install --upgrade pip
+echo "installing from requirements.txt"
+pip install -r requirements.txt
 
-# Install 
-# By default we upgrade all packges to latest. if we need to pin packages use the python_requirements
-echo "This script install python packages defined in '$PYTHON_REQUIREMNTS_FILE' "
-python3 -m venv ~/venv-ansible
-source ~/venv-ansible/bin/activate
-~/venv-ansible/bin/pip3 install --upgrade pip
-~/venv-ansible/bin/pip3 install --no-cache-dir  --upgrade --requirement "$PYTHON_REQUIREMNTS_FILE"
-~/venv-ansible/bin/ansible-galaxy collection install community.general
+if [[ "$venvCreated" == "true" ]]; then
+  echo "Since virtual environment was not already added importing roles and collections from ansible-galaxy"
+  if [[ -z "$SSH_AUTH_SOCK" ]]; then
+    echo 'environment variable SSH_AUTH_SOCK not found set it up by running eval $(ssh-agent); ssh-add'
+    eval "$(ssh-agent)"; ssh-add
+  fi
+  echo "importing roles and collections from ansible-galaxy since virtual env dont exist yet"
+  echo "installing roles from roles/requirements.yml"
+  ansible-galaxy role install -r roles/requirements.yml --force
+  echo "installing collections from collections/requirements.yml"
+  ansible-galaxy collection install -r collections/requirements.yml --force
+fi
 
-
-#Touch vpass
-#echo "Touching vpass"
-#if [ -w "$ROOT_DIR" ]
-#then
-#   touch "$ROOT_DIR/.vpass"
-#else
-#  sudo touch "$ROOT_DIR/.vpass"
-#fi
-#exit 0
+echo "ansible ready version info from ansible --version:"
+ansible --version

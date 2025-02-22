@@ -18,3 +18,5 @@ roles/external/*
 playbooks/habbfarm-infrastructure
 .idea
 .vscode
+roles/external/*
+collections/ansible_collections/
