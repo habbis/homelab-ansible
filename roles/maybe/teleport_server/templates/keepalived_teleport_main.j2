@@ -1,0 +1,38 @@
+# Define the script used to check if teleport is still working
+vrrp_script chk_teleport {
+    # This will check if the teleport pid of teleport is install running if no then failover to the backup.
+    script "/usr/bin/killall -0 teleport"
+    interval 2
+    weight 2
+}
+
+# Configuration for Virtual Interface
+vrrp_instance LB_VIP {
+    # choose the your interface
+    interface eth0
+    state MASTER        # set to BACKUP on the peer machine
+    priority 101        # set to  99 on the peer machine
+    virtual_router_id 51
+
+
+    # Not need to allow ssh for root user it will failover
+    authentication {
+        auth_type PASS
+        # pass only for keepalived
+        auth_pass 2gU7kFR0AS    # Password for accessing vrrpd. Same on all devices
+    }
+    unicast_src_ip 10.31.78.4 # Private IP address of main
+    unicast_peer {
+        10.31.82.8              # Private IP address of the backup teleport
+   }
+
+    # The virtual ip address shared between the two teleport servers
+    virtual_ipaddress {
+        10.31.78.5
+    }
+
+    # Use the Defined Script to Check whether to initiate a fail over
+    track_script {
+        chk_teleport
+    }
+}

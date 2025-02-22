@@ -1,0 +1,12 @@
+- name: Install vnc package and epel centos and RHEL
+  ansible.builtin.yum:
+    name:
+      - epel-release
+      - tigervnc-server
+    state: present
+
+- name: Install packages centos and RHEL
+  ansible.builtin.yum:
+    name:
+      - "@xfce"
+    state: present

@@ -1,0 +1,12 @@
+---
+username: test1
+# see https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-generate-encrypted-passwords-for-the-user-module
+userpassword: randomting2
+add_vnc_user: true
+displaynumber: 1
+# port ranger exampel works with selinux
+# 5985-5999, 5900-5983
+vncpassword: randomting
+password_salt: saltysalt
+vncport: 5985
+desktop: xfce

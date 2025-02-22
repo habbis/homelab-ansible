@@ -1,0 +1,117 @@
+---
+- include_tasks: setup-RedHat.yml
+  when: ( ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum" )
+
+- include_tasks: setup-Debian.yml
+  when: (ansible_distribution == "Debian")
+
+- include_tasks: setup-Ubuntu.yml
+  when: (ansible_distribution == "Ubuntu")
+
+- name: add vnc user
+  ansible.builtin.user:
+    name: "{{ username }}"
+    shell: /bin/bash
+    password: "{{ userpassword }}"
+    update_password: on_create
+    state: present
+  when: add_vnc_user
+
+- name: Create .vnc directory
+  ansible.builtin.file:
+    group: "{{ username }}"
+    mode: 0755
+    owner: "{{ username }}"
+    path: "/home/{{ username }}/.vnc"
+    state: directory
+
+- name: Check if vnc user config is already set
+  ansible.builtin.stat:
+    path: "/home/{{ username }}/.vnc/config"
+  register: vnc_user_config
+
+- name: add vncport add port
+  ansible.builtin.lineinfile:
+    path: "/home/{{ username }}/.vnc/config"
+    line: "rfbport={{ vncport }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    create: yes
+    state: present
+  when: ( not vnc_user_config.stat.exists )
+
+- name: add desktop environment to user vnc config
+  ansible.builtin.lineinfile:
+    path: "/home/{{ username }}/.vnc/config"
+    line: "session={{ desktop }}"
+    insertafter: "rfbport={{ vncport }}"
+    owner: "{{ username }}"
+    group: "{{ username }}"
+    state: present
+  when: ( not vnc_user_config.stat.exists )
+
+- name: Check if vnc password is already set
+  ansible.builtin.stat:
+    path: "/home/{{ username }}/.vnc/passwd"
+  register: vnc_passwd_file
+
+- name: Set default vnc password
+  shell: |
+    echo "{{ vncpassword }}" | vncpasswd -f > /home/"{{ username }}"/.vnc/passwd
+  when: ( not vnc_passwd_file.stat.exists )
+
+- name: Set correct permissions for vnc passwd file
+  file:
+    group: "{{ username }}"
+    mode: 0600
+    owner: "{{ username }}"
+    path: "/home/{{ username }}/.vnc/passwd"
+  when: ( not vnc_passwd_file.stat.exists )
+
+- name: update diplay number for vnc
+  ansible.builtin.lineinfile:
+    path: /etc/tigervnc/vncserver.users
+    regexp: '^\:{{ displaynumber }}'
+    line: ":{{ displaynumber }}={{ username }}"
+    insertafter: #
+    state: present
+
+- name: add restart alway to rhel/centos vnc services
+  ansible.builtin.lineinfile:
+    path: "/etc/systemd/system/multi-user.target.wants/vncserver@:{{ displaynumber }}.service"
+    line: "Restart=always"
+    #insertafter: "[Service]"
+    insertafter: "Type=forking"
+    state: present
+  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
+  retries: 2
+  ignore_errors: true
+
+- name: add restart alway to debian/ubuntu vnc services
+  ansible.builtin.lineinfile:
+    path: "/usr/lib/systemd/system/tigervncserver@.service"
+    line: "Restart=always"
+    insertafter: "[Service]"
+    state: present
+  when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+  ignore_errors: true
+
+- name: Just force systemd to reread configs
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Enable vnc service and start
+  ansible.builtin.systemd:
+    name: "vncserver@:{{ displaynumber }}"
+    state: restarted
+    enabled: yes
+  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
+  ignore_errors: true
+
+- name: Enable vnc service and start
+  ansible.builtin.systemd:
+    name: "tigervncserver@:{{ displaynumber }}.service"
+    state: restarted
+    enabled: yes
+  when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+  ignore_errors: true

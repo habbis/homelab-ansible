@@ -1,0 +1,31 @@
+version: v3
+teleport:
+  nodename: {{ inventory_hostname }}
+  data_dir: /var/lib/teleport
+  log:
+    output: stderr
+    severity: INFO
+    format:
+      output: text
+  ca_pin: ""
+  diag_addr: ""
+auth_service:
+  enabled: "yes"
+  listen_addr: {{ proxy_ip_address }}:3025
+  cluster_name: {{ cluster_name }}
+  proxy_listener_mode: multiplex
+ssh_service:
+  enabled: "yes"
+  commands:
+  - name: hostname
+    command: [hostname]
+    period: 1m0s
+proxy_service:
+  enabled: "yes"
+  web_listen_addr: {{ web_ip_address }}:443
+  public_addr: {{ cluster_name }}:443
+  https_keypairs:
+  - key_file: {{ ssl_cert_key }}
+    cert_file: {{ ssl_cert }}
+  https_keypairs_reload_interval: 0s
+  acme: {}

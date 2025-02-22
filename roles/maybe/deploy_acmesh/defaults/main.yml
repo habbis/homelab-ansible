@@ -1,0 +1,8 @@
+---
+# acme.sh version check git tags
+version: 3.0.6
+# email for acme
+email: unix@habbestad.tech
+PDNS_Url: http://dns01.no.habbfarm.net:8081
+PDNS_ServerId: localhost
+PDNS_Ttl: 60

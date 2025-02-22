@@ -1,0 +1,407 @@
+---
+
+- name: check if contianer
+  shell: "uname -r |cut -c 10-"
+  register: if_container
+
+#- name: set config to disable ipv6
+#  ansible.builtin.template:
+#    src: 98-disable_ipv6.conf.j2
+#    dest: /etc/sysctl.d/98-disable_ipv6.conf
+#    owner: root
+#    group: root
+#    mode: '0644'
+
+#- name: check if contianer
+#  shell: "sysctl -p"
+
+#- name: disable ipv6 with sysctl
+#  ansible.builtin.sysctl:
+#    name: "{{ item }}"
+#    value: 1
+#    state: present
+#    reload: yes
+#  loop:
+#    - net.ipv6.conf.all.disable_ipv6
+#    - net.ipv6.conf.default.disable_ipv6
+
+- name: check habbfarm ca cert exist
+  ansible.builtin.stat:
+    path: /usr/local/share/ca-certificates/habbfarm.crt
+  register: habbfarm_ca
+
+- name: get habbfarm ca cert
+  ansible.builtin.template:
+    src:  habbfarm.crt.j2
+    dest: /usr/local/share/ca-certificates/habbfarm.crt
+    owner: root
+    group: root
+    mode: '0755'
+  when: (ansible_pkg_mgr == "apt" and habbfarm_ca.stat.exists == false)
+
+- name: install habbfarm ca cert
+  command: /usr/sbin/update-ca-certificates
+  when: (ansible_pkg_mgr == "apt" and habbfarm_ca.stat.exists == false)
+
+- name: get habbfarm ca cert
+  ansible.builtin.template:
+    src:  habbfarm.crt.j2
+    dest: /etc/pki/ca-trust/source/anchors/habbfarm.crt
+    owner: root
+    group: root
+    mode: '0755'
+  when: (ansible_pkg_mgr == "dnf" and habbfarm_ca.stat.exists == false)
+
+- name: install habbfarm ca cert
+  command: update-ca-trust
+  when: (ansible_pkg_mgr == "dnf" and habbfarm_ca.stat.exists == false)
+
+- name: set /etc/hosts
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Set a hostname
+  ansible.builtin.hostname:
+    name: "{{ ansible_fqdn }}"
+    use: systemd
+
+- name: set /etc/hostname
+  ansible.builtin.template:
+    src: hostname.j2
+    dest: /etc/hostname
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: apt proxy config
+  ansible.builtin.template:
+    src: proxy.conf.j2
+    dest: /etc/apt/apt.conf.d/proxy.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_pkg_mgr == "apt")
+
+- name: set proxy env vars /etc/profile.d
+  ansible.builtin.template:
+    src: proxy.sh.j2
+    dest: /etc/profile.d/proxy.sh
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: source proxy env vars /etc/profile.d
+  shell: /etc/profile.d/proxy.sh
+  ignore_errors: true
+
+- name: remove sssd  packages ubuntu and debian
+  package:
+    name:
+      - sssd
+      - sssd-common
+      - sssd-ldap
+    state: absent
+    update_cache: yes
+  when: (ansible_pkg_mgr == "apt")
+
+- name: Install packages ubuntu and debian
+  package:
+    name:
+      - curl
+      - wget
+      - python3
+      - python3-pip
+      - python3-venv
+      - git
+      - vim
+      - apt-utils
+      - lvm2
+      - ufw
+      - openssh-server
+      - screen
+      - tmux
+      - dnsutils
+      #- sssd
+      #- sssd-common
+      #- sssd-ldap
+      - monitoring-plugins
+      - monitoring-plugins-contrib
+    state: present
+    update_cache: yes
+  when: (ansible_pkg_mgr == "apt")
+
+- name: Install monitoring packages ubuntu and debian
+  package:
+    name:
+      - monitoring-plugins-contrib
+      - monitoring-plugins-systemd
+    state: present
+    update_cache: yes
+  when: (ansible_distribution == 'Debian' and ansible_distribution_major_version == '12')
+
+- name: Install packages centos and RHEL
+  package:
+    name:
+      - curl
+      - wget
+      - python3
+      - python3-pip
+      - git
+      - vim
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+      - sudo
+      - bash-completion
+      - firewalld
+      - openssh-server
+      - tmux
+      - nagios-plugins
+    state: present
+  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
+
+- name: Install epel centos
+  shell: "dnf config-manager --set-enabled crb -y  ; dnf install -y  epel-release epel-next-release"
+  when: (ansible_distribution == 'CentOS' and ansible_distribution_major_version == '9')
+
+- name: Install epel redhat 8
+  shell: "dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm"
+  when: (ansible_distribution == 'OracleLinux' or ansible_distribution == 'RedHat' and ansible_distribution_major_version == '8')
+
+- name: Install epel rocky linux  8
+  shell: "dnf config-manager --set-enabled powertools"
+  when: (ansible_distribution == 'Rocky' and ansible_distribution_major_version == '8')
+
+- name: Install epel rocky linux  9
+  shell: "dnf config-manager --set-enabled crb"
+  when: (ansible_distribution == 'Rocky' and ansible_distribution_major_version == '9')
+
+- name: Install epel rocky linux
+  package:
+    name:
+      - epel-release
+    state: present
+  when: (ansible_distribution == 'Rocky')
+
+- name: Install chrony
+  package:
+    name:
+      - chrony
+    state: present
+    update_cache: yes
+  when: if_container.stdout != "pve"
+
+- name: setup client ntp rhel
+  ansible.builtin.template:
+    src: chrony_rhel.conf.j2
+    dest: /etc/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_pkg_mgr == "dnf" and not ansible_hostname == "ntp2" and not ansible_hostname == "ntp3" and if_container.stdout != "pve")
+
+- name: setup client ntp debian
+  ansible.builtin.template:
+    src: chrony_debian.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_distribution == "Debian" and not ansible_hostname == "ntp2" and not ansible_hostname == "ntp3" and if_container.stdout != "pve")
+
+- name: setup client ntp ubuntu 2004
+  ansible.builtin.template:
+    src: chrony_ubuntu_2004.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_release == 'focal' and if_container.stdout != "pve")
+
+- name: setup client ntp ubuntu 2204
+  ansible.builtin.template:
+    src: chrony_ubuntu_2204.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_distribution == "Ubuntu" and ansible_distribution_release == 'jammy' and not ansible_hostname == "ntp2" and not ansible_hostname == "ntp3" and if_container.stdout != "pve")
+
+- name: selinux config
+  ansible.builtin.template:
+    src: selinux_config.j2
+    dest: /etc/selinux/config
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_pkg_mgr == "yum" or ansible_pkg_mgr == "dnf")
+
+- name: sudoers file for ansible
+  ansible.builtin.template:
+    src: ansible_no_passwd.j2
+    dest: /etc/sudoers.d/00_ansible
+    mode: '0440'
+
+- name: sudoers file for admins group
+  ansible.builtin.template:
+    src: sudo_admin_hf_admin.j2
+    dest: /etc/sudoers.d/02_hf_admin
+    mode: '0440'
+
+- name: remove sudoers file
+  ansible.builtin.file:
+    path: /etc/sudoers.d/90-cloud-init-users
+    state: absent
+  ignore_errors: true
+
+- name: remove sudoers file
+  ansible.builtin.file:
+    path: /etc/sudoers.d/01_users
+    state: absent
+  ignore_errors: true
+
+- name: sshd_config file
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    mode: '0600'
+  when: (ansible_pkg_mgr == "apt")
+
+- name: sshd_config file fedora 39
+  ansible.builtin.template:
+    src: fedora39_sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    mode: '0600'
+  when: (ansible_distribution == 'Fedora' and ansible_distribution_major_version == '39')
+
+- name: add right sftp server for debian/ubuntu in sshd_config
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '/usr/libexec/openssh/sftp-server'
+    line: "Subsystem  sftp /usr/lib/openssh/sftp-server"
+  when: (ansible_pkg_mgr == "apt")
+
+- name: remove system users called monitoring
+  ansible.builtin.user:
+    name: "{{ item }}"
+    shell: /bin/bash
+    state: absent
+  loop:
+    - monitoring
+
+- name: add group admins for sudo admin
+  group:
+    name: hf-admin
+    state: present
+  #ignore_errors: true
+
+- name: Create .ssh dir root
+  ansible.builtin.file:
+    path: /root/.ssh
+    state: directory
+    mode: '0700'
+
+- name: Set authorized key, removing all the authorized keys already set
+  ansible.posix.authorized_key:
+    user: root
+    key: "{{ lookup('file', 'files/authorized_keys.keys') }}"
+    path: /root/.ssh/authorized_keys2
+    manage_dir: yes
+    state: present
+    exclusive: True
+
+- name: Create user .ssh dir
+  ansible.builtin.file:
+    path: "/home/{{ item }}/.ssh"
+    state: directory
+    mode: '0700'
+  loop:
+    - ansible
+    - nagios
+
+- name: Change permissions of authorized_keys2
+  ansible.builtin.file:
+    path: "/root/.ssh/authorized_keys2"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: add system users called
+  ansible.builtin.user:
+    name: "{{ item }}"
+    shell: /bin/bash
+    state: present
+  loop:
+    - ansible
+    - nagios
+
+- name: Set authorized key managment, removing all the authorized keys already set
+  ansible.posix.authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', 'files/authorized_keys.keys') }}"
+    path: "/home/{{ item }}/.ssh/authorized_keys2"
+    manage_dir: yes
+    state: present
+    exclusive: True
+  loop:
+    - ansible
+
+- name: Set authorized key for monitoring, removing all the authorized keys already set
+  ansible.posix.authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', 'files/monitoring_authorized_keys.keys') }}"
+    path: "/home/{{ item }}/.ssh/authorized_keys2"
+    manage_dir: yes
+    state: present
+    exclusive: True
+  loop:
+    - nagios
+
+
+- name: Change permissions of authorized_keys2
+  ansible.builtin.file:
+    path: "/home/{{ item }}/.ssh/authorized_keys2"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0644'
+  loop:
+    - ansible
+
+- name: Change permissions of authorized_keys2
+  ansible.builtin.file:
+    path: "/home/{{ item }}/.ssh/authorized_keys2"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: '0644'
+  loop:
+    - nagios
+
+- name: fix permissions of home folder
+  ansible.builtin.file:
+    path: "/home/{{ item }}/"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+  loop:
+    - nagios
+
+- name: reload chronyd
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  loop:
+    - chronyd
+  #ignore_errors: true
+  when: if_container.stdout != "pve"
+
+- name: reload sshd
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  loop:
+    - sshd

@@ -1,0 +1,6 @@
+---
+
+- name: redhat.freeipa
+  scm: git
+  src: https://github.com/freeipa/ansible-freeipa.git
+  version: master

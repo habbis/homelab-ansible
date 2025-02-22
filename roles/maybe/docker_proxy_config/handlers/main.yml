@@ -1,0 +1,14 @@
+---
+- name: reload systemd
+  become: yes
+  become_user: root
+  systemd:
+    daemon_reload: yes
+
+- name: restart docker
+  become: yes
+  become_user: root
+  systemd:
+    name: docker
+    enabled: yes
+    state: restarted

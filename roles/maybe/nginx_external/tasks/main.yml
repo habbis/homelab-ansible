@@ -1,0 +1,76 @@
+---
+- name: Install packages nginx
+  package:
+    name:
+      - nginx
+      - openssl
+      - telnet
+      - keepalived
+      - psmisc
+    state: present
+    update_cache: yes
+  when: (ansible_pkg_mgr == "apt")
+
+- name: enable IP address that are nonlocal
+  sysctl:
+    name: net.ipv4.ip_nonlocal_bind
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: deploy config keepalived main
+  ansible.builtin.template:
+    src: keepalived_nginx_external_main.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: keepalived_main
+
+- name: deploy config keepalived backup
+  ansible.builtin.template:
+    src: keepalived_nginx_external_backup.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: keepalived_backup
+
+- name: Remove default nginx sites-available
+  ansible.builtin.file:
+    path: /etc/nginx/sites-available/default
+    state: absent
+
+- name: Remove default nginx sites-enabled
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: deploy config nginx
+  ansible.builtin.template:
+    src: nginx.conf_external.j2
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: deploy config nginx vhost
+  ansible.builtin.template:
+    src: nginx_vhost_reverse_proxy.j2
+    dest: /etc/nginx/sites-enabled/reverse_proxy
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: check config nginx
+  command: nginx -t
+
+- name: reload keepalived haproxy nginx
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  loop:
+    - keepalived
+    - nginx

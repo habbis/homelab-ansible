@@ -3,9 +3,15 @@
 - name: standard_setup.yml | All roles
   hosts: all
   gather_facts: yes
-  #remote_user: root
   remote_user: ansible
+  #remote_user: root
   become: yes
+  #vars_files:
+  #  - secrets/vault.yml
 
   roles:
-    - { role: ansible_role_server_lite,                   tags: ["server_lite"] }
+    - {role: hf_standard_setup, tags: ["hf_standard_setup"]}
+
+  environment:
+    http_proxy: http://hf-proxy.no.habbfarm.net:8888
+    https_proxy: http://hf-proxy.no.habbfarm.net:8888

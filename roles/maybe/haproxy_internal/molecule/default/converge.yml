@@ -1,0 +1,17 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: yes
+  #vars_files:
+  #  - ../../defaults/main.yml
+  #vars:
+
+
+  tasks:
+    #- name: "Include hf_haproxy_internal"
+    #  include_role:
+    #    name: "hf_haproxy_internal"
+
+  roles:
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') | basename }}"

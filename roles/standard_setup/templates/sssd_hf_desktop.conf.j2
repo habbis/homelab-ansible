@@ -1,0 +1,30 @@
+[sssd]
+config_file_version = 2
+services = nss, pam, ssh
+domains = no.habbfarm.net
+
+[nss]
+
+[pam]
+
+[domain/no.habbfarm.net]
+cache_credentials = True
+enumerate = False
+id_provider = ldap
+auth_provider = ldap
+access_provider = ldap
+ldap_uri = ldaps://hf-ldaps.no.habbfarm.net:636
+ldap_search_base = dc=no,dc=habbfarm,dc=net
+ldap_group_search_base = dc=no,dc=habbfarm,dc=net
+ldap_default_bind_dn = {{ bind_user }}
+ldap_default_authtok_type = password
+ldap_default_authtok = {{ bind_user_password }}
+ldap_use_tokengroups = False
+ldap_tls_cacert = /etc/ssl/certs/ca-certificates.crt
+sudo_provider = none
+ldap_group_member = member
+ldap_schema = rfc2307bis
+ldap_access_order = filter
+ldap_access_filter = (memberOf=ou={{ ldap_group }},ou=groups,dc=no,dc=habbfarm,dc=net)
+ldap_user_extra_attrs = sshPublicKey
+ldap_user_ssh_public_key = sshPublicKey

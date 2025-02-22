@@ -1,0 +1,25 @@
+---
+
+- name: setup puppet
+  hosts: puppet_server
+  gather_facts: yes
+  remote_user: ansible
+  become: yes
+  #vars_files:
+  #  - secrets/vault.yml
+  vars:
+    - keepalived_main: true
+    - keepalived_backup: false
+    - puppet_server: hf-puppet2.no.habbfarm.net
+    - ubuntu_debfile: puppet8-release-jammy.deb
+    - debian_debfile: puppet8-release-bookworm.deb
+    - rpmfile_release: puppet8-release-el-9.noarch.rpm
+    - fix_hosts: true
+
+
+  roles:
+    - habbfarm.puppet_server
+
+  environment:
+    http_proxy: http://hf-proxy.no.habbfarm.net:8888
+    https_proxy: http://hf-proxy.no.habbfarm.net:8888

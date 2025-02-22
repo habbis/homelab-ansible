@@ -1,0 +1,76 @@
+---
+
+- name: insall package
+  package:
+    name:
+      - socat
+
+- name: add user called acme
+  user:
+    name: acme
+    shell: /bin/bash
+
+- name: Create user acme .ssh
+  ansible.builtin.file:
+    path: /home/acme/.ssh
+    state: directory
+    mode: '0700'
+
+- name: Set authorized key, removing all the authorized keys already set
+  ansible.posix.authorized_key:
+    user: acme
+    key: "{{ lookup('file', 'files/authorized_keys.keys') }}"
+    path: /home/acme/.ssh/authorized_keys2
+    #manage_dir: yes
+    state: present
+    exclusive: True
+
+- name: check acme dir
+  ansible.builtin.stat:
+    path: /home/acme/.acme.sh
+  register: acme_sh_dir
+
+- name: clone acme.sh
+  ansible.builtin.git:
+    repo: https://github.com/acmesh-official/acme.sh.git
+    dest: /home/acme/acme_sh
+    single_branch: yes
+    version: "{{ version }}"
+    accept_hostkey: yes
+  become: true
+  become_user: acme
+  when: acme_sh_dir.stat.exists == false
+
+- name: Copy acme.sh
+  ansible.builtin.copy:
+    src: /home/acme/acme_sh/acme.sh
+    dest: /home/acme/acme.sh
+    remote_src: yes
+    mode: 0755
+  become: true
+  become_user: acme
+  when: acme_sh_dir.stat.exists == false
+
+- name: install acme.sh script
+  ansible.builtin.shell: "cd  /home/acme/acme_sh ; ./acme.sh --install -m {{ email }}"
+  args:
+    executable: /bin/bash
+  become: true
+  become_user: acme
+  when: acme_sh_dir.stat.exists == false
+
+- name: cleanup acme git dir
+  ansible.builtin.file:
+    path: "/home/acme/{{ item }}"
+    state: absent
+  loop:
+    - acme_sh
+    - acme.sh
+
+- name: acme.sh.env template
+  ansible.builtin.template:
+    src: acme.sh.env.j2
+    dest: /home/acme/.acme.sh/acme.sh.env
+    owner: acme
+    group: acme
+    mode: '0644'

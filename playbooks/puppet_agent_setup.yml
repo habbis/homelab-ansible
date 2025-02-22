@@ -1,0 +1,9 @@
+---
+- name: setup puppet agent
+  hosts: puppet_agent
+  remote_user: ansible
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - role: habbfarm.puppet_agent

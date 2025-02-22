@@ -1,0 +1,41 @@
+---
+#- name: create hiera dir
+#  ansible.builtin.file:
+#    path: "{{ item }}"
+#    state: directory
+#  loop:
+#    - /etc/puppetlabs/code/environments/production/hieradata
+#    - /etc/puppetlabs/code/environments/production/hieradata/node
+#    - /etc/puppetlabs/code/environments/production/hieradata/role
+#    - /etc/puppetlabs/code/environments/production/hieradata/location
+
+- name: create r10k dir
+  ansible.builtin.file:
+    path: /etc/puppetlabs/r10k
+    state: directory
+
+
+- name: set hiera files
+  ansible.builtin.template:
+    src: templates/hiera.yaml.j2
+    dest: /etc/puppetlabs/puppet/hiera.yaml
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Generate an OpenSSH keypair for puppet
+  community.crypto.openssh_keypair:
+    path: /root/.ssh/id_ed25519
+    comment: root@puppet
+    type: ed25519
+
+- name: install r10k
+  command: /opt/puppetlabs/puppet/bin/gem install r10k
+
+- name: set r10k config
+  ansible.builtin.template:
+    src: templates/r10k.yaml.j2
+    dest: /etc/puppetlabs/r10k/r10k.yaml
+    owner: root
+    group: root
+    mode: '0644'

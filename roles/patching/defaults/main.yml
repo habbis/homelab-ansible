@@ -1,0 +1,5 @@
+---
+upgrade_all: true
+upgrade_security: false
+patch_reboot: true
+

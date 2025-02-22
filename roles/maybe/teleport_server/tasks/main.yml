@@ -1,0 +1,109 @@
+---
+- name: teleport apt repo
+  ansible.builtin.template:
+    src: teleport.list.j2
+    dest: /etc/apt/sources.list.d/teleport.list
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: enable IP address that are nonlocal
+  sysctl:
+    name: net.ipv4.ip_nonlocal_bind
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: install teleport
+  ansible.builtin.apt:
+    name: "teleport={{ teleport_version }}"
+    update_cache: yes
+
+- name: Install keepalived, killall, telnet
+  package:
+    name:
+      - telnet
+      - keepalived
+      - psmisc
+    state: present
+    update_cache: yes
+  when: (ansible_pkg_mgr == "apt")
+
+- name: teleport yaml config
+  ansible.builtin.template:
+    src: teleport.yml.j2
+    dest: /etc/teleport.yaml
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: deploy config keepalived main
+  ansible.builtin.template:
+    src: keepalived_teleport_main.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: keepalived_main
+
+- name: deploy config keepalived backup
+  ansible.builtin.template:
+    src: keepalived_teleport_backup.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: keepalived_backup
+
+- name: reload and enable teleport service
+  service:
+    name: teleport
+    enabled: yes
+    state: restarted
+  loop:
+    - teleport
+    - keepalived
+
+- name: add user called teleport_backup
+  user:
+    name: teleport_backup
+    shell: /bin/bash
+    groups: teleport_backup
+    append: yes
+  when: teleport_backup_user
+
+- name: sudoers file for teleport_backup
+  ansible.builtin.template:
+    src: teleport_backup_no_passwd.j2
+    dest: /etc/sudoers.d/01_teleport_backup
+    mode: '0440'
+  when: teleport_backup_user
+
+- name: Create user teleport_backup .ssh
+  ansible.builtin.file:
+    path: /home/teleport_backup/.ssh
+    state: directory
+    owner: teleport_backup
+    group: teleport_backup
+    mode: '0700'A
+  when: teleport_backup_user
+
+- name: Generate an OpenSSH keypair teleport_backup
+  community.crypto.openssh_keypair:
+    path: /home/teleport_backup/.ssh/id_ssh_dsa
+    type: dsa
+  remote_user: teleport_backup
+  become: yes
+  when: teleport_backup_server
+
+- name: Download ssh_pubkey to localhost
+  ansible.builtin.fetch:
+    src: /home/teleport_backup/.ssh/
+    dest: 
+    flat: yes
+  delegate_to: "{{ groups[rke2_servers_group_name].0 }}"
+  run_once: true
+  when:
+  - teleport_backup_server | bool
+

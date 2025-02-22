@@ -1,0 +1,16 @@
+---
+- name: setup jenkins
+  gather_facts: yes
+  remote_user: root
+  #remote_user: ansible
+  #become: yes
+  #become_method: sudo
+  hosts: debian
+  #hosts: puppet-clients
+  #hosts: all
+  vars_files:
+    -  defaults/main.yml
+    #-  defaults/secrets.yml
+
+  roles:
+    - { role: ../hf_jenkins_deploy }

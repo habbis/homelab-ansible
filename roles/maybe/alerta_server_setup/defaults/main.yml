@@ -1,0 +1,4 @@
+---
+alerta_server_version: 9.0.1
+alerta_webui_version: v8.7.0
+alerta_cli_version: 8.5.2

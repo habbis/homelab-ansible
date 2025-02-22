@@ -1,0 +1,32 @@
+---
+
+- name: setup haproxy for external use
+  hosts: haproxy_external_backup
+  gather_facts: yes
+  remote_user: ansible
+  become: yes
+  tags: haproxy_backup
+  #vars_files:
+  #  - secrets/vault.yml
+  vars:
+    - keepalived_main: false
+    - keepalived_backup: true
+
+  roles:
+    - hf_haproxy_external
+
+- name: setup haproxy for external use
+  hosts: haproxy_external_main
+  gather_facts: yes
+  remote_user: ansible
+  tags: haproxy_main
+  become: yes
+  #vars_files:
+  #  - secrets/vault.yml
+  vars:
+    - keepalived_main: true
+    - keepalived_backup: false
+
+
+  roles:
+    - hf_haproxy_external

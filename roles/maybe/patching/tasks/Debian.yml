@@ -1,0 +1,28 @@
+---
+
+- name: apt dist_upgrade
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: yes
+  when: upgrade_all
+
+- name: apt dist_upgrade
+  ansible.builtin.apt:
+    upgrade: safe
+    update_cache: yes
+  when: upgrade_security
+
+- name: check if reboot is required
+  ansible.builtin.stat:
+    path: /var/run/reboot-required
+    get_md5: no
+  register: reboot_required_file
+
+- name: reboot server if required
+  ansible.builtin.reboot:
+  when: (reboot_required_file.stat.exists == true and patch_reboot)
+
+- name: remove dependecies that are no longer required
+  ansible.builtin.apt:
+    autoremove: yes
+

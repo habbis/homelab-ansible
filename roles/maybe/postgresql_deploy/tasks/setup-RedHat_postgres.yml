@@ -1,0 +1,97 @@
+---
+- name: check if postgres repo exist
+  ansible.builtin.stat:
+    path: /etc/yum.repos.d/pgdg-redhat-all.repo
+  register: postgres_repo_exist
+
+- name: install postgres repo
+  command: dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+  when: postgres_repo_exist.stat.exists == false
+
+- name: disable local postgres repo
+  command: dnf -qy module disable postgresql
+  when: postgres_repo_exist.stat.exists == false
+  ignore_errors: true
+
+- name: Install postges server and python package
+  ansible.builtin.package:
+    name:
+      - "postgresql{{ postgres_version }}-server"
+      - python3-psycopg2
+      - pigz
+    state: present
+
+- name: test if postgres db exsist unser datadir
+  ansible.builtin.stat:
+    path: "/var/lib/pgsql/{{ postgres_version }}/data/base/"
+  register: postgres_db_exist
+
+- name: init postgres db
+  command: "/usr/pgsql-{{ postgres_version }}/bin/postgresql-{{ postgres_version }}-setup initdb"
+  when: postgres_db_exist.stat.exists == false
+
+- name: deploy postgres.conf with tuning
+  ansible.builtin.template:
+    src: templates/postgresql.conf_rhel.j2
+    dest: "/var/lib/pgsql/{{ postgres_version }}/data/postgresql.conf"
+    owner: postgres
+    group: postgres
+    mode: '0644'
+
+- name: deploy pg_hba.conf
+  ansible.builtin.template:
+    src: templates/pg_hba.conf_rhel.j2
+    dest: "/var/lib/pgsql/{{ postgres_version }}/data/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: '0644'
+
+- name: restart postgres servies so tuning can take effect
+  ansible.builtin.systemd:
+    name: "postgresql-{{ postgres_version }}"
+    enabled: yes
+    state: restarted
+
+- name: Create postgres database wih encoding
+  community.postgresql.postgresql_db:
+    name: "{{ item['database'] }}"
+    encoding: UTF-8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    template: template0
+    state: present
+  become_user: postgres
+  loop: "{{ postgres_databases }}"
+  no_log: true
+
+- name: create postgres user give access database
+  community.postgresql.postgresql_user:
+    db: "{{ item['database'] }}"
+    name: "{{ item['user'] }}"
+    password: "{{ item['password'] }}"
+    priv: ALL
+    expires: infinity
+    state: present
+  become_user: postgres
+  loop: "{{ postgres_databases }}"
+  no_log: true
+
+- name: set postgres user access ip address and auth method
+  community.postgresql.postgresql_pg_hba:
+    dest: "/var/lib/pgsql/{{ postgres_version }}/data/pg_hba.conf"
+    contype: host
+    users: "{{ item['user'] }}"
+    source: "{{ item['ip_address'] }}"
+    databases: "{{ item['database'] }}"
+    method: "{{ item['auth_method'] }}"
+    state: present
+  become_user: postgres
+  loop: "{{ postgres_databases }}"
+  no_log: true
+
+#- name: allow postgres port
+#  ansible.posix.firewalld:
+#    zone: dmz
+#    service: postgresql
+#    permanent: true
+#    state: enabled

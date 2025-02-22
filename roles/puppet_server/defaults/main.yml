@@ -1,0 +1,18 @@
+---
+# defaults file for ansible_role_puppet_server
+puppet_server: hf-puppet2.no.habbfarm.net
+# ubuntu 22.04
+ubuntu_debfile: puppet7-release-jammy.deb
+# debain 12
+debian_debfile: puppet7-release-bookworm.deb
+# rhel 9
+rpmfile_release: puppet7-release-el-9.noarch.rpm
+
+delete_puppet_ssl_dir: false
+apt_purge: false
+yum_purge: false
+run_puppet_agent: false
+fix_hosts: false
+# if having problem with
+# apt update repo problem.
+fix_apt_missing: false

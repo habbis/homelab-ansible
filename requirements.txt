@@ -1,0 +1,21 @@
+# This file is used by pip to install all necessary python libraries
+
+# If you need to use a module that requires other libraries, for example the library 'pyvmomi' for
+# vmware modules, please add them here, so that the dependency can easily be added by others who
+# need to use the same playbooks.
+
+# It is reccommended to set it to a specific version to isolate you from breaking changes, but
+# keep in mind that these might need to be updated when ansible-core or its collections are updated
+
+# Core functionality
+ansible-core==2.16.14
+ansible-lint==25.1.2
+
+# Utility to work with inline-encrypted variables
+vaulti-ansible
+
+# Ansible-navigator, used to run ansible in containers
+ansible-navigator==25.1.0
+
+# Requests library needed to make http requests
+requests

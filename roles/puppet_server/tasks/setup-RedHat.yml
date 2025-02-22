@@ -1,0 +1,29 @@
+---
+- name: Download {{ rpmfile_release9 }}
+  get_url:
+    url: "https://yum.puppet.com/{{ rpmfile_release }}"
+    dest: "/tmp/{{ rpmfile_release }}"
+  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
+
+- name: Install a {{ rpmfile_release9 }}
+  ansible.builtin.yum:
+    name: "/tmp/{{ rpmfile_release }}"
+    disable_gpg_check: true
+    state: present
+  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
+
+- name: install puppetserver and puppet-agent
+  ansible.builtin.yum:
+    name:
+      - puppetserver
+      - puppet-agent
+    state: present
+
+- ansible.posix.firewalld:
+    zone: dmz
+    port: 8140/tcp
+    permanent: true
+    state: enabled
+
+- name: reload firewalld
+  shell: firewall-cmd --reload

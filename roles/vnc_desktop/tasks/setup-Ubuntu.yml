@@ -1,0 +1,42 @@
+---
+- name: Install tigervnc ubuntu
+  ansible.builtin.apt:
+    name:
+      - tigervnc-standalone-server
+      - tigervnc-common
+    update_cache: yes
+    state: present
+
+- name: Install tigervnc-tools ubuntu
+  ansible.builtin.apt:
+    name:
+      - tigervnc-tools
+    update_cache: yes
+    state: present
+  when: (ansible_distribution == 'Ubuntu' and ansible_distribution_release == 'jammy')
+
+- name: Install desktop ubuntu
+  ansible.builtin.apt:
+    name:
+      - xfce4
+      - xfce4-goodies
+    state: present
+
+- name: add lxd group
+  ansible.builtin.group:
+    name: lxd
+    state: present
+
+- name: add vnc ubuntu user
+  ansible.builtin.user:
+    name: "{{ username }}"
+    shell: /bin/bash
+    groups: cdrom,sudo,dip,plugdev,lxd
+    append: yes
+  when: add_vnc_user
+
+- name: Copy copy polkit permissions fix
+  ansible.builtin.copy:
+    src: files/45-allow-colord.pkla
+    dest: /etc/polkit-1/localauthority/50-local.d/45-allow-colord.pkla
+    remote_src: no
