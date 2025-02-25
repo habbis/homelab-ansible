@@ -1,37 +1,13 @@
 ---
-- name: Download "{{ ubuntu_debfile }}"
-  get_url:
-    url: "https://apt.puppetlabs.com/{{ ubuntu_debfile }}"
-    dest: "/tmp/{{ ubuntu_debfile }}"
-  when: (ubuntu_debfile and ansible_distribution == "Ubuntu")
-
 - name: Download "{{ debian_debfile }}"
   get_url:
     url: "https://apt.puppetlabs.com/{{ debian_debfile }}"
     dest: "/tmp/{{ debian_debfile }}"
   when: (debian_debfile and ansible_distribution == "Debian")
 
-- name: Download "{{ ubuntu_debfile }}"
-  get_url:
-    url: "https://apt.puppetlabs.com/{{ ubuntu_debfile }}"
-    dest: "/tmp/{{ ubuntu_debfile }}"
-  when: (ubuntu_debfile and ansible_distribution == "Ubuntu")
-
-- name: Download "{{ debian_debfile }}"
-  get_url:
-    url: "https://apt.puppetlabs.com/{{ debian_debfile }}"
-    dest: "/tmp/{{ debian_debfile }}"
-  when: (debian_debfile and ansible_distribution == "Debian")
-
- # ubuntu apt install
 - name: fix missing
   command: apt update -y --fix-missing
   when: (fix_apt_missing and ansible_pkg_mgr == "apt")
-
-- name: Install a "{{ ubuntu_debfile }}"·
-  apt:
-    deb: "/tmp/{{ ubuntu_debfile }}"
-  when: ansible_distribution == "Ubuntu"
 
 - name: Install a "{{ debian_debfile }}"
   apt:

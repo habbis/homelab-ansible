@@ -1,60 +1,11 @@
-[temp]
-10.31.22.101
+[puppet_master]
+hf-t-puppet*
 
-[salt_minion]
-hf-t-salt-minion1.dc1.ncop.no
+[puppet_client]
+hf-t-puppet-client1*
 
-[docker]
-#hf-t-docker1.no.habbfarm.net
-hf-t-attack1.no.habbfarm.net
-
-[attack]
-hf-t-attack1.no.habbfarm.net
-
-[gns3_lab]
-hf-gns3-lab1.no.habbfarm.net
-
-[dev]
-hf-dev1.no.habbfarm.net
-
-[client]
-hf-t-client1.no.habbfarm.net
-
-[test_virt]
-hf-t-virt1.no.habbfarm.net
-
-[test_kube_main]
-hf-t-kube-main1.no.habbfarm.net
-hf-t-kube-main2.no.habbfarm.net
-hf-t-kube-main3.no.habbfarm.net
-
-[test_kube_worker]
-hf-t-kube-worker1.no.habbfarm.net
-hf-t-kube-worker2.no.habbfarm.net
-
-[test]
-hf-t-node1.no.habbfarm.net
-
-[k3s-test]
-hf-k3s-test1.no.habbfarm.net
-
-
-[test_ipv6]
-test1-ipv6.no.habbfarm.net
-
-[test_apps]
-hf-t-apps1.no.habbfarm.net
-
-[test_checkmk]
-hf-t-checkmk1.no.habbfarm.net
-
-[dev_network]
-dev-network1.no.habbfarm.net
 
 [puppet_agent:children]
-test_apps
-test_ipv6
-dev_network
 
 [all:vars]
 # Sets the environment to development(dev) or production (prod) or test
