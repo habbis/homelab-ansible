@@ -1,6 +1,6 @@
 # homelab-ansible
 
-## quickstart
+### quickstart
 
 setup right ansible version in python venv
 ```
