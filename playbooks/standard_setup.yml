@@ -10,7 +10,7 @@
   #  - secrets/vault.yml
 
   roles:
-    - {role: hf_standard_setup, tags: ["hf_standard_setup"]}
+    - {role: standard_setup, tags: ["standard_setup"]}
 
   environment:
     http_proxy: http://hf-proxy.no.habbfarm.net:8888
