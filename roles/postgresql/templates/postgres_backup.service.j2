@@ -1,0 +1,11 @@
+[Unit]
+Description=Postgres backup script
+Wants=myMonitor.timer
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/postgres_backup.sh
+User=postgres
+
+[Install]
+WantedBy=multi-user.target

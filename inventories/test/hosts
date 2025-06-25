@@ -1,3 +1,6 @@
+[postgres]
+hf-t-psql1.dc1.ncop.no
+
 [puppet_master]
 hf-t-puppet*
 

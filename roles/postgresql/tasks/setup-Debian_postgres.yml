@@ -17,7 +17,7 @@
     mode: '0644'
   when: postgres_repo
 
-- name: Update repositories 
+- name: Update repositories
   ansible.builtin.apt:
     update_cache: yes
 
@@ -52,7 +52,6 @@
     name: postgresql
     enabled: yes
     state: restarted
-  ignore_errors: True
 
 - name: Create postgres database wih encoding
   community.postgresql.postgresql_db:
@@ -96,4 +95,3 @@
     method: "{{ postgres_auth_method }}"
     state: present
   become_user: postgres
-

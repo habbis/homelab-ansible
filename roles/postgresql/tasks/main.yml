@@ -1,6 +1,6 @@
 ---
 - include_tasks: setup-RedHat_postgres.yml
-  when: ( ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum" )
+  when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
 
 - include_tasks: setup-Debian_postgres.yml
   when: (ansible_distribution == "Debian" or ansible_distribution == "Ubuntu")
@@ -12,6 +12,34 @@
     owner: root
     group: root
     mode: '0755'
+
+- name: /etc/systemd/system/postgresql_backup.timer
+  ansible.builtin.template:
+    src: postgres_backup.timer.j2
+    dest: /etc/systemd/system/postgres_backup.timer
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: /etc/systemd/system/postgres_backup.service
+  ansible.builtin.template:
+    src: postgres_backup.service.j2
+    dest: /etc/systemd/system/postgres_backup.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: enable, reload, start postgres backup timer
+  ansible.builtin.systemd_service:
+    state: started
+    enabled: true
+    daemon_reload: true
+    name: postgres_backup.timer
+
+- name: enable, reload postgres backup service
+  ansible.builtin.systemd_service:
+    enabled: true
+    name: postgres_backup.service
 
 - name: create postgres backup dir
   ansible.builtin.file:
@@ -28,22 +56,3 @@
     group: postgres
     mode: '744'
     state: touch
-
-- name: add add postgres backup cronjob
-  ansible.builtin.cron:
-    name: "postgres_backup"
-    minute: "0"
-    hour: "20"
-    #day: "1"
-    user: postgres
-    job: "/usr/local/postgres_backup.sh > /dev/null"
-    state: present
-
-- name: copy ssl cert
-  ansible.builtin.copy:
-    src: files/snakeoil.pem
-    dest: /etc/ssl/snakeoil.pem
-    owner: root
-    group: root
-    mode: '0644'
-  when: copy_ssl

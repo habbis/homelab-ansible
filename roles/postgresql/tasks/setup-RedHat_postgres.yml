@@ -1,56 +1,127 @@
 ---
-- name: check if postgres repo exist 
-  command: ls -al /etc/yum.repos.d/pgdg-redhat-all.repo
+- name: check if postgres repo exist
+  ansible.builtin.stat:
+    path: /etc/yum.repos.d/pgdg-redhat-all.repo
   register: postgres_repo_exist
-  ignore_errors: True
+  when: postgres_repo == true
 
 - name: install postgres repo
-  command: dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-  when: postgres_repo_exist is failed
+  ansible.builtin.dnf:
+    name: "https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm"
+    state: present
+  when: postgres_repo_exist == false and postgres_repo == true
 
 - name: disable local postgres repo
   command: dnf -qy module disable postgresql
-  when: postgres_repo_exist is failed
+  when: postgres_repo_exist is failed and postgres_repo == true
 
-- name: Install postges server and python package
+- name: Install the dnf versionlock plugin
+  ansible.builtin.dnf:
+    name:
+      - python3-dnf-plugin-versionlock
+    state: installed
+
+- name: Remove lock
+  community.general.dnf_versionlock:
+    state: absent
+    name: postgresql-server
+  when: postgres_repo_exist == false and postgres_repo == true
+
+- name: Install postgres repo server and python package repo
   ansible.builtin.package:
-    name: 
+    name:
       - "postgresql{{ postgres_version }}-server"
       - python3-psycopg2
       - pigz
     state: present
+  when: postgres_repo_exist == false and postgres_repo == true
 
-- name: test if postgres db exsist unser datadir 
-  shell: "ls -al /var/lib/pgsql/{{ postgres_version }}/data/base/"
-  register: postgres_db_exist
-  ignore_errors: True
+- name: Prevent postgres repo from being updated
+  community.general.dnf_versionlock:
+    state: present
+    name:
+      - postgresql{{ postgres_version }}-server
+  when: postgres_repo_exist == false and postgres_repo == true
 
-- name: init postgres db
-  command: "/usr/pgsql-13/bin/postgresql-{{ postgres_version }}-setup initdb"
-  when: postgres_db_exist is failed
+- name: Remove lock
+  community.general.dnf_versionlock:
+    state: absent
+    name: postgresql-server
+  when: postgres_repo == false
 
-- name: deploy postgres.conf with tuning
+- name: Install postgres server and python package local
+  ansible.builtin.dnf:
+    name:
+      - "@postgresql:{{ postgres_version }}"
+      - python3-psycopg2
+      - pigz
+    state: present
+  when: postgres_repo == false
+
+- name: Prevent postgres repo from being updated
+  community.general.dnf_versionlock:
+    state: present
+    name:
+      - "@postgresql:{{ postgres_version }}"
+  when: postgres_repo == false
+
+- name: test if postgres db exsist unser datadir when using repo
+  ansible.builtin.stat:
+    path: "/var/lib/pgsql/{{ postgres_version }}/data/base/PG_VERSION"
+  register: postgres_db_exist_repo
+  when: postgres_repo == true
+
+- name: test if postgres db exsist unser datadir when using local
+  ansible.builtin.stat:
+    path: /var/lib/pgsql/data/PG_VERSION
+  register: postgres_db_exist_local
+  when: postgres_repo == false
+
+- name: init postgres db repo
+  command: "/usr/pgsql-13/bin/postgresql-{{ postgres_version }} --initdb --unit postgresql"
+  when: postgres_repo == true and postgres_db_exist_local == true
+
+- name: init postgres db local
+  command: "/bin/postgresql-setup --initdb --unit postgresql"
+  when: postgres_repo == false and not postgres_db_exist_local.stat.exists
+
+- name: deploy postgres.conf with tuning when using repo
   ansible.builtin.template:
     src: templates/postgresql.conf_rhel.j2
     dest: "/var/lib/pgsql/{{ postgres_version }}/data/postgresql.conf"
     owner: postgres
     group: postgres
     mode: '0644'
+  when: postgres_repo == true
 
-- name: deploy pg_hba.conf
+- name: deploy postgres.conf with tuning when using local
+  ansible.builtin.template:
+    src: templates/postgresql.conf_rhel.j2
+    dest: "/var/lib/pgsql/data/postgresql.conf"
+    owner: postgres
+    group: postgres
+    mode: '0644'
+  when: postgres_repo == false
+
+- name: deploy pg_hba.conf repo
   ansible.builtin.template:
     src: templates/pg_hba.conf_rhel.j2
     dest: "/var/lib/pgsql/{{ postgres_version }}/data/pg_hba.conf"
     owner: postgres
     group: postgres
     mode: '0644'
+  when: postgres_repo == true
+  notify: restart postgres_repo
 
-- name: restart postgres servies so tuning can take effect
-  ansible.builtin.systemd:
-    name: "postgresql-{{ postgres_version }}"
-    enabled: yes
-    state: restarted
-  ignore_errors: True
+- name: deploy pg_hba.conf local
+  ansible.builtin.template:
+    src: templates/pg_hba.conf_rhel.j2
+    dest: "/var/lib/pgsql/data/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: '0644'
+  when: postgres_repo == false
+  notify: restart postgres
 
 - name: Create postgres database wih encoding
   community.postgresql.postgresql_db:
@@ -60,6 +131,7 @@
     lc_ctype: en_US.UTF-8
     template: template0
     state: present
+  become: true
   become_user: postgres
 
 - name: create postgres user give access database
@@ -67,12 +139,19 @@
     db: "{{ postgres_database }}"
     name: "{{ postgres_user }}"
     password: "{{ postgres_user_password }}"
-    priv: ALL
     expires: infinity
     state: present
   become_user: postgres
 
-- name: set postgres user access ip address and auth method
+- name: grant user all privileges on "{{ postgres_database }}" 
+  community.postgresql.postgresql_privs:
+    db: "{{ postgres_database }}"
+    privs: ALL
+    type: database
+    role: "{{ postgres_user }}"
+  become_user: postgres
+
+- name: set postgres user access ip address and auth method repo
   community.postgresql.postgresql_pg_hba:
     dest: "/var/lib/pgsql/{{ postgres_version }}/data/pg_hba.conf"
     contype: host
@@ -82,3 +161,16 @@
     method: "{{ postgres_auth_method }}"
     state: present
   become_user: postgres
+  when: postgres_repo == true
+
+- name: set postgres user access ip address and auth method local
+  community.postgresql.postgresql_pg_hba:
+    dest: "/var/lib/pgsql//data/pg_hba.conf"
+    contype: host
+    users: "{{ postgres_user }}"
+    source: "{{ ip_address }}/{{ netmask }}"
+    databases: "{{ postgres_database }}"
+    method: "{{ postgres_auth_method }}"
+    state: present
+  become_user: postgres
+  when: postgres_repo == false
