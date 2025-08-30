@@ -19,3 +19,7 @@ ansible-navigator==25.1.0
 
 # Requests library needed to make http requests
 requests
+
+# postgres
+#psycopg2
+psycopg2-binary

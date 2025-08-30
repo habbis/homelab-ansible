@@ -1,6 +1,8 @@
 # This is inventory file for production stage
 #
 #
+[jellyfin]
+jellyfin-private1.dc1.ncop.no
 
 [web_deploy]
 hf-web-deploy1.*
@@ -94,9 +96,9 @@ dns01.*
 dns02.*
 
 [linbast]
-hf-linbast1.*
-hf-linbast2.*
-hf-linbast3.*
+hf-linbast1.dc1.ncop.no
+hf-linbast2.no.habbfarm.net
+hf-linbast3.no.habbfarm.net
 
 #[zabbix]
 #hf-zabbix01.*
@@ -225,6 +227,3 @@ ssh
 [desktop:children]
 #hf_desktop1
 
-[all:vars]
-# Sets the environment to development(dev) or production (prod) or test
-environment=prod

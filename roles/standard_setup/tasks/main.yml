@@ -25,6 +25,10 @@
 #    - net.ipv6.conf.all.disable_ipv6
 #    - net.ipv6.conf.default.disable_ipv6
 
+#- name: Print return information from the previous task
+#  ansible.builtin.debug:
+#    var: "{{ ansible_distribution }}"
+
 - name: check habbfarm ca cert exist
   ansible.builtin.stat:
     path: /usr/local/share/ca-certificates/habbfarm.crt
@@ -160,7 +164,7 @@
       - firewalld
       - openssh-server
       - tmux
-      - nagios-plugins
+      #- nagios-plugins
     state: present
   when: (ansible_os_family == 'RedHat' or ansible_pkg_mgr == "dnf" or ansible_pkg_mgr == "yum")
 
@@ -180,12 +184,16 @@
   shell: "dnf config-manager --set-enabled crb"
   when: (ansible_distribution == 'Rocky' and ansible_distribution_major_version == '9')
 
+- name: Install epel alma linux  10
+  shell: "dnf config-manager --set-enabled crb"
+  when: (ansible_distribution == 'Almalinux' and ansible_distribution_major_version == '10')
+
 - name: Install epel rocky linux
   package:
     name:
       - epel-release
     state: present
-  when: (ansible_distribution == 'Rocky')
+  when: (ansible_distribution == 'Rocky' or ansible_distribution == 'Almalinux')
 
 - name: Install chrony
   package:
@@ -328,7 +336,7 @@
     path: "/root/.ssh/authorized_keys2"
     owner: root
     group: root
-    mode: '0644'
+    mode: '0600'
 
 - name: add system users called
   ansible.builtin.user:

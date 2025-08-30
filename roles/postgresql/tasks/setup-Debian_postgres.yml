@@ -59,10 +59,10 @@
     encoding: UTF-8
     lc_collate: en_US.UTF-8
     lc_ctype: en_US.UTF-8
-    template: template1
+    template: template0
     state: present
+  become: true
   become_user: postgres
-
 
 - name: set postgres user access ip address and auth method
   community.postgresql.postgresql_pg_hba:
@@ -79,8 +79,8 @@
   community.postgresql.postgresql_user:
     db: "{{ postgres_database }}"
     name: "{{ postgres_user }}"
-    password: "{{ postgres_user_password }}"
     priv: ALL
+    password: "{{ postgres_user_password }}"
     expires: infinity
     state: present
   become_user: postgres
