@@ -1,6 +1,10 @@
 [temp]
 10.31.1.57
 
+[shipyard]
+hf-t-shipyard1.dc1.ncop.no
+hf-t-shipyard-vm1.dc1.ncop.no
+
 [postgres]
 hf-t-psql1.dc1.ncop.no
 

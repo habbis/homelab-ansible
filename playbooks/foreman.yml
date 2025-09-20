@@ -1,0 +1,70 @@
+---
+- hosts: localhost
+  pre_tasks:
+    - name: Create host collections
+      theforeman.foreman.host_collection:
+        server_url: "{{ foreman_server_url }}"
+        username: "{{ foreman_username }}"
+        password: "{{ foreman_password }}"
+        validate_certs: "{{ foreman_validate_certs }}"
+        organization: "{{ my_organization }}"
+        name: "{{ item.name }}"
+        description: "{{ item.description}}"
+      with_items: "{{ host_collections }}"
+      tags: host_collections
+    - debug:
+        msg: "{{ foreman_repository_sets | map(attribute='name') | list }}"
+
+  roles:
+
+    - role: theforeman.foreman.content_credentials
+      vars:
+        #foreman_content_credentials: "{{ content_credentials }}"
+        foreman_content_credentials: "{{ content_credentials }}"
+      tags: content_credentials
+
+    - role: theforeman.foreman.repositories
+      vars:
+        foreman_products: "{{ foreman_repository_sets }}"
+      tags: repositories
+ 
+    - role: theforeman.foreman.sync_plans
+      vars:
+        foreman_sync_plans:
+          - name: Weekly Sync
+            interval: weekly
+            sync_date: 2020-11-10 02:00:00 UTC
+            products: "{{ foreman_repository_sets | map(attribute='name') | list }}"
+      tags: sync_plans
+
+    - role: theforeman.foreman.locations
+      vars:
+        foreman_locations: "{{ locations }}"
+      tags:  locations
+
+    - role: theforeman.foreman.lifecycle_environments
+      vars:
+        foreman_lifecycle_environments: "{{ lifecycle_environments }}"
+      tags: lifecycle_environments
+
+    - role: theforeman.foreman.hostgroups
+      vars:
+         foreman_hostgroups: "{{ hostgroups }}"
+#        foreman_locations: "{{ locations }}"
+      tags: hostgroups
+ 
+    - role: theforeman.foreman.content_views
+      vars:
+        foreman_content_views: "{{ content_views }}"
+      tags: content_views
+
+    - role: theforeman.foreman.activation_keys
+      vars:
+        foreman_activation_keys: "{{ activation_keys }}"
+      tags: activation_keys
+
+#    - role: systemd_timer
+#      vars:
+#        publish_and_promote:
+#          exec_start:
+#      tags: systemd_timer

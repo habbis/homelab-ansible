@@ -1,8 +1,14 @@
 # This is inventory file for production stage
 #
 #
+[foreman]
+localhost
+
 [jellyfin]
 jellyfin-private1.dc1.ncop.no
+
+[foreman]
+hf-foreman1.dc1.ncop.no
 
 [web_deploy]
 hf-web-deploy1.*

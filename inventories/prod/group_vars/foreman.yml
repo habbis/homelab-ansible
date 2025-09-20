@@ -1,0 +1,986 @@
+---
+locations:
+  - name: "dc1"
+
+lifecycle_environments:
+  - name: "Test"
+    description: "Test lifecycle environment"
+    label: "test"
+    prior: "Library"
+  - name: "Stage"
+    description: "Staging lifecycle environment"
+    label: "Stage"
+    prior: "Test"
+  - name: "Prod"
+    description: "Production lifecycle environment"
+    label: "Prod"
+    prior: "Stage"
+
+hostgroups:
+  - name: "test"
+    organization: "{{ my_organization }}"
+    lifecycle_environment:  "Test"
+    description: "Test"
+  - name: "stage"
+    organization: "{{ my_organization }}"
+    lifecycle_environment:  "Stage"
+    description: "Staging"
+  - name: "prod"
+    organization: "{{ my_organization }}"
+    lifecycle_environment:  "Prod"
+    description: "Production"
+
+content_credentials:
+  - name: rpm-gpg-key-epel-9
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      mQINBGE3mOsBEACsU+XwJWDJVkItBaugXhXIIkb9oe+7aadELuVo0kBmc3HXt/Yp
+      CJW9hHEiGZ6z2jwgPqyJjZhCvcAWvgzKcvqE+9i0NItV1rzfxrBe2BtUtZmVcuE6
+      2b+SPfxQ2Hr8llaawRjt8BCFX/ZzM4/1Qk+EzlfTcEcpkMf6wdO7kD6ulBk/tbsW
+      DHX2lNcxszTf+XP9HXHWJlA2xBfP+Dk4gl4DnO2Y1xR0OSywE/QtvEbN5cY94ieu
+      n7CBy29AleMhmbnx9pw3NyxcFIAsEZHJoU4ZW9ulAJ/ogttSyAWeacW7eJGW31/Z
+      39cS+I4KXJgeGRI20RmpqfH0tuT+X5Da59YpjYxkbhSK3HYBVnNPhoJFUc2j5iKy
+      XLgkapu1xRnEJhw05kr4LCbud0NTvfecqSqa+59kuVc+zWmfTnGTYc0PXZ6Oa3rK
+      44UOmE6eAT5zd/ToleDO0VesN+EO7CXfRsm7HWGpABF5wNK3vIEF2uRr2VJMvgqS
+      9eNwhJyOzoca4xFSwCkc6dACGGkV+CqhufdFBhmcAsUotSxe3zmrBjqA0B/nxIvH
+      DVgOAMnVCe+Lmv8T0mFgqZSJdIUdKjnOLu/GRFhjDKIak4jeMBMTYpVnU+HhMHLq
+      uDiZkNEvEEGhBQmZuI8J55F/a6UURnxUwT3piyi3Pmr2IFD7ahBxPzOBCQARAQAB
+      tCdGZWRvcmEgKGVwZWw5KSA8ZXBlbEBmZWRvcmFwcm9qZWN0Lm9yZz6JAk4EEwEI
+      ADgWIQT/itE0RZcQbs6BO5GKOHK/MihGfAUCYTeY6wIbDwULCQgHAgYVCgkICwIE
+      FgIDAQIeAQIXgAAKCRCKOHK/MihGfFX/EACBPWv20+ttYu1A5WvtHJPzwbj0U4yF
+      3zTQpBglQ2UfkRpYdipTlT3Ih6j5h2VmgRPtINCc/ZE28adrWpBoeFIS2YAKOCLC
+      nZYtHl2nCoLq1U7FSttUGsZ/t8uGCBgnugTfnIYcmlP1jKKA6RJAclK89evDQX5n
+      R9ZD+Cq3CBMlttvSTCht0qQVlwycedH8iWyYgP/mF0W35BIn7NuuZwWhgR00n/VG
+      4nbKPOzTWbsP45awcmivdrS74P6mL84WfkghipdmcoyVb1B8ZP4Y/Ke0RXOnLhNe
+      CfrXXvuW+Pvg2RTfwRDtehGQPAgXbmLmz2ZkV69RGIr54HJv84NDbqZovRTMr7gL
+      9k3ciCzXCiYQgM8yAyGHV0KEhFSQ1HV7gMnt9UmxbxBE2pGU7vu3CwjYga5DpwU7
+      w5wu1TmM5KgZtZvuWOTDnqDLf0cKoIbW8FeeCOn24elcj32bnQDuF9DPey1mqcvT
+      /yEo/Ushyz6CVYxN8DGgcy2M9JOsnmjDx02h6qgWGWDuKgb9jZrvRedpAQCeemEd
+      fhEs6ihqVxRFl16HxC4EVijybhAL76SsM2nbtIqW1apBQJQpXWtQwwdvgTVpdEtE
+      r4ArVJYX5LrswnWEQMOelugUG6S3ZjMfcyOa/O0364iY73vyVgaYK+2XtT2usMux
+      VL469Kj5m13T6w==
+      =Mjs/
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-epel-10
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      mQINBGV4X6kBEAC3eQxgiWuo08uc3mHo4ELux++uqTnYz/tJzEf9Ou3h36WnhumA
+      Nvs+Ts5h8PBx879Y9/aIX1Z20p1kf6tBCinZnEJu59n+TAAsph0+XQlV1l5YkleK
+      Z2ff/Fg65k8QcLXWaIGykA/FaKznRiSurGuD6tRGhJw7DawEwBJr8QZSkRUpnH1L
+      URW97Q/iKrRPiE5VEayE0y8eAL28jIIiFvR+4oJMzvCsRRB/2wYZ2MlJOW91hcYf
+      mbUoXKOBD5UzsJylu7kj25K/ge8rEJ7KicOOwcdYddxsU3DxGSSfwF8AMagENcm2
+      XROeXknjm84A8sNlUkFZBJwfuc7eRTiZGJrnQQVYLrkKj8Mxpq9Ts7hU51TqAWNI
+      uvGDlJdYNE3D2RMqjMEsZ8ej08Thrib6xslu4NzTBkt+6QNnXL4E3hEgYtoyio60
+      GswSz2ulogKg7X4JrNdJYE8/qNowyF3hoVgj5TG1/wQRq+5HlMMOLjgGu9wzLUix
+      fnVfEUnzaofbrUf4/GabCaeY8xRe4tFQrvzigQ4g+kgwKKnfAeqBmPov0yljkw9z
+      BYJWR5zvaw0ffg9Ing00KUSaXBXA5jSlgk1603Y+LefY1SlXsTyqohiRvGH6FI77
+      HNMo72DwoJfFcYjncZUzKgXWJECR4nhVsdj6pKoOjcQ4aSuyVxtsR86ASQARAQAB
+      tChGZWRvcmEgKGVwZWwxMCkgPGVwZWxAZmVkb3JhcHJvamVjdC5vcmc+iQJOBBMB
+      CAA4FiEEfY0Vy/xOYmiFkfsmM9mFF+N+0VgFAmV4X6kCGw8FCwkIBwIGFQoJCAsC
+      BBYCAwECHgECF4AACgkQM9mFF+N+0Vhv/A/+PlhPLSctGRCUEahE+cN4764Acc3p
+      l40ZYzXRhqR0/Tc1/cSDjlA3qVTc8SPohi5OJXwCyr9EiMqKoyoDN097euqbYpyp
+      yN/Pj0lBjsXwcpdDtZ21WGeQU0Khb04N68bMtJbDaxeBciTvDDQravZuPPh0m4Rg
+      Z6myEoa6Aa6EK0hI1Qwi1qIWeRiuEkVT671IaKVETBW5XiUpNBXDAB/L+6DzUF9u
+      scBzfsUDiPO6NrpYDtV3jwq22y6gWluIct/Ka8brwPbqK2sBfFzrHboRhfqlTGjs
+      7F9qUGwIQZn/A8iozXZYQ0+JG1bhQyvjA8eN1GOcRpT+O7H7JXN49o6IG2As4+iK
+      F04+qjqAu2sVfpD8mzM2VubFNllcKKiyCzRYHhSbObRCPzsudDL9GPiXeGGaCuWg
+      sDkiA1MESvf2tLETAGBs/TziO4GwmXUtlKbRiq1FYm90mVq9mBxPZ/Idn+yZusNB
+      0O5SXIbI8lYZw5n4XTK4b+byHRBYsOTHiTsGvjTF2Y7oSwW2CVUmL6RZ23mI4qoY
+      1p5kzRS+GjT1acnTei/FTsOlIKCsjfeHx7uxCkX6xpAD8P3UtLQqfsgH0CL4vSZt
+      TGO6L1InQlp4ZG3OYIomTKbD3/R0wod3U3dTqdulQMXL895u6OLTY3spY2m2MO2k
+      p9Dfd2pKuxK9Mys=
+      =mhQZ
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-almalinux-9
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      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
+      1WKL
+      =jk2t
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-almalinux-10
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      mQINBGaP6O8BEACvg8IlAxGayV8zOi9Ex+Pd8lrj2BrBzloG8ri84ORp9o8ojq7l
+      ykKmIElHe11cQD2Lf/a4lcQQ4Ec3baiD786X6K2eVSlBEAnZMzfjDg8R63SfsBuu
+      8Yk+lUyqlBrDnSDYaPruOAzLIz2r82ikIC1jDbipZsMFPFHPI4/hayyWxJ3oGxRe
+      0mbtYLB9ElEKngt+/hfo7JLklakbznyIRuVEF3VrZb91XC6r/idqfJoNyBXSKidj
+      z0IwqOhgkLUk84rzltDo3AzwGqusd7PEuhOmqinOhp0hMdXsztD4TVyhw82iXu/O
+      onOAObZTZYfM6Z8btmDqkoo0aT+oPPCuZ3yC/caU9dhvCSXET/CGoXc3hL55u9PV
+      qmcVm/mwvuEImEAvxVc0/dBzEUk+FwW8KsaN3HoUKrC4/NqgmaQz8/42np7u2j+B
+      OOJ4hAckNEdWd8rB86CYN00sdxnvLBsp8V3IwEqXLhGOoBsagy61Z8hKCM+siOGn
+      xmbbybgaLOs+DPlxt9LrtgLJHODwmD96oysUPJuA0lv8KMiSpId0tSpp9Wn/wHBG
+      kRgxGYfzQu7WRvRZqQaleft1JTXXOjNzPur0RkJyb3yFwAoxpePyo/WrupM41OHW
+      58cEqdC6riCnJcS4U84RLj+hwvufBVB7areQ75sETnKeyozZW+P16E1t/wARAQAB
+      tChBbG1hTGludXggT1MgMTAgPHBhY2thZ2VyQGFsbWFsaW51eC5vcmc+iQJMBBMB
+      CgA2FiEE7m23uY9b9e3Z2g3l3uXBHMKh5XIFAmaP6O8CGwMECwkIBwQVCgkIBRYC
+      AwEAAh4FAheAAAoJEN7lwRzCoeVy32AP/A2+KI+JhmsxnactSptkAWGyAAf1YBWW
+      Js2sc9OJdKj7uIkzszCx7c7VIVeF/VLijIYpM/zwUgir5S5SimzQmY+FumwbKIml
+      K5RBsoSog22i7Edho0MLa1pa6qvnKS0nkl9DEcu8EbMUhucWbxGnCG/22EEMTrY+
+      Si1IZNkDGtlBHHBKMC+STbqqTxtdy4tAd2NYwWh3sBIh6PF7T4NLRAugu7PZQr5K
+      amS4z2lV3ebshGjieA0Zoznwh0AXgN0gZ/0pC/LXI25gcgtrvkCyL8Fe0AyZUMd8
+      UvZXaRSsm3SkCUIlGjPrvuItn1D7tHmqVSCDKXDM2TqjfiRm1JF+2OFCBNvGz19V
+      LxWd/Gf+0qw0dtKxRMKzGh0mxXY40hjtmYZulrPxhG5itNDjStovgrevM1HBsXs9
+      ikrkOGQ0pFcqizTn4ZKAmMozEMuIuV89Vof2bBCg7pHT1FmXVdAaYJxb6a7A/CgN
+      qHjoh8AxBiGw/Q2NM4YJlUVhHqqd+/lUG3WJqACNEnqSlZkYQ3HqNNaKhHVbD4mN
+      q/g6v+f8aWWDZDsI6IAfbJUB+KPEnIvQJQleWuHrq7kcUMhEq3dwBMIoTVEHhUUr
+      RQKToSEM1rN7PcanaXQM2gy141dS7tFLxhapG8ug75LkIUnEOpPMtUjvrU1ZELGq
+      36vVHBB+dTDg
+      =tJCw
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-foreman
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      mQINBGiUmPwBEADSusizwQ2Kp7URX0G1JUU4Tl7ufpeVppYZGS4LNEfZ99yVy3vS
+      yg4noXAaiE3TfgjUFh6K/xyFBNbAtfKp8WA9ldQo2LiYoGE5JWcyXmg2qFVQVTvI
+      IeuibkUuDYqEK+sYgB0rfVh2VZdX6s4arZOIqtMWZeRUYHa4nYFlisPJVSmg3Rmx
+      g8NKX2TE7gXLULjejm6Ctmj9CmD1ommQrVC5NkEPuPO2OH2/4me4nb/bd4FuySos
+      k6xt3Fsn0Dk3C/UkztQD3L6+LiqM9a8jCE8B8VD8yPVB0F86DM46FOkaH54DX1kx
+      LqN4l2BcT+7ClM9i0sDtK03OcYnmj5gCGwVY96B7oP8U4IAOWO8MOZSJwOBAzfXx
+      y+Hc4g0hxhHJxJRPZGhQLSVUbSWtUcW3LaIy7i00NvTsXd5P1tmdyoe1HUjd5LDC
+      i/lW1uZr9T7NgxhySf2x07sR4H9IRDHTpxP1ObguPLqf45oCSiMQZeYSpjYOxe7D
+      Rsq2V0mXVwJOpr9XFEXdNkfU+MLJ2oc+UYvCkZ0tjYeRPGYnGiPDBunAd/LalReW
+      894UP1lEDbhucGsmR+T2+TuUoc74dHvllmYlyb32CL6WTjgWAttgBQyaeTSXq0Nc
+      Diu8Z+Hpgaln4f60XSpGLynZQ930/SFjpMd6kH46hYoXlzVKV+2KXvTqKQARAQAB
+      tD5Gb3JlbWFuIEF1dG9tYXRpYyBTaWduaW5nIEtleSAoMy4xNikgPHBhY2thZ2Vz
+      QHRoZWZvcmVtYW4ub3JnPokCWAQTAQgAQhYhBE7wlLvWxDrajkGQvRg1e1mtFzII
+      BQJolJj8AxsvBAUJAeEzgAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRAY
+      NXtZrRcyCOWND/9eDlxhbnlZ7HVt6dYttXmsm5voWOmZS9P5q1kn1RT8mHxTTzR6
+      ikQJwR0+pnh6hkrPz66wVZs/Cy+2F1xeeD2iwt1gmJ6ibFC3z8qLjeV7kRA4IN5B
+      f5nOg3/NvkP/4pWWtdwA6wgfl7aPQE7WBSFhezoysOeBZPd2ZydEOrFGBdstYRh+
+      reNjH48u9NNNMCeyZZUUYcPOyk9CGuWJ4UfFACH6q6MCiyxgwhaDQcWbVXkIVFzg
+      DpKwsaBVvMZyADdwHFk08wjI2vo1A6LvJhL31JgK5IPbKP/vPDFu+Vkt3A6L3taD
+      yGj+T6fa+GY67K7EL8nYctGGwqZ45fNjzIGzGnqmRPx2+gx4COAiKeCRDTf9BJw4
+      fTQA+UQ2Ro66APeY1/RUTr2v2Zn4ead/etsTX+qF5rwR6rv5KaDGY+TB0WK+gke9
+      LVNxvQl18IhlHBMhTtAwd8cAXca/muqvukmlOdPisXe3DHEbFR4OndRTfBzcsi4+
+      fYX1MrS/K4zW0PUPze9+5z/pFXYzPOON9JpjG29hkixMW3BGp1QMJhNuAGn3F3v9
+      wHPRAArNU+dfUdPuwmJI6A8EAhi6Iag94GOlos5cdWNIxN1gH38fnc1VRYU7DHme
+      QoGx8Kr33S8awRrFOlUqxe+WEl/vhNPovs7FRt+btoCfAjz+Ohcav8KnHw==
+      =LeuY
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-influx-archive
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      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
+      mkkO7wkTEAhz6IuBGjMg
+      =mg0I
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-zabbix
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      mQGiBFCNJaYRBAC4nIW8o2NyOIswb82Xn3AYSMUcNZuKB2fMtpu0WxSXIRiX2BwC
+      YXx8cIEQVYtLRBL5o0JdmoNCjW6jd5fOVem3EmOcPksvzzRWonIgFHf4EI2n1KJc
+      JXX/nDC+eoh5xW35mRNFN/BEJHxxiRGGbp2MCnApwgrZLhOujaCGAwavGwCgiG4D
+      wKMZ4xX6Y2Gv3MSuzMIT0bcEAKYn3WohS+udp0yC3FHDj+oxfuHpklu1xuI3y6ha
+      402aEFahNi3wr316ukgdPAYLbpz76ivoouTJ/U2MqbNLjAspDvlnHXXyqPM5GC6K
+      jtXPqNrRMUCrwisoAhorGUg/+S5pyXwsWcJ6EKmA80pR9HO+TbsELE5bGe/oc238
+      t/2oBAC3zcQ46wPvXpMCNFb+ED71qDOlnDYaaAPbjgkvnp+WN6nZFFyevjx180Kw
+      qWOLnlNP6JOuFW27MP75MDPDpbAAOVENp6qnuW9dxXTN80YpPLKUxrQS8vWPnzkY
+      WtUfF75pEOACFVTgXIqEgW0E6oww2HJi9zF5fS8IlFHJztNYtbQgWmFiYml4IFNJ
+      QSA8cGFja2FnZXJAemFiYml4LmNvbT6IYAQTEQIAIAUCUI0lpgIbAwYLCQgHAwIE
+      FQIIAwQWAgMBAh4BAheAAAoJENE9WOR56l7UhUwAmgIGZ39U6D2w2oIWDD8m7KV3
+      oI06AJ9EnOxMMlxEjTkt9lEvGhEX1bEh7bkBDQRQjSWmEAQAqx+ecOzBbhqMq5hU
+      l39cJ6l4aocz6EZ9mSSoF/g+HFz6WYnPAfRaYyfLmZdtF5rGBDD4ysalYG5yD59R
+      Mv5tNVf/CEx+JAPMhp6JCBkGRaH+xHws4eBPGkea4rGNVP3L3rA7g+c1YXZICGRI
+      OOH7CIzIZ/w6aFGsPp7xM35ogncAAwUD/3s8Nc1OLDy81DC6rGpxfEURd5pvd/j0
+      D5Di0WSBEcHXp5nThDz6ro/Vr0/FVIBtT97tmBHX27yBS3PqxxNRIjZ0GSWQqdws
+      Q8o3YT+RHjBugXn8CzTOvIn+2QNMA8EtGIZPpCblJv8q6MFPi9m7avQxguMqufgg
+      fAk7377Rt9RqiEkEGBECAAkFAlCNJaYCGwwACgkQ0T1Y5HnqXtQx4wCfcJZINKVq
+      kQIoV3KTQAIzr6IvbZoAn12XXt4GP89xHuzPDZ86YJVAgnfK
+      =+200
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-openvox
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      mQENBGeGidcBCADjJzn2Mh7E7guNotcwRh1vvKQkQrw/TYY+xuKA2DGOvMrVYzyn
+      BQ5CzQ3n2A4fyvUWhRqbgy2hV8uYQNap2ddJ05BlzH1WotUaLfHcAUmCxRIOYw89
+      nhi/5v+tZNjvAZo96E9fvYvWVnsYXVpYcG4xyGuQYdvEiBIrgxXM3M3XCgS3+Ns+
+      Hlm2FGZSxIYI0IOsbu34J5KDV/sAmBSAG7Oyg+hXGBAABWW97IQcZw0l260ksDHS
+      ea7Z0HcWmNgH6CjG2eR+WkGHJ7nVDxIr06SUgRr1xL66BrwYfD7rtURZJQWYPur4
+      D8G95js0Aisf2oUMHK0PRkq1hAUTBFXdE1P9ABEBAAG0IlZveCBQdXB1bGkgPG9w
+      ZW52b3hAdm94cHVwdWxpLm9yZz6JAVEEEwEIADsWIQQOJkKZhwAkGPlRPypfuZnC
+      1i/z2QUCZ4aJ1wIbAwULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRBfuZnC
+      1i/z2dLbCADcttMJyLG3TFax4FAzhNMwqM/Md7eWvDcAlhiXCbvQCNEsK97zumzV
+      v2EnTRwH7HWJeq/+5YMMKZh7BGKQb5BqKygBamF7EyzR8I3AfDqoKXhvs9yIDnVv
+      BuGO1uzLZCP/jdN/KBGbcQvU5u2Uxr3nB9VxPcQnBtg4e3uYWPDPqm9sfiOzLn5D
+      UFLiE1MyFkQER6BZO86QxsL+jQDbOnSCIIKTMd017rUBxNDV9713KMNerjRhB1UT
+      K73UfsKCHfc45xg0t3dQz7td/3fp7GyJafvT65ww9bTRoHLVFG/q3jOQ4b5pNAuz
+      YyhoaxkEPFLXD/uYahTG6YnKBZQnEU+9uQENBGeGidcBCADL6aKBBbYcNV+tqcq0
+      2wV6QluFwyfqCK6tRBMd9iMXa9JOLLncKf6ADMAfstSJ95IDzeJMQJrMAJ9Jq9/c
+      dGceEv7IHahyQ3LbDrz6S8cFyDXxJNlFvVu1+xbuDdVTlmBb69u34TpFenqsO6oO
+      TO7C9bK+pt3lZuiCmzgCgtsqHA38/M0BhtR/as4tTbnwR9FDj5xYH4WgKCIj4OqN
+      F2dmmdjmtHtnpNVGLCiFsfiCRxQGj4WzQnrXe60FXekV/MJBCnGGdttdyBkFFywb
+      cT6ceZCJJ9nbVborqkAZgipllwE4JG5rjNVsX1vraNtzvikfykANNRoSNf9ZC2ya
+      4O4dABEBAAGJATYEGAEIACAWIQQOJkKZhwAkGPlRPypfuZnC1i/z2QUCZ4aJ1wIb
+      DAAKCRBfuZnC1i/z2UZVCACCAvzs6VSVmQYeMilylNd3pAlY+LaVGrdCMbYZ4FBv
+      vMNhpTOzcV6y/9gcfP5NH5jSmbIQ6Lq82OBGgaag0gUvcY5AIFutuZAph9LPVfY8
+      kEqBCa8TqRAiWMzqYElbUvWMnY4pLL3+vlQViXPFuLk8MViEJ5jphGG3j4WDTgwC
+      al8R3f/kzwRYoJc9CK9LbZreqKVWFLVbxunyq8R/7nWxH/9jCUr6GbY0X1bQfc5M
+      laqQNoSXiDwb+K2CU+szqmwcuyxliV3arAQ/2a509l90H1VyNzBNmC42JxqgFAAT
+      8Dj43+HR+npsfqx1w78xgCtYYi1TU+S+tKpvKybylNP9
+      =vzYO
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-salt
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      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
+      =ZKPF
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-debian
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      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
+      ugNdPbTx5TQVD48tsKiSIOPP1g==
+      =UqDn
+      -----END PGP PUBLIC KEY BLOCK-----
+  - name: rpm-gpg-key-proxmox
+    content_type: gpg_key
+    content: |
+      -----BEGIN PGP PUBLIC KEY BLOCK-----
+      mQGiBEkGw8URBACes0Nn6KGrblcNfylEonfSuqEyCDz4P0SoPc09ieqhacdJYZZu
+      gOJkdAQMESUvVG9S/KolkQI0eR3VqW5PxdC7Uon8lnLofy+iicJhaZvBQA8voOJ9
+      Myv4SrrBPrsa64pLppZ2zYJ2Vj+x26tvYRG1L8G20FDKejnrcLmAOLz+twCgo5rj
+      Lcyh1gGAE/ktluKIS6EpfmsEAJAjyiiDs2HZcBh7RrlV25kZEk7rwwrrMXmkGpBb
+      iElZjbRY6cHl+IvwEHD89ShuADuiEOVMqQ8nSbaFQAblqBK+Q1klZUxmppw1UfG5
+      +x3X7MrULg0YAgAMqwBPgYrAYfV6tdzO3HY6dP5aRNBVYxCgvnXpHw4XW4GC8qRO
+      NmBPBACLSxG4Q2md/6jHVnoQT4UsPA5Nn2imKsLqS62WQBQyM8W+LtlyxT+QAf+t
+      +D/XFv5ZUQQq766cR4WnmOkNLAqmFaSrUF2T58UPxOC6TsTkrFkI+kVJFqHedag2
+      9n+EFXK/DzrsmElWiMyYuMYkOzNn/2cbYnpLq4zO5cwi7BNoRrQxUHJveG1veCBS
+      ZWxlYXNlIEtleSA8cHJveG1veC1yZWxlYXNlQHByb3htb3guY29tPohgBBMRAgAg
+      BQJJBsPFAhsDBgsJCAcDAgQVAggDBBYCAwECHgECF4AACgkQwjrH9JiH+VqTLwCf
+      TVzFdNADeZ00bKpyE8u4BHZJK+4AmwVbhpnb4EkSHYqNhrhEIVSynxm0uQINBEkG
+      w8oQCAD323YC4+yp1fJGyI2o8GjnPWKRbmJPhoaeungGkFD0M2Ke2/NlgoQnwwyH
+      FRCLxmjc48r++hlSN+OhVuGrvSl5mh0R3Tv5m17OD1KmkAMT9TcrZ7mqn2D79iv3
+      TkO27Z76Rs+Wnfu/dc+85wCJDGx9oK8hmJTu6Qc62AkdVCfTULoKSQ3u7LFkGQP9
+      I+wtOLnLIc8TpGNuwJ97gIAsfZEkbg3zS39loPwQdIV4b48Hfiz7uMEc4Zwx2bqL
+      +6sp1vK3jfr7Vb1vQyqG9pvDQ5LSbjh9PCCEmbLtyEIDx8hogNZ9M0ShgZzOwRj4
+      vF/sdAdxIT4/7TlMi8jzZqFYSDN/AAMFCACBFBtH1KF45gt70BwgDDv+2zxCy3nP
+      3kT2W2f2P3OzTSsu0HGGrIZFtllemAVv89sXlJvZEOzIDvWFizwTiaSW0orj1ni4
+      Rz5tNIKnv2T1nJbKWnK7hKO+VKopSCADfFW4FxOwnkV1tV/k7WtCsP+y7X4b/9PA
+      EFDYY81MZo3pXvvk989SmoNL2mAdcVYRn1vVCAsciVX6QZFuaupFl4J+57G0OO9P
+      tNXn9Hesw7qMo0H52WLp/l8WOhKcghV3+2V4NgpPqZiWD0bOclSO41gmeRWyNo0h
+      lVzmRVZF0Np9gXzIBVvaq3pHMglb8rOLm/AsNxgZlDe1PqJiSWFZR96EiEkEGBEC
+      AAkFAkkGw8oCGwwACgkQwjrH9JiH+VrCsgCfQQwtSer1YsUF9zYG5jzVONe2Ms0A
+      nRwQSm7uGTkFGHhEVkqTPwzNUzg6
+      =6GBj
+      -----END PGP PUBLIC KEY BLOCK-----
+foreman_repository_sets:
+  - name: Alma_Linux_for_x86_64
+    repositories:
+
+# Find names with: sudo subscription-manager repos | grep '^Repo Name'
+#
+    - name: Alma_Linux_9_for_x86_64_BaseOS
+      content_type: yum
+      url: https://repo.almalinux.org/almalinux/9/BaseOS/x86_64/os/
+      gpg_key: rpm-gpg-key-almalinux-9
+      download_policy: on_demand
+      basearch: "x86_64"
+      download_policy: on_demand
+    - name: Alma_Linux_9_for_x86_64_AppStream
+      content_type: yum
+      url: https://repo.almalinux.org/almalinux/9/AppStream/x86_64/os/
+      gpg_key: rpm-gpg-key-almalinux-9
+      download_policy: on_demand
+      basearch: "x86_64"
+      download_policy: on_demand
+    - name: Alma_Linux_9_for_x86_64_CodeReady
+      content_type: yum
+      url: https://repo.almalinux.org/almalinux/9/CRB/x86_64/os/
+      gpg_key: rpm-gpg-key-almalinux-9
+      download_policy: on_demand
+      basearch: "x86_64"
+      download_policy: on_demand
+    - name: Alma_Linux_10_for_x86_64_BaseOS
+      content_type: yum
+      url: https://repo.almalinux.org/almalinux/10/BaseOS/x86_64/os/
+      gpg_key: rpm-gpg-key-almalinux-10
+      download_policy: on_demand
+      basearch: "x86_64"
+      download_policy: on_demand
+    - name: Alma_Linux_10_for_x86_64_AppStream
+      content_type: yum
+      url: https://repo.almalinux.org/almalinux/10/AppStream/x86_64/os/
+      gpg_key: rpm-gpg-key-almalinux-10
+      download_policy: on_demand
+      basearch: "x86_64"
+      download_policy: on_demand
+    - name: Alma_Linux_10_for_x86_64_CodeReady
+      content_type: yum
+      url: https://repo.almalinux.org/almalinux/10/CRB/x86_64/os/
+      gpg_key: rpm-gpg-key-almalinux-10
+      download_policy: on_demand
+      basearch: "x86_64"
+      download_policy: on_demand
+  - name: Extra_Packages_for_Enterprise_Linux
+    repositories:
+      - name: Extra_Packages_for_Enterprise_Linux_9_x86_64
+        content_type: yum
+        url: https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/
+        gpg_key: rpm-gpg-key-epel-9
+        download_policy: on_demand
+      - name: Extra_Packages_for_Enterprise_Linux_10_x86_64
+        content_type: yum
+        url: https://dl.fedoraproject.org/pub/epel/10/Everything/x86_64/
+        gpg_key: rpm-gpg-key-epel-10
+        download_policy: on_demand
+  - name: foreman
+    repositories:
+      - name: Release_3.16_Enterprise_Linux_9_x86_64
+        content_type: yum
+        url: https://yum.theforeman.org/releases/3.16/el9/x86_64/
+        gpg_key: rpm-gpg-key-foreman
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Plugins_Release_3.16_Enterprise_Linux_9_x86_64
+        content_type: yum
+        url: https://yum.theforeman.org/plugins/3.16/el9/x86_64/
+        gpg_key: rpm-gpg-key-foreman
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+  - name: influx
+    repositories:
+      - name: Release_Stable_rpm_x86_64
+        content_type: yum
+        url: https://repos.influxdata.com/stable/x86_64/main/
+        gpg_key: rpm-gpg-key-influx-archive
+        basearch: "x86_64"
+        download_policy: on_demand
+  - name: zabbix
+    repositories:
+      - name: Release_7.0_Alma_Linux_9_x86_64
+        content_type: yum
+        url: https://repo.zabbix.com/zabbix/7.0/alma/9/x86_64/
+        gpg_key: rpm-gpg-key-zabbix
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Release_7.0_Alma_Linux_10_x86_64
+        content_type: yum
+        url: https://repo.zabbix.com/zabbix/7.0/alma/10/x86_64/
+        gpg_key: rpm-gpg-key-zabbix
+        releasever: 10
+        basearch: "x86_64"
+        download_policy: on_demand
+  - name: openvox
+    repositories:
+      - name: Release_7_el_9_x86_64
+        content_type: yum
+        url: https://yum.voxpupuli.org/openvox7/el/9/x86_64/
+        gpg_key: rpm-gpg-key-openvox
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Release_7_el_10_x86_64
+        content_type: yum
+        url: https://yum.voxpupuli.org/openvox7/el/10/x86_64/
+        gpg_key: rpm-gpg-key-openvox
+        releasever: 10
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Release_8_el_9_x86_64
+        content_type: yum
+        url: https://yum.voxpupuli.org/openvox9/el/9/x86_64/
+        gpg_key: rpm-gpg-key-openvox
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Release_8_el_10_x86_64
+        content_type: yum
+        url: https://yum.voxpupuli.org/openvox8/el/10/x86_64/
+        gpg_key: rpm-gpg-key-openvox
+        releasever: 10
+        basearch: "x86_64"
+        download_policy: on_demand
+  - name: salt
+    repositories:
+      - name: salt_rpm_all
+        content_type: yum
+        url: https://packages.broadcom.com/artifactory/saltproject-rpm/
+        gpg_key: rpm-gpg-key-salt
+        download_policy: on_demand
+  - name: debian
+    repositories:
+      - name: trixie_amd64
+        content_type: deb
+        deb_releases: trixie trixie-updates
+        deb_components: main contrib non-free-firmware
+        deb_architectures: amd64
+        url: https://deb.debian.org/debian/
+        gpg_key: rpm-gpg-key-debian
+        download_policy: on_demand
+      - name: trixie_security_amd64
+        content_type: deb
+        url: https://security.debian.org/debian-security/
+        deb_releases: trixie-security
+        deb_components: main contrib non-free-firmware
+        deb_architectures: amd64
+        gpg_key: rpm-gpg-key-debian
+        download_policy: on_demand
+  - name: proxmox
+    repositories:
+      - name: Release_9_trixie_amd64
+        content_type: deb
+        deb_releases: trixie trixie-updates
+        deb_components: pve-no-subscription
+        deb_architectures: amd64
+        url: http://download.proxmox.com/debian/pve
+        gpg_key: rpm-gpg-key-proxmox
+        download_policy: on_demand
+#   - name: GitLab
+#     repositories:
+#       - name: GitLab CE EL9 - x86_64
+#         content_type: yum
+#         url: https://packages.gitlab.com/gitlab/gitlab-ce/el/9/x86_64/
+#         gpg_key: rpm-gpg-key-gitlab
+#         download_policy: on_demand
+
+  # Custom product for our custom packages
+  - name: custom_packages
+    repositories:
+      - name: custom
+        content_type: yum
+content_views:
+  - name: alma9
+    repositories:
+#
+# Find names with: hammer repository list --organization habbfarm
+#
+      - name: Alma_Linux_9_for_x86_64_BaseOS
+        product: Alma_Linux_for_x86_64
+      - name: Alma_Linux_9_for_x86_64_AppStream
+        product: Alma_Linux_for_x86_64
+      - name: Alma_Linux_9_for_x86_64_CodeReady
+        product: Alma_Linux_for_x86_64
+      - name: Extra_Packages_for_Enterprise_Linux_9_x86_64
+        product: Extra_Packages_for_Enterprise_Linux
+      - name: Release_8_el_9_x86_64
+        product: openvox
+      - name: Release_7_el_9_x86_64
+        product: openvox
+      - name: salt_rpm_all
+        product: salt
+      - name: Release_7.0_Alma_Linux_9_x86_64
+        product: zabbix
+      - name:  Release_Stable_rpm_x86_64
+        product: influx
+      - name: custom
+        product: custom_packages
+
+content_views:
+  - name: alma10
+    repositories:
+# Find names with: hammer repository list --organization habbfarm
+      - name: Alma_Linux_10_for_x86_64_BaseOS
+        product: Alma_Linux_for_x86_64
+      - name: Alma_Linux_10_for_x86_64_AppStream
+        product: Alma_Linux_for_x86_64
+      - name: Alma_Linux_10_for_x86_64_CodeReady
+        product: Alma_Linux_for_x86_64
+      - name: Extra_Packages_for_Enterprise_Linux_10_x86_64
+        product: Extra_Packages_for_Enterprise_Linux
+      - name: Release_8_el_10_x86_64
+        product: openvox
+      - name: Release_7_el_10_x86_64
+        product: openvox
+      - name: salt_rpm_all
+        product: salt
+      - name: Release_7.0_Alma_Linux_10_x86_64
+        product: zabbix
+      - name:  Release_Stable_rpm_x86_64
+        product: influx
+      - name: custom
+        product: custom_packages
+
+  - name: foreman
+    repositories:
+      - name: Release_3.16_Enterprise_Linux_9_x86_64
+        product: foreman
+      - name: Plugins_Release_3.16_Enterprise_Linux_9_x86_64
+        product: foreman
+      - name: Alma_Linux_9_for_x86_64_BaseOS
+        product: Alma_Linux_for_x86_64
+      - name: Alma_Linux_9_for_x86_64_AppStream
+        product: Alma_Linux_for_x86_64
+      - name: Alma_Linux_9_for_x86_64_CodeReady
+        product: Alma_Linux_for_x86_64
+      - name: Extra_Packages_for_Enterprise_Linux_9_x86_64
+        product: Extra_Packages_for_Enterprise_Linux
+      - name: Release_8_el_9_x86_64
+        product: openvox
+      - name: Release_7_el_9_x86_64
+        product: openvox
+      - name: salt_rpm_all
+        product: salt
+      - name: Release_7.0_Alma_Linux_9_x86_64
+        product: zabbix
+      - name:  Release_Stable_rpm_x86_64
+        product: influx
+      - name: custom
+        product: custom_packages
+
+host_collections:
+  - name: "alma9"
+    description: "Host collection for Alma Linux 9 servers."
+  - name: "alma10"
+    description: "Host collection for Alma Linux 9 servers."
+  - name: "foreman"
+    description: "Host collection for foreman server"
+  - name: "smart_proxy"
+    description: "Host collection for smart_proxy"
+  - name: "Test"
+    description: "Host collection for test servers."
+  - name: "Stage"
+    description: "Host collection for Stage servers."
+  - name: "Prod"
+    description: "Host collection for Prod servers."
+
+activation_keys:
+  - name: "alma9_test"
+    description: "Alma Linux 9 in the test environment."
+    auto_attach: True
+    unlimited_hosts: True
+    lifecycle_environment: "Test"
+    host_collections:
+      - "alma9"
+      - "Test"
+    content_view: "alma9"
+    #content_overrides:
+      #- label: "Alma_Linux_9_for_x86_64_BaseOS"
+      #  override: enabled
+      #- label: "Alma_Linux_9_for_x86_64_AppStream"
+      #  override: enabled
+      #- label: "Alma_Linux_9_for_x86_64_CodeReady"
+      #  override: enabled
+      #- label: "Extra_Packages_for_Enterprise_Linux"
+      #- label: "Extra_Packages_for_Enterprise_Linux_9_x86_64"
+      #  override: enabled
+      #- label: "custom_packages"
+      #  override: enabled
+
+  - name: "alma9_stage"
+    description: "Alma Linux 9 in the stage environment."
+    auto_attach: True
+    unlimited_hosts: True
+    lifecycle_environment: "Stage"
+    host_collections:
+      - "alma9"
+      - "Stage"
+    content_view: "alma9"
+    #content_overrides:
+    #  - label: "Alma_Linux_9_for_x86_64_BaseOS"
+    #    override: enabled
+    #  - label: "Alma_Linux_9_for_x86_64_AppStream"
+    #    override: enabled
+    #  - label: "Alma_Linux_9_for_x86_64_CodeReady"
+    #    override: enabled
+      #- label: "Extra_Packages_for_Enterprise_Linux"
+    #  - label: "Extra_Packages_for_Enterprise_Linux_9_x86_64"
+    #    override: enabled
+      #- label: "custom_packages"
+      #  override: disabled
+
+  - name: "alma9_prod"
+    description: "Alma Linux 9 in the prod environment."
+    auto_attach: True
+    unlimited_hosts: True
+    lifecycle_environment: "Prod"
+    host_collections:
+      - "alma9"
+      - "Prod"
+    content_view: "alma9"
+    #content_overrides:
+    #  - label: "Alma_Linux_9_for_x86_64_BaseOS"
+    #    override: enabled
+    #  - label: "Alma_Linux_9_for_x86_64_AppStream"
+    #    override: enabled
+    #  - label: "Alma_Linux_9_for_x86_64_CodeReady"
+    #    override: enabled
+      #- label: "Extra_Packages_for_Enterprise_Linux"
+    #  - label: "Extra_Packages_for_Enterprise_Linux_9_x86_64"
+    #    override: enabled
+      #- label: "custom_packages"
+      #  override: disabled
+  - name: "alma10_test"
+    description: "Alma Linux 10 in the test environment."
+    auto_attach: True
+    unlimited_hosts: True
+    lifecycle_environment: "Test"
+    host_collections:
+      - "alma10"
+      - "Test"
+    content_view: "alma10"
+
+  - name: "alma10_stage"
+    description: "Alma Linux 10 in the stage environment."
+    auto_attach: True
+    unlimited_hosts: True
+    lifecycle_environment: "Stage"
+    host_collections:
+      - "alma10"
+      - "Stage"
+    content_view: "alma10"
+
+  - name: "alma10_prod"
+    description: "Alma Linux 10 in the prod environment."
+    auto_attach: True
+    unlimited_hosts: True
+    lifecycle_environment: "Prod"
+    host_collections:
+      - "alma10"
+      - "Prod"
+    content_view: "alma10"
+
+  - name: "foreman"
+    description: "foreman in the prod environment."
+    auto_attach: True
+    unlimited_hosts: True
+    lifecycle_environment: "Prod"
+    host_collections:
+      - "foreman"
+      - "Prod"
+    content_view: "foreman"
+
+  - name: "smart_proxy"
+    description: "smart proxy in the prod environment."
+    auto_attach: True
+    unlimited_hosts: True
+    lifecycle_environment: "Prod"
+    host_collections:
+      - "smart_proxy"
+      - "Prod"
+    content_view: "foreman"
+
+sat_publish_description: "Automatic, scheduled."

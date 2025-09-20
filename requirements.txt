@@ -23,3 +23,6 @@ requests
 # postgres
 #psycopg2
 psycopg2-binary
+
+# jmespath
+jmespath
