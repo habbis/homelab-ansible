@@ -924,7 +924,6 @@ foreman_repository_sets:
       - name: Plugins_Release_3.16_Enterprise_Linux_9_x86_64
         content_type: yum
         url: https://yum.theforeman.org/plugins/3.16/el9/x86_64/
-        gpg_key: rpm-gpg-key-foreman
         releasever: 9
         basearch: "x86_64"
         download_policy: on_demand
