@@ -14,21 +14,26 @@
       resource: content_views
       search: 'name="alma9"'
     register: raw_list_cvs
+    tags: alma9
 
   - debug:
       var: raw_list_cvs.resources
+    tags: alma9
 
   - debug:
       var: raw_list_cvs.resources[0].versions
+    tags: alma9
 
   - name:
     set_fact:
       list_all_cvs: "{{ raw_list_cvs['resources'] | json_query(jmesquery) | list }}"
     vars: 
       jmesquery: "[*].{name: name, composite: composite, id: id}"
+    tags: alma9
 
   - debug:
       var: list_all_cvs
+    tags: alma9
 
   - name: Extract list of content views
     set_fact:
@@ -36,12 +41,15 @@
       sat6_content_views_list: "['{{ item.name }}' ]"
     loop: "{{ list_all_cvs | reject('search', 'Default_Organization_View') | list }}"
     when: item.composite == false
+    tags: alma9
 
   - debug:
       var: sat6_content_views_list
+    tags: alma9
 
   - debug:
       var: "sat6_content_views_list | list }}"
+    tags: alma9
 
 
   - name: Publish content
@@ -63,6 +71,7 @@
     loop_control:
       loop_var: "item"
     register: cv_publish_sleeper
+    tags: alma9
 
 # alma10
   - name: Find all CVs
@@ -75,21 +84,26 @@
       resource: content_views
       search: 'name="alma10"'
     register: raw_list_cvs
+    tags: alma10
 
   - debug:
       var: raw_list_cvs.resources
+    tags: alma10
 
   - debug:
       var: raw_list_cvs.resources[0].versions
+    tags: alma10
 
   - name:
     set_fact:
       list_all_cvs: "{{ raw_list_cvs['resources'] | json_query(jmesquery) | list }}"
     vars: 
       jmesquery: "[*].{name: name, composite: composite, id: id}"
+    tags: alma10
 
   - debug:
       var: list_all_cvs
+    tags: alma10
 
   - name: Extract list of content views
     set_fact:
@@ -97,12 +111,15 @@
       sat6_content_views_list: "['{{ item.name }}' ]"
     loop: "{{ list_all_cvs | reject('search', 'Default_Organization_View') | list }}"
     when: item.composite == false
+    tags: alma10
 
   - debug:
       var: sat6_content_views_list
+    tags: alma10
 
   - debug:
       var: "sat6_content_views_list | list }}"
+    tags: alma10
 
 
   - name: Publish content
@@ -124,6 +141,7 @@
     loop_control:
       loop_var: "item"
     register: cv_publish_sleeper
+    tags: alma10
 
 # foreman
   - name: Find all CVs
@@ -136,21 +154,26 @@
       resource: content_views
       search: 'name="foreman"'
     register: raw_list_cvs
+    tags: foreman
 
   - debug:
       var: raw_list_cvs.resources
+    tags: foreman
 
   - debug:
       var: raw_list_cvs.resources[0].versions
+    tags: foreman
 
   - name:
     set_fact:
       list_all_cvs: "{{ raw_list_cvs['resources'] | json_query(jmesquery) | list }}"
     vars: 
       jmesquery: "[*].{name: name, composite: composite, id: id}"
+    tags: foreman
 
   - debug:
       var: list_all_cvs
+    tags: foreman
 
   - name: Extract list of content views
     set_fact:
@@ -158,12 +181,15 @@
       sat6_content_views_list: "['{{ item.name }}' ]"
     loop: "{{ list_all_cvs | reject('search', 'Default_Organization_View') | list }}"
     when: item.composite == false
+    tags: foreman
 
   - debug:
       var: sat6_content_views_list
+    tags: foreman
 
   - debug:
       var: "sat6_content_views_list | list }}"
+    tags: foreman
 
 
   - name: Publish content
@@ -185,6 +211,7 @@
     loop_control:
       loop_var: "item"
     register: cv_publish_sleeper
+    tags: foreman
 
 # debian13
   - name: Find all CVs
@@ -197,21 +224,26 @@
       resource: content_views
       search: 'name="debian13"'
     register: raw_list_cvs
+    tags: debian13
 
   - debug:
       var: raw_list_cvs.resources
+    tags: debian13
 
   - debug:
       var: raw_list_cvs.resources[0].versions
+    tags: debian13
 
   - name:
     set_fact:
       list_all_cvs: "{{ raw_list_cvs['resources'] | json_query(jmesquery) | list }}"
     vars: 
       jmesquery: "[*].{name: name, composite: composite, id: id}"
+    tags: debian13
 
   - debug:
       var: list_all_cvs
+    tags: debian13
 
   - name: Extract list of content views
     set_fact:
@@ -219,12 +251,15 @@
       sat6_content_views_list: "['{{ item.name }}' ]"
     loop: "{{ list_all_cvs | reject('search', 'Default_Organization_View') | list }}"
     when: item.composite == false
+    tags: debian13
 
   - debug:
       var: sat6_content_views_list
+    tags: debian13
 
   - debug:
       var: "sat6_content_views_list | list }}"
+    tags: debian13
 
 
   - name: Publish content
@@ -246,3 +281,4 @@
     loop_control:
       loop_var: "item"
     register: cv_publish_sleeper
+    tags: debian13
