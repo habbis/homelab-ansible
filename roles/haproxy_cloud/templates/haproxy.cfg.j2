@@ -1,0 +1,104 @@
+global
+    log         127.0.0.1 local2
+
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+
+    # turn on stats unix socket
+    stats socket /var/lib/haproxy/stats
+
+    # utilize system-wide crypto-policies
+    ssl-default-bind-ciphers PROFILE=SYSTEM
+    ssl-default-server-ciphers PROFILE=SYSTEM
+
+defaults
+    mode                    http
+    log                     global
+    option                  dontlognull
+    option http-server-close
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+
+frontend git-ssh.habbfarm.net
+        bind                    95.217.30.59:1000
+        mode                    tcp
+        log                     global
+        timeout client          30000
+        default_backend git-ssh
+
+#
+# comment out if not using nginx to use lets encrypt and redirect
+#
+#frontend main-http
+#        bind                    95.217.30.59:80
+#        mode                    http
+#        log                     global
+#        option                  http-keep-alive
+#        timeout client          30000
+#        http-request redirect scheme https
+#        http-response set-header Strict-Transport-Security max-age=63072000
+
+frontend  main
+    mode http
+    #bind 95.217.30.59:443 ssl crt /etc/ssl/habbfarm.net.all.pem
+    bind 95.217.30.59:443 ssl crt /etc/letsencrypt/live/habbfarm.net/fullcert.pem
+    #bind :::443 v4v6 ssl crt /etc/letsencrypt/live/habbfarm.net/fullcert.pem
+    acl url_static       path_beg       -i /static /images /javascript /stylesheets
+    acl url_static       path_end       -i .jpg .gif .png .css .js
+
+    #acl host_plex hdr(host) -i plex.habbfarm.net
+
+    acl root_dir path_reg ^$|^/$
+    #acl no_plex_header req.hdr_cnt(X-Plex-Device-Name) -i 0
+
+    #acl host_testnextcloud hdr(host) -i testnextcloud.habbfarm.net
+    acl host_git hdr(host) -i git.habbfarm.net
+    use_backend git if host_git
+
+   # redirect location https://plex.habbfarm.net/web/index.html code 302 if no_plex_header root_dir host_plex
+   # use_backend plex_any if host_plex
+
+
+    #use_backend static          if url_static
+    default_backend             app
+
+
+# The ssl verify none here means to use ssl, but ignore if the cert
+# is self-signed.
+#backend plex
+#    balance roundrobin
+#    server 8.6.5.2:8001 check ssl verify none
+
+
+#backend testnextcloud
+#    mode http
+#    balance roundrobin
+#    server testnextcloud 8.6.5.2:8006 check
+#
+
+backend git
+    mode http
+    balance roundrobin
+    server git 79.161.232.235:3000 check
+
+# This is an nginx instance running on port 81:
+backend app
+    mode http
+    balance     roundrobin
+    server  app1 127.0.0.1:81 check
+
+backend git-ssh
+   mode tcp
+   server git-ssh 79.161.232.235:1000 check

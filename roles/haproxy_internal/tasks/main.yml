@@ -1,0 +1,79 @@
+---
+- name: Install packages haproxy
+  package:
+    name:
+      - haproxy
+       #- nginx
+      - openssl
+      - telnet
+      - keepalived
+      - psmisc
+    state: present
+    update_cache: yes
+  when: (ansible_pkg_mgr == "apt")
+
+- name: enable IP address that are nonlocal
+  sysctl:
+    name: net.ipv4.ip_nonlocal_bind
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes
+
+- name: deploy config keepalived main
+  ansible.builtin.template:
+    src: keepalived_haproxy_internal_main.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: keepalived_main
+
+- name: deploy config keepalived backup
+  ansible.builtin.template:
+    src: keepalived_haproxy_internal_backup.j2
+    dest: /etc/keepalived/keepalived.conf
+    owner: root
+    group: root
+    mode: '0644'
+  when: keepalived_backup
+
+#- name: deploy config nginx
+#  ansible.builtin.template:
+#    src: nginx.conf_internal.j2
+#    dest: /etc/nginx/nginx.conf
+#    owner: root
+#    group: root
+#    mode: '0644'
+
+#- name: deploy config nginx vhost
+#  ansible.builtin.template:
+#    src: nginx_vhost_no_habbfarm.net.j2
+#    dest: /etc/nginx/conf.d/no.habbfarm.net
+#    owner: root
+#    group: root
+#    mode: '0644'
+
+- name: deploy config
+  ansible.builtin.template:
+    src: haproxy.cfg_internal.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: check config haproxy
+  command: haproxy -f /etc/haproxy/haproxy.cfg -c
+
+#- name: check config nginx
+#  #command: nginx -t
+
+- name: reload keepalived haproxy nginx
+  service:
+    name: "{{ item }}"
+    enabled: yes
+    state: restarted
+  loop:
+    - keepalived
+    - haproxy
+    #- nginx

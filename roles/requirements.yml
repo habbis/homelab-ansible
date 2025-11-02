@@ -4,3 +4,8 @@
   scm: git
   src: https://github.com/freeipa/ansible-freeipa.git
   version: master
+
+- name: habbfarm.autoDistUpgrade
+  scm: git
+  src: https://github.com/habbis/ansible_role_autoDistUpgrade.git
+  version: main

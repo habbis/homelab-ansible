@@ -4,6 +4,9 @@
 [foreman]
 localhost
 
+[xo]
+hf-xo.dc1.ncop.no
+
 [jellyfin]
 jellyfin-private1.dc1.ncop.no
 
@@ -59,10 +62,10 @@ hf-auth1.*
 #hf-vault2.*
 
 [haproxy_internal_main]
-hf-lb-int1.*
+hf-lb-int1.no.habbfarm.net
 
 [haproxy_internal_backup]
-hf-lb-int2.*
+hf-lb-int2.no.habbfarm.net
 
 [nginx_external_main]
 hf-nginx1.*
@@ -98,8 +101,8 @@ hf-mysql2.*
 hf-acme1.*
 
 [dns]
-dns01.*
-dns02.*
+dns01.no.habbfarm.net
+dns02.no.habbfarm.net
 
 [linbast]
 hf-linbast1.dc1.ncop.no

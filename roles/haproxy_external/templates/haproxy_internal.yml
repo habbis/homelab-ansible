@@ -1,0 +1,33 @@
+---
+
+- name: setup haproxy for internal use
+  hosts: haproxy_internal_main
+  gather_facts: yes
+  remote_user: ansible
+  tags: main
+  become: yes
+  #vars_files:
+  #  - secrets/vault.yml
+  vars:
+    - keepalived_main: true
+    - keepalived_backup: false
+
+
+  roles:
+    - hf_haproxy_internal
+
+
+- name: setup haproxy for internal use
+  hosts: haproxy_internal_backup
+  gather_facts: yes
+  remote_user: ansible
+  become: yes
+  tags: backup
+  #vars_files:
+  #  - secrets/vault.yml
+  vars:
+    - keepalived_main: false
+    - keepalived_backup: true
+
+  roles:
+    - hf_haproxy_internal

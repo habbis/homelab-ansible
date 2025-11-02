@@ -1,0 +1,16 @@
+---
+
+- name: debian auto dist upgrade
+  hosts: all
+  gather_facts: yes
+  remote_user: ansible
+  become: yes
+  vars:
+    - keepalived_main: true
+    - keepalived_backup: false
+
+
+  roles:
+    - habbfarm.autoDistUpgrade
+
+

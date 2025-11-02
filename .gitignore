@@ -22,4 +22,5 @@ roles/external/*
 collections/ansible_collections/
 playbooks/secrets
 secrets
-roles/redhat.freeipa
+roles/redhat*
+roles/habbfarm*

@@ -1,0 +1,124 @@
+global
+        log /dev/log    local0
+        log /dev/log    local1 notice
+        chroot /var/lib/haproxy
+        stats socket /run/haproxy/admin.sock mode 660 level admin
+        stats timeout 30s
+        user haproxy
+        group haproxy
+        daemon
+
+        # Default SSL material locations
+        ca-base /etc/ssl/certs
+        crt-base /etc/ssl/private
+
+        # See: https://ssl-config.mozilla.org/#server=haproxy&server-version=2.0.3&config=intermediate
+        ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+        ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+        ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
+
+
+defaults
+    log                     global
+    mode                    http
+    option                  httplog
+    option                  dontlognull
+    option                  http-server-close
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+    errorfile 400 /etc/haproxy/errors/400.http
+    errorfile 403 /etc/haproxy/errors/403.http
+    errorfile 408 /etc/haproxy/errors/408.http
+    errorfile 500 /etc/haproxy/errors/500.http
+    errorfile 502 /etc/haproxy/errors/502.http
+    errorfile 503 /etc/haproxy/errors/503.http
+    errorfile 504 /etc/haproxy/errors/504.http
+
+frontend repo01-ssh.habbfarm.net
+        bind                    10.31.82.4:3001
+        mode                    tcp
+        log                     global
+        timeout client          30000
+        default_backend gitea_ssh
+
+#frontend hf-k3s-control.no.habbfarm.net
+#        bind                    10.31.82.4:6443
+#        mode                    tcp
+#        log                     global
+#        timeout client          30000
+#        default_backend hf-k3s-control
+
+frontend  main
+    mode http
+    bind 10.31.82.4:443 ssl crt /etc/ssl/habbfarm.net.pem
+    bind 10.31.82.4:80
+    redirect scheme https if !{ ssl_fc } # Redirect http requests to https
+
+    acl url_static       path_beg       -i /static /images /javascript /stylesheets
+    acl url_static       path_end       -i .jpg .gif .png .css .js
+
+
+    acl root_dir path_reg ^$|^/$
+
+    acl host_gitea hdr(host) -i repo01.habbfarm.net
+    use_backend gitea if host_gitea
+
+    acl host_dns hdr(host) -i dns.habbfarm.net
+    use_backend dns if host_dns
+
+    acl host_truenas_ssd hdr(host) -i truena-sdd.habbfarm.net
+    use_backend truenas_ssd if host_truenas_ssd
+
+    acl host_pve hdr(host) -i pve.habbfarm.net
+    use_backend pve if host_pve
+
+    acl host_pve2 hdr(host) -i pve2.habbfarm.net
+    use_backend pve2 if host_pve2
+
+
+backend gitea
+    mode http
+    balance roundrobin
+    server gitea 10.31.8.2:3000 check
+
+backend gitea_ssh
+   mode tcp
+   server gitea-ssh 10.31.8.4:3001 check
+
+backend dns
+    mode http
+    balance roundrobin
+    server dns 10.17.2.4:80 check
+
+backend truenas_ssd
+    mode http
+    balance roundrobin
+    server dns 10.31.79.2:80 check
+
+backend pve
+    mode http
+    balance roundrobin
+    server firestorm  firestorm.dc1.ncop.no:8006 check
+    server ironfist   ironfist.dc1.ncop.no:8006 check
+    server grey-wolf  grey-wolf.dc1.ncop.no:8006 check
+    server hydra      hydra.dc1.ncop.no:8006 check
+    server tiger      tiger.dc1.ncop.no:8006 check
+
+backend pve2
+    mode http
+    balance roundrobin
+    server mini  mini.dc1.ncop.no:8006 check
+
+#backend hf-k3s-control
+#   mode tcp
+#   server hf-k3s-control1 10.31.68.2:6443 check
+#   server hf-k3s-control2 10.31.68.3:6443 check
+#   server hf-k3s-control3 10.31.68.4:6443 check
