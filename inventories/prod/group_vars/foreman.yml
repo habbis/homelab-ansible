@@ -1095,6 +1095,7 @@ foreman_repository_sets:
         download_policy: on_demand
   - name: foreman
     repositories:
+      # foreman 3.16
       - name: Release_3.16_Enterprise_Linux_9_x86_64
         content_type: yum
         url: https://yum.theforeman.org/releases/3.16/el9/x86_64/
@@ -1125,6 +1126,41 @@ foreman_repository_sets:
       - name: Pulpcore_Release_3.73_Enterprise_Linux_9_x86_64
         content_type: yum
         url: https://yum.theforeman.org/pulpcore/3.73/el9/x86_64/
+        gpg_key: rpm-gpg-key-pulpcore
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+        # foreman 3.17
+      - name: Release_3.17_Enterprise_Linux_9_x86_64
+        content_type: yum
+        url: https://yum.theforeman.org/releases/3.17/el9/x86_64/
+        gpg_key: rpm-gpg-key-foreman
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Plugins_Release_3.17_Enterprise_Linux_9_x86_64
+        content_type: yum
+        url: https://yum.theforeman.org/plugins/3.16/el9/x86_64/
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Katello_Release_4.19_Enterprise_Linux_9_x86_64
+        content_type: yum
+        url: https://yum.theforeman.org/katello/4.19/katello/el9/x86_64/
+        gpg_key: rpm-gpg-key-foreman
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Candlepin_Release_4.7_Enterprise_Linux_9_x86_64
+        content_type: yum
+        url: https://yum.theforeman.org/candlepin/4.7/el9/x86_64/
+        gpg_key: rpm-gpg-key-candlepin
+        releasever: 9
+        basearch: "x86_64"
+        download_policy: on_demand
+      - name: Pulpcore_Release_3.85_Enterprise_Linux_9_x86_64
+        content_type: yum
+        url: https://yum.theforeman.org/pulpcore/3.85/el9/x86_64/
         gpg_key: rpm-gpg-key-pulpcore
         releasever: 9
         basearch: "x86_64"
@@ -1313,6 +1349,16 @@ content_views:
       - name: Candlepin_Release_4.6_Enterprise_Linux_9_x86_64
         product: foreman
       - name: Pulpcore_Release_3.73_Enterprise_Linux_9_x86_64
+        product: foreman
+      - name: Release_3.17_Enterprise_Linux_9_x86_64
+        product: foreman
+      - name: Plugins_Release_3.17_Enterprise_Linux_9_x86_64
+        product: foreman
+      - name: Katello_Release_4.19_Enterprise_Linux_9_x86_64
+        product: foreman
+      - name: Candlepin_Release_4.7_Enterprise_Linux_9_x86_64
+        product: foreman
+      - name: Pulpcore_Release_3.85_Enterprise_Linux_9_x86_64
         product: foreman
       - name: Alma_Linux_9_for_x86_64_BaseOS
         product: Alma_Linux_for_x86_64
