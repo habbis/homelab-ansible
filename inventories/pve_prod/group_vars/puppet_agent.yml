@@ -1,0 +1,32 @@
+---
+# defaults file for ansible_role_puppet_agent
+puppet_server: hf-puppet1.no.habbfarm.net
+#puppet_server: hf-foreman04.no.habbfarm.net
+# ubuntu 20.04
+#ubuntu_debfile: puppet6-release-focal.deb
+ubuntu_debfile: puppet7-release-focal.deb
+# debain 11
+#debian_debfile: puppet6-release-bullseye.deb
+debian_debfile: puppet7-release-bullseye.deb
+# rhel 8
+#rpmfile: puppet6-release-el-8.noarch.rpm
+rpmfile: puppet7-release-el-8.noarch.rpm
+package: puppet-agent
+service: puppet
+delete_puppet_ssl_dir: false
+apt_purge: false
+yum_purge: false
+run_puppet_agent: true
+fix_hosts: false
+#offline install
+offline_rpmfile: false
+offline_ubuntu_debfile: false
+offline_debain_debfile: false
+# online install
+online_rpmfile: true
+online_ubuntu_debfile: true
+online_debian_debfile: true
+# if having problem with
+# apt update repo problem.
+fix_apt_missing: false
+

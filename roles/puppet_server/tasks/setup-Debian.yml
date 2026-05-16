@@ -1,7 +1,7 @@
 ---
 - name: Download puppet
   get_url:
-    url: "https://apt.puppetlabs.com/{{ debian_debfile }}"
+    url: "https://apt.voxpupuli.org/{{ debian_debfile }}"
     dest: "/tmp/{{ debian_debfile }}"
   when: (ansible_distribution == "Debian")
 

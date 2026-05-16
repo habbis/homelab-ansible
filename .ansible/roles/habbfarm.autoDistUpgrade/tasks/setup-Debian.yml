@@ -1,0 +1,37 @@
+---
+- name: Install a list of packages
+  ansible.builtin.apt:
+    pkg:
+      - screen
+      - apt-transport-https
+    update_cache: yes
+
+- name: copy /etc/apt/sources.list
+  ansible.builtin.copy:
+    src: /etc/apt/sources.list
+    dest: /etc/apt/bk_sources.list
+
+- name: set debian base repo for "{{ debian_release }}"
+  ansible.builtin.template:
+    src: "templates/sources.list_{{ debian_release }}.j2"
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: '0644'
+  when: (ansible_distribution == "Debian")
+
+- name: apt update to get new package for dist-upgrade
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: set env noninteractive
+  ansible.builtin.shell: env DEBIAN_FRONTEND=noninteractive
+
+- name: set env apt list changes to mail
+  ansible.builtin.shell: env APT_LISTCHANGES_FRONTEND=mail
+
+- name: upgrade to "{{ debian_release }}"
+  ansible.builtin.apt:
+    upgrade: dist
+    update_cache: yes
+    dpkg_options: 'force-confdef,force-confold'

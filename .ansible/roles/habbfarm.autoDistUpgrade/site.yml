@@ -1,0 +1,15 @@
+---
+- name: upgrade debian
+  gather_facts: yes
+  #remote_user: ansible
+  become: yes
+  become_method: sudo
+  hosts: mailman
+  #hosts: puppet-clients
+  #hosts: all
+  vars_files:
+    -  defaults/main.yml
+    #-  defaults/secrets.yml
+
+  roles:
+    - { role: ../ansible_role_autoDistUpgrade }

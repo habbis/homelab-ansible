@@ -17,7 +17,7 @@
 - name: set puppet conf
   ansible.builtin.template:
     src: templates/puppet.conf.j2
-    dest: /etc/puppetlabs/puppet/puppet.conf
+    dest: /etc/puppet/puppet.conf
     owner: root
     group: root
     mode: '0644'
@@ -40,18 +40,18 @@
 
 - name: check puppet agent lock exist
   ansible.builtin.stat:
-    path: /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock
+    path: /opt/puppet/cache/state/agent_catalog_run.lock
   register: puppet_agent_lock
 
-- name: Remove puppet agent lock if exist·
+- name: Remove puppet agent lock if exist
   ansible.builtin.file:
-    path: /opt/puppetlabs/puppet/cache/state/agent_catalog_run.lock
+    path: /opt/puppet/cache/state/agent_catalog_run.lock
     state: absent
   when: puppet_agent_lock | bool == true
 
 - name: Remove puppet agent ssl dir if set to "true" in vars file
   ansible.builtin.file:
-    path: /etc/puppetlabs/puppet/ssl
+    path: /etc/puppet/ssl
     state: absent
   when: delete_puppet_ssl_dir
 

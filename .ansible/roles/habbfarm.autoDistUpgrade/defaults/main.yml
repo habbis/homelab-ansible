@@ -1,0 +1,9 @@
+---
+# variables
+# debian version to upgrade to
+#debian_release: stretch
+#debian_release: buster
+#debian_release: bullseye
+debian_release: bookworm
+# not working yet
+#debian_release: trixie

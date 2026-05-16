@@ -340,36 +340,67 @@ content_credentials:
       MetBbjkOnNXyWrP3SAPwqQMMg/vNa+mJIjoNByw=
       =sdsH
       -----END PGP PUBLIC KEY BLOCK-----
+#  - name: rpm-gpg-key-foreman
+#    content_type: gpg_key
+#    content: |
+#      -----BEGIN PGP PUBLIC KEY BLOCK-----
+#      mQINBGiUmPwBEADSusizwQ2Kp7URX0G1JUU4Tl7ufpeVppYZGS4LNEfZ99yVy3vS
+#      yg4noXAaiE3TfgjUFh6K/xyFBNbAtfKp8WA9ldQo2LiYoGE5JWcyXmg2qFVQVTvI
+#      IeuibkUuDYqEK+sYgB0rfVh2VZdX6s4arZOIqtMWZeRUYHa4nYFlisPJVSmg3Rmx
+#      g8NKX2TE7gXLULjejm6Ctmj9CmD1ommQrVC5NkEPuPO2OH2/4me4nb/bd4FuySos
+#      k6xt3Fsn0Dk3C/UkztQD3L6+LiqM9a8jCE8B8VD8yPVB0F86DM46FOkaH54DX1kx
+#      LqN4l2BcT+7ClM9i0sDtK03OcYnmj5gCGwVY96B7oP8U4IAOWO8MOZSJwOBAzfXx
+#      y+Hc4g0hxhHJxJRPZGhQLSVUbSWtUcW3LaIy7i00NvTsXd5P1tmdyoe1HUjd5LDC
+#      i/lW1uZr9T7NgxhySf2x07sR4H9IRDHTpxP1ObguPLqf45oCSiMQZeYSpjYOxe7D
+#      Rsq2V0mXVwJOpr9XFEXdNkfU+MLJ2oc+UYvCkZ0tjYeRPGYnGiPDBunAd/LalReW
+#      894UP1lEDbhucGsmR+T2+TuUoc74dHvllmYlyb32CL6WTjgWAttgBQyaeTSXq0Nc
+#      Diu8Z+Hpgaln4f60XSpGLynZQ930/SFjpMd6kH46hYoXlzVKV+2KXvTqKQARAQAB
+#      tD5Gb3JlbWFuIEF1dG9tYXRpYyBTaWduaW5nIEtleSAoMy4xNikgPHBhY2thZ2Vz
+#      QHRoZWZvcmVtYW4ub3JnPokCWAQTAQgAQhYhBE7wlLvWxDrajkGQvRg1e1mtFzII
+#      BQJolJj8AxsvBAUJAeEzgAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRAY
+#      NXtZrRcyCOWND/9eDlxhbnlZ7HVt6dYttXmsm5voWOmZS9P5q1kn1RT8mHxTTzR6
+#      ikQJwR0+pnh6hkrPz66wVZs/Cy+2F1xeeD2iwt1gmJ6ibFC3z8qLjeV7kRA4IN5B
+#      f5nOg3/NvkP/4pWWtdwA6wgfl7aPQE7WBSFhezoysOeBZPd2ZydEOrFGBdstYRh+
+#      reNjH48u9NNNMCeyZZUUYcPOyk9CGuWJ4UfFACH6q6MCiyxgwhaDQcWbVXkIVFzg
+#      DpKwsaBVvMZyADdwHFk08wjI2vo1A6LvJhL31JgK5IPbKP/vPDFu+Vkt3A6L3taD
+#      yGj+T6fa+GY67K7EL8nYctGGwqZ45fNjzIGzGnqmRPx2+gx4COAiKeCRDTf9BJw4
+#      fTQA+UQ2Ro66APeY1/RUTr2v2Zn4ead/etsTX+qF5rwR6rv5KaDGY+TB0WK+gke9
+#      LVNxvQl18IhlHBMhTtAwd8cAXca/muqvukmlOdPisXe3DHEbFR4OndRTfBzcsi4+
+#      fYX1MrS/K4zW0PUPze9+5z/pFXYzPOON9JpjG29hkixMW3BGp1QMJhNuAGn3F3v9
+#      wHPRAArNU+dfUdPuwmJI6A8EAhi6Iag94GOlos5cdWNIxN1gH38fnc1VRYU7DHme
+#      QoGx8Kr33S8awRrFOlUqxe+WEl/vhNPovs7FRt+btoCfAjz+Ohcav8KnHw==
+#      =LeuY
+#      -----END PGP PUBLIC KEY BLOCK-----
   - name: rpm-gpg-key-foreman
     content_type: gpg_key
     content: |
       -----BEGIN PGP PUBLIC KEY BLOCK-----
-      mQINBGiUmPwBEADSusizwQ2Kp7URX0G1JUU4Tl7ufpeVppYZGS4LNEfZ99yVy3vS
-      yg4noXAaiE3TfgjUFh6K/xyFBNbAtfKp8WA9ldQo2LiYoGE5JWcyXmg2qFVQVTvI
-      IeuibkUuDYqEK+sYgB0rfVh2VZdX6s4arZOIqtMWZeRUYHa4nYFlisPJVSmg3Rmx
-      g8NKX2TE7gXLULjejm6Ctmj9CmD1ommQrVC5NkEPuPO2OH2/4me4nb/bd4FuySos
-      k6xt3Fsn0Dk3C/UkztQD3L6+LiqM9a8jCE8B8VD8yPVB0F86DM46FOkaH54DX1kx
-      LqN4l2BcT+7ClM9i0sDtK03OcYnmj5gCGwVY96B7oP8U4IAOWO8MOZSJwOBAzfXx
-      y+Hc4g0hxhHJxJRPZGhQLSVUbSWtUcW3LaIy7i00NvTsXd5P1tmdyoe1HUjd5LDC
-      i/lW1uZr9T7NgxhySf2x07sR4H9IRDHTpxP1ObguPLqf45oCSiMQZeYSpjYOxe7D
-      Rsq2V0mXVwJOpr9XFEXdNkfU+MLJ2oc+UYvCkZ0tjYeRPGYnGiPDBunAd/LalReW
-      894UP1lEDbhucGsmR+T2+TuUoc74dHvllmYlyb32CL6WTjgWAttgBQyaeTSXq0Nc
-      Diu8Z+Hpgaln4f60XSpGLynZQ930/SFjpMd6kH46hYoXlzVKV+2KXvTqKQARAQAB
-      tD5Gb3JlbWFuIEF1dG9tYXRpYyBTaWduaW5nIEtleSAoMy4xNikgPHBhY2thZ2Vz
-      QHRoZWZvcmVtYW4ub3JnPokCWAQTAQgAQhYhBE7wlLvWxDrajkGQvRg1e1mtFzII
-      BQJolJj8AxsvBAUJAeEzgAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRAY
-      NXtZrRcyCOWND/9eDlxhbnlZ7HVt6dYttXmsm5voWOmZS9P5q1kn1RT8mHxTTzR6
-      ikQJwR0+pnh6hkrPz66wVZs/Cy+2F1xeeD2iwt1gmJ6ibFC3z8qLjeV7kRA4IN5B
-      f5nOg3/NvkP/4pWWtdwA6wgfl7aPQE7WBSFhezoysOeBZPd2ZydEOrFGBdstYRh+
-      reNjH48u9NNNMCeyZZUUYcPOyk9CGuWJ4UfFACH6q6MCiyxgwhaDQcWbVXkIVFzg
-      DpKwsaBVvMZyADdwHFk08wjI2vo1A6LvJhL31JgK5IPbKP/vPDFu+Vkt3A6L3taD
-      yGj+T6fa+GY67K7EL8nYctGGwqZ45fNjzIGzGnqmRPx2+gx4COAiKeCRDTf9BJw4
-      fTQA+UQ2Ro66APeY1/RUTr2v2Zn4ead/etsTX+qF5rwR6rv5KaDGY+TB0WK+gke9
-      LVNxvQl18IhlHBMhTtAwd8cAXca/muqvukmlOdPisXe3DHEbFR4OndRTfBzcsi4+
-      fYX1MrS/K4zW0PUPze9+5z/pFXYzPOON9JpjG29hkixMW3BGp1QMJhNuAGn3F3v9
-      wHPRAArNU+dfUdPuwmJI6A8EAhi6Iag94GOlos5cdWNIxN1gH38fnc1VRYU7DHme
-      QoGx8Kr33S8awRrFOlUqxe+WEl/vhNPovs7FRt+btoCfAjz+Ohcav8KnHw==
-      =LeuY
+      mQINBGkSXIEBEADVYHvWcYtL2NdXoLRS5z0DJBwvhYigUJ7+7IFWncwfpdWntuZb
+      JgnLj6WM0agyDaFet+kj9sVgX9kN7LgQ+9i5XUfRpT2U/D5sf1Ch+D7TEyenCLwp
+      pzp/MWna2OA6o0wiKEbep6rxpD8tL8E9mgOjres1XWq4qBvwdWdApYY4HglgYBMH
+      cr08eUHIWgW18zhxpYBllroNWoDMg/KeB6I0aCrdXar5ndt9yewGMTyuaEbuztXs
+      GBJKnuXve/H4Io+o1WDOWAgG4dTKpXCww+7CtY01qMeajXshtbsdxGXXzTvfOu5b
+      G2Uw0n92fYoxXCnYX9gMYe8p3RtgYAKTv4NgPtjmkD1vosV60FmTXLslxsatCBq/
+      0GHMfZUvmNCgM0e4enTV4gevLpRYo8stKSuN5U0gF4TCC5rRVwE7E+jXTQrv59Mo
+      KZ4OeLQoosPbhMUeQidA3gjT8zyuSSAOz+nW7Ny2pQ4KV98FnwyTslG/roJOVuZA
+      R/gHb672T8y1HteJPYhrLx6cg21WHLJJrdWOLnOeVj2j2u6ZrgX22dGYWG5f79wN
+      72k6BAD1l+nNRBoWKrJccPyHjy2ROmd4d49+Q8ThyEapXLx+DqZS/48WFrQQ5sz/
+      kaKbDJC2OD/hY7LbtgKQAvaow2Z6nzx+nNGcVi1e6kXgMhv4O36n5kcFOwARAQAB
+      tD5Gb3JlbWFuIEF1dG9tYXRpYyBTaWduaW5nIEtleSAoMy4xNykgPHBhY2thZ2Vz
+      QHRoZWZvcmVtYW4ub3JnPokCWAQTAQoAQhYhBCwhnOisCjui7ei2UlCeO9PWq5rR
+      BQJpElyBAxsvBAUJAeEzgAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRBQ
+      njvT1qua0UwOEAC1gKNz51jaoULlVyRNnueewXBkFg+TiBqfNQgDLeLw3DGer0Mg
+      rRSVAkQE6HnEQJjnmAmT+tkkQHCNIMitP5u8Lt0Q3MgXs02RFneyeNeuzgKOVtWp
+      GmvYvjNAUb3WK1c8wfaDbOsj7w8eAarNZJdwhRTzYZcb/TXqE3LrNISSqJRf83YC
+      h2AMdExmwTUoWrCQJr8wO2BmBVrdofOFAdDuTAmTiuqSWa61dwx3Od/ALXBiJp0r
+      CmrJUt/XBKKIukAQmnnN7LY+H4xlouFbv929/Otie6Xo3yBmQ9aSMBcXJGB1BDYf
+      f+K5+I37sdWjwq4tvxXC3OpMnsB5K2XjlMziw6A2UJ2cEeWJGFliPg19pb0xhZ5G
+      oOBkGME5lidsuRufB3IFflkQu6vNnywHeAVOwQre7cg/g5ZB7ZGE/7VSsfNRCl3U
+      tzLeN+LYWZQEMr3y1QRpvw9Ot9xqYhDGEfd5G3nCPCICZQrr1bhH+sc80t0+t6xO
+      RQYGcSIYxQ8HBvVSOzUgvTVZo58BRkxJBXTjE5Ak8F8ta4/RiEAquFCLYVOQ7Dtr
+      Q7uh0eBtYYX293ueEpZ2MSBNaJ/acfC/VLqW/+xVEUs+WTvMnDKBnGg+/WjzBCN9
+      zXL9OPsawQ6O2oT3xLuMhdjLGeSHRH++yT3Ia5dg5/uS7noA6uDiww8KpQ==
+      =Wu+U
       -----END PGP PUBLIC KEY BLOCK-----
   - name: rpm-gpg-key-candlepin
     content_type: gpg_key
@@ -402,36 +433,67 @@ content_credentials:
       cVxJsfPzrh/llwwMtKGxOwCb+pJ29sovX14oRgIA0ps/Kc/aU353nApY4Ww=
       =244i
       -----END PGP PUBLIC KEY BLOCK-----
+#  - name: rpm-gpg-key-pulpcore
+#    content_type: gpg_key
+#    content: |
+#      -----BEGIN PGP PUBLIC KEY BLOCK-----
+#      mQINBGgiNvUBEADGfB/UhBQHB2psPC0M6NKBhvk5pcRxM9do3KT5PSflg6DN6eje
+#      TH54Vdg2e23/OaajrilPwDhr24CeWclYJYcu+/MF49N6ha3J3Ro9XYWfRflL3Vwh
+#      Hrx9m0ePsoKAeY5cD/UbEKARTlrodMhXCFJtCFA8zArZvC/Ur1Vr43/C27auiFd3
+#      PDwPkTn285uC2w+ivzcwKB6dGMmOc8OSgU7wjsH41wl3wXahhMYE+91JcjVsQx0L
+#      f0yeUTtj0yAuL8YvA5ZUhnvEE1Nw1vNjZlojDHT/HGOcZw6JuDhUNL3Duxj3raLx
+#      pPeikiEB0BJcNU+OGljg+MWCfD3A3eTRojyaCipeZs0h7F/AZ1sE0MP+iRxGwxpr
+#      LVS5ujMSSbi7GgnbrEzpHAtrIiUlYXw0eR6V/Sd4o32gQYHw4aca34wuDqYLtV/H
+#      7CqgQgSlawkyN7/8CkiqCI1iJiqlNsCu+Au6+DjvTDp2wkEPU+iZC8Dzh+jSYFG8
+#      SsVAINAlCJu7rX1fCsTx5noz6BQrJqToOo6CVc2wf7AXjkglmlnQBOG9L768nxGu
+#      7Q8UqCOwjKcZJGh7am6gueDduyPbHfHkFhE5XQtUQzOUblT2zo4C5Y2T4Vc3C+lk
+#      1Qai9LzBfwwSFgVeeA9m8by7Ywjb1srMg0XW5CEzX3ouk1jDCOzUAzx5JwARAQAB
+#      tD9QdWxwY29yZSBBdXRvbWF0aWMgU2lnbmluZyBLZXkgKDMuNzMpIDxwYWNrYWdl
+#      c0B0aGVmb3JlbWFuLm9yZz6JAlgEEwEKAEIWIQTUVzizdOjOApIef7ROO1K9tbHh
+#      mQUCaCI29QMbLwQFCQHhM4AFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQ
+#      TjtSvbWx4ZkhnRAAiEwNT0xKhQAHS/YqQMivtBOHhP8xusqBeUn6DC9JDvYsh/JJ
+#      npTFVYSkwaQzcfU2mNi1d1p3ip0pP3njtS7ppKq7k6bmMeYVU1ObANAI6HzNE1le
+#      8XEJLYspperG1/Ri5Zl1xTTkITKYGOc1tZFM8CZvwTXIVVUQhxw0TG7W4w032bv1
+#      SLCGj6wqcPzbr5IY5vN900Bii7b1lutiuBg8L9+fQHtVG1sGVjZYPUE+tIunO3SO
+#      QR9S+x1nLpTFzZQeA/NtH+yC4As/P56dRae/dWjmGrHI6wXMi6JqjYXXW0V/US8a
+#      jnBSfspv+OFaLBEdKu9fCqczUmP/gQ9mzWPnyqoMeU+pQj49FCfzlWYD9YP9xQ9S
+#      BCUhirVgnwJyMi1wECTwT9IHG/NSv0J/785Jf7tMUogS3UxToUUIP7VSdXTaOx5j
+#      xiwKROAQf6oIzYH0ws/0tcfg2gtzz/kXR6f0dJursJtClyWeZsDykVvxnyCeCndi
+#      tYOCCLk74IzhgpUVeY0CYsgb51Hw6zjiRzVyfcKqiM9U1lDcmF8sp4dKbugPn41g
+#      tx73jWnvS3LpwQyRXRemHvnqDYde2YRx9HK4EtYBZVvDFCSVJIXgR9bxZWAeLLom
+#      1xZO2WYwQBLYOSok2X519FJx2yoUJ8B6Ndr/ZuZvSxqpUdQQHhin9RqrzQs=
+#      =V1MM
+#      -----END PGP PUBLIC KEY BLOCK-----
   - name: rpm-gpg-key-pulpcore
     content_type: gpg_key
     content: |
       -----BEGIN PGP PUBLIC KEY BLOCK-----
-      mQINBGgiNvUBEADGfB/UhBQHB2psPC0M6NKBhvk5pcRxM9do3KT5PSflg6DN6eje
-      TH54Vdg2e23/OaajrilPwDhr24CeWclYJYcu+/MF49N6ha3J3Ro9XYWfRflL3Vwh
-      Hrx9m0ePsoKAeY5cD/UbEKARTlrodMhXCFJtCFA8zArZvC/Ur1Vr43/C27auiFd3
-      PDwPkTn285uC2w+ivzcwKB6dGMmOc8OSgU7wjsH41wl3wXahhMYE+91JcjVsQx0L
-      f0yeUTtj0yAuL8YvA5ZUhnvEE1Nw1vNjZlojDHT/HGOcZw6JuDhUNL3Duxj3raLx
-      pPeikiEB0BJcNU+OGljg+MWCfD3A3eTRojyaCipeZs0h7F/AZ1sE0MP+iRxGwxpr
-      LVS5ujMSSbi7GgnbrEzpHAtrIiUlYXw0eR6V/Sd4o32gQYHw4aca34wuDqYLtV/H
-      7CqgQgSlawkyN7/8CkiqCI1iJiqlNsCu+Au6+DjvTDp2wkEPU+iZC8Dzh+jSYFG8
-      SsVAINAlCJu7rX1fCsTx5noz6BQrJqToOo6CVc2wf7AXjkglmlnQBOG9L768nxGu
-      7Q8UqCOwjKcZJGh7am6gueDduyPbHfHkFhE5XQtUQzOUblT2zo4C5Y2T4Vc3C+lk
-      1Qai9LzBfwwSFgVeeA9m8by7Ywjb1srMg0XW5CEzX3ouk1jDCOzUAzx5JwARAQAB
-      tD9QdWxwY29yZSBBdXRvbWF0aWMgU2lnbmluZyBLZXkgKDMuNzMpIDxwYWNrYWdl
-      c0B0aGVmb3JlbWFuLm9yZz6JAlgEEwEKAEIWIQTUVzizdOjOApIef7ROO1K9tbHh
-      mQUCaCI29QMbLwQFCQHhM4AFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQ
-      TjtSvbWx4ZkhnRAAiEwNT0xKhQAHS/YqQMivtBOHhP8xusqBeUn6DC9JDvYsh/JJ
-      npTFVYSkwaQzcfU2mNi1d1p3ip0pP3njtS7ppKq7k6bmMeYVU1ObANAI6HzNE1le
-      8XEJLYspperG1/Ri5Zl1xTTkITKYGOc1tZFM8CZvwTXIVVUQhxw0TG7W4w032bv1
-      SLCGj6wqcPzbr5IY5vN900Bii7b1lutiuBg8L9+fQHtVG1sGVjZYPUE+tIunO3SO
-      QR9S+x1nLpTFzZQeA/NtH+yC4As/P56dRae/dWjmGrHI6wXMi6JqjYXXW0V/US8a
-      jnBSfspv+OFaLBEdKu9fCqczUmP/gQ9mzWPnyqoMeU+pQj49FCfzlWYD9YP9xQ9S
-      BCUhirVgnwJyMi1wECTwT9IHG/NSv0J/785Jf7tMUogS3UxToUUIP7VSdXTaOx5j
-      xiwKROAQf6oIzYH0ws/0tcfg2gtzz/kXR6f0dJursJtClyWeZsDykVvxnyCeCndi
-      tYOCCLk74IzhgpUVeY0CYsgb51Hw6zjiRzVyfcKqiM9U1lDcmF8sp4dKbugPn41g
-      tx73jWnvS3LpwQyRXRemHvnqDYde2YRx9HK4EtYBZVvDFCSVJIXgR9bxZWAeLLom
-      1xZO2WYwQBLYOSok2X519FJx2yoUJ8B6Ndr/ZuZvSxqpUdQQHhin9RqrzQs=
-      =V1MM
+      mQINBGkUgqMBEADKB6XI9zc2n55rB9k3NcfKo6B9CG/+V8DNvQptCYyMGV7vmYVz
+      yB99Kqs+JhbYmkDE/ccQQoSMCkM4M/gxC4pUodljeJGcNGxn5d+/Xppui2fEzLNm
+      ACzkteunef1vz5o7VPo4eks7NWOnI6mb19NTxWW50b6XgDOsE1RolNBEOId52O7A
+      kRZSdUsTY800KG4RDcw6hVCufaiM+146TGDImF/LmcYdKu6FwWNx5gA78nr8tHHp
+      jNINR/pGu36djDfpVkuEC2oVozByNXN3hCbyb3gsivocJtc6VbU/lDBKyHEDLyPv
+      XZ8Y4WRRDv2WpYEA2pQ/fWA/fdb11PRaUnQqK44VfugOUcpYCT5t9POie9dAtta7
+      tuu15ObAP8jChoJPBovRpXpHvxdy2C43RGCGzkuEpwf30+D5JBb6QtDFdsz69cpc
+      gvDBjWoY/PO9z2K8/21UCPnhIwGbP/pn+5mIUPsoujSN8HbEikKK7U5hOf9wN5WH
+      cbUKUinTN6DH0Xnvscw5iT/0gDlCxpJYT544TcssZx6gHzQhDpvvFigTvBAQz6o4
+      7Q1/MPwqVmpAENcguos9J4lrDmwCVEfXwLnCdhy/QrFtce/FY+hAHCCWCNATbtDf
+      mSnlnot8YWLbYwgYdP35RGa78N1o8v22EhmGPgjcQ0+q9UWRNybg/v1zZQARAQAB
+      tD9QdWxwY29yZSBBdXRvbWF0aWMgU2lnbmluZyBLZXkgKDMuODUpIDxwYWNrYWdl
+      c0B0aGVmb3JlbWFuLm9yZz6JAlgEEwEKAEIWIQS+x6NHNjwow0TgwE3AvXwch86h
+      QwUCaRSCowMbLwQFCQHhM4AFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgkQ
+      wL18HIfOoUMXqBAAtASEZtAnwVXBljY/6SyiraZqdbJhQ3V35xNq8DYRfCrCxzbm
+      oFT425K6PUCEMXj84894JSd1gq8+fFLDoP4cGYJunqFC1gfbWWEl/czbvPKK2Tw2
+      mCvgybqOzDyNSaZeFUSpymIXrga9xtfZkoMnMYTfZnYpGQ2iezaDvwgZ12qAVzuT
+      juuB45j+xSLCLgx4HmDcvFai51D150BBGL2oGkICfir6xMbr/BC/jxWVtiUonCTx
+      g/ESU3bvX2Je06J5jYQaTLUNC54e6t7YvHhJaN8TMPU8YqYOKSw4wBB+GCNZRgnp
+      OpROoX2FeogOFhmekJ1f7W+DWT2sItYZTmGdwkFqOHKNGiUbUcb6yyOdnIFVhGYV
+      DxSjNG5zVI93uz0qKAK6u8dEOnNSOwMgQtEr3fEY1+/BelG/PeAmlMcC//RKI9+r
+      ZPm8pJEGeGTzHdovZXejCrCn2C0nKFgPNiBZSY5goybIdtTaYeKl8WU7G0PBR5SJ
+      kLxPSjokx1oIV47gvH273UA4pP3FpDPgPntI4Kl55MkIl3PIqNw6Jf7QrQS1I3Ks
+      RlReAmnhRim22AP6zTbTEdia766XFYlq+WX/TyRCaANVo3n/PIFpU1YsLE4e+KfU
+      4iC0wb4pLiWPpUmKwJ6txoP4bTbBI7PYGnGAsC8/jUalxroyZ6Gihn9f3sY=
+      =ro3p
       -----END PGP PUBLIC KEY BLOCK-----
   - name: rpm-gpg-key-influx-archive
     content_type: gpg_key
@@ -1096,40 +1158,40 @@ foreman_repository_sets:
   - name: foreman
     repositories:
       # foreman 3.16
-      - name: Release_3.16_Enterprise_Linux_9_x86_64
-        content_type: yum
-        url: https://yum.theforeman.org/releases/3.16/el9/x86_64/
-        gpg_key: rpm-gpg-key-foreman
-        releasever: 9
-        basearch: "x86_64"
-        download_policy: on_demand
-      - name: Plugins_Release_3.16_Enterprise_Linux_9_x86_64
-        content_type: yum
-        url: https://yum.theforeman.org/plugins/3.16/el9/x86_64/
-        releasever: 9
-        basearch: "x86_64"
-        download_policy: on_demand
-      - name: Katello_Release_4.18_Enterprise_Linux_9_x86_64
-        content_type: yum
-        url: https://yum.theforeman.org/katello/4.18/katello/el9/x86_64/
-        gpg_key: rpm-gpg-key-foreman
-        releasever: 9
-        basearch: "x86_64"
-        download_policy: on_demand
-      - name: Candlepin_Release_4.6_Enterprise_Linux_9_x86_64
-        content_type: yum
-        url: https://yum.theforeman.org/candlepin/4.6/el9/x86_64/
-        gpg_key: rpm-gpg-key-candlepin
-        releasever: 9
-        basearch: "x86_64"
-        download_policy: on_demand
-      - name: Pulpcore_Release_3.73_Enterprise_Linux_9_x86_64
-        content_type: yum
-        url: https://yum.theforeman.org/pulpcore/3.73/el9/x86_64/
-        gpg_key: rpm-gpg-key-pulpcore
-        releasever: 9
-        basearch: "x86_64"
-        download_policy: on_demand
+#      - name: Release_3.16_Enterprise_Linux_9_x86_64
+#        content_type: yum
+#        url: https://yum.theforeman.org/releases/3.16/el9/x86_64/
+#        gpg_key: rpm-gpg-key-foreman
+#        releasever: 9
+#        basearch: "x86_64"
+#        download_policy: on_demand
+#      - name: Plugins_Release_3.16_Enterprise_Linux_9_x86_64
+#        content_type: yum
+#        url: https://yum.theforeman.org/plugins/3.16/el9/x86_64/
+#        releasever: 9
+#        basearch: "x86_64"
+#        download_policy: on_demand
+#      - name: Katello_Release_4.18_Enterprise_Linux_9_x86_64
+#        content_type: yum
+#        url: https://yum.theforeman.org/katello/4.18/katello/el9/x86_64/
+#        gpg_key: rpm-gpg-key-foreman
+#        releasever: 9
+#        basearch: "x86_64"
+#        download_policy: on_demand
+#      - name: Candlepin_Release_4.6_Enterprise_Linux_9_x86_64
+#        content_type: yum
+#        url: https://yum.theforeman.org/candlepin/4.6/el9/x86_64/
+#        gpg_key: rpm-gpg-key-candlepin
+#        releasever: 9
+#        basearch: "x86_64"
+#        download_policy: on_demand
+#      - name: Pulpcore_Release_3.73_Enterprise_Linux_9_x86_64
+#        content_type: yum
+#        url: https://yum.theforeman.org/pulpcore/3.73/el9/x86_64/
+#        gpg_key: rpm-gpg-key-pulpcore
+#        releasever: 9
+#        basearch: "x86_64"
+#        download_policy: on_demand
         # foreman 3.17
       - name: Release_3.17_Enterprise_Linux_9_x86_64
         content_type: yum
@@ -1340,16 +1402,17 @@ content_views:
 
   - name: foreman
     repositories:
-      - name: Release_3.16_Enterprise_Linux_9_x86_64
-        product: foreman
-      - name: Plugins_Release_3.16_Enterprise_Linux_9_x86_64
-        product: foreman
-      - name: Katello_Release_4.18_Enterprise_Linux_9_x86_64
-        product: foreman
-      - name: Candlepin_Release_4.6_Enterprise_Linux_9_x86_64
-        product: foreman
-      - name: Pulpcore_Release_3.73_Enterprise_Linux_9_x86_64
-        product: foreman
+#      - name: Release_3.16_Enterprise_Linux_9_x86_64
+#        product: foreman
+#      - name: Plugins_Release_3.16_Enterprise_Linux_9_x86_64
+#        product: foreman
+#      - name: Katello_Release_4.18_Enterprise_Linux_9_x86_64
+#        product: foreman
+#      - name: Candlepin_Release_4.6_Enterprise_Linux_9_x86_64
+#        product: foreman
+#      - name: Pulpcore_Release_3.73_Enterprise_Linux_9_x86_64
+#        product: foreman
+      # foreman 3.17
       - name: Release_3.17_Enterprise_Linux_9_x86_64
         product: foreman
       - name: Plugins_Release_3.17_Enterprise_Linux_9_x86_64
