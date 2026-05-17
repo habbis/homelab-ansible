@@ -8,12 +8,12 @@
 - name: /etc/yum.repos.d/puppet8-release.repo
   ansible.builtin.template:
     src: puppet8-release.repo.j2
-    dest: /etc/yum
+    dest: /etc/yum.repos.d/puppet8-release.repo
 
-- name: Remove lock
-  community.general.dnf_versionlock:
-    state: absent
-    name: puppet-agent
+#- name: Remove lock
+#  community.general.dnf_versionlock:
+#    state: absent
+#    name: puppet-agent
 
 - name: Install the dnf versionlock plugin
   ansible.builtin.dnf:
@@ -24,14 +24,14 @@
 - name: Install puppet-agent
   ansible.builtin.dnf:
     name:
-      - puppet-agent-{{ puppet_agent_version }}-1
+      - openvox-agent
     state: installed
 
-- name: Prevent puppet-agent from being updated
-  community.general.dnf_versionlock:
-    state: present
-    name:
-      - puppet-agent-{{ puppet_agent_version }}-1
+#- name: Prevent puppet-agent from being updated
+#  community.general.dnf_versionlock:
+#    state: present
+#    name:
+#      - puppet-agent-{{ puppet_agent_version }}-1
 
 - name: Start and enable puppet-agent
   ansible.builtin.service:

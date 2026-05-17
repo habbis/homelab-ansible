@@ -25,8 +25,9 @@ my_organization: habbfarm
 foreman_organization: habbfarm
 
 puppet_server: hf-puppet1.dc1.ncop.no
-debian_debfile: "openvox8-release-debian{{ ansible_distribution_major_version }}.deb"
-rpmfile: "openvox8-release-el-{{ ansible_distribution_major_version }}.noarch.rpm"
+puppet_release: 8
+debian_debfile: "openvox{{ puppet_release }}-release-debian{{ ansible_distribution_major_version }}.deb"
+rpmfile: "openvox{{ puppet_release }}-release-el-{{ ansible_distribution_major_version }}.noarch.rpm"
 package: openvox-agent
 service: puppet
 delete_puppet_ssl_dir: false

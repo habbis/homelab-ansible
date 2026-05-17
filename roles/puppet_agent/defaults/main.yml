@@ -1,7 +1,9 @@
 ---
-debian_debfile: "openvox8-release-debian{{ ansible_distribution_major_version }}.deb"
+puppet_release: 8
+debian_debfile: "openvox{{ puppet_release }}-release-debian{{ ansible_distribution_major_version }}.deb"
+rpmfile: "openvox{{ puppet_release }}-release-el-{{ ansible_distribution_major_version }}.noarch.rpm"
 puppet_dnf_gpg_key: https://yum.voxpupuli.org/GPG-KEY-openvox.pub
-puppet_agent_version: 8.10.0
+#puppet_agent_version: 8.10.0
 delete_puppet_ssl_dir: false
 package: openvox-agent
 apt_purge: false
