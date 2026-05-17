@@ -1,0 +1,5 @@
+---
+puppet_server: hf-puppet1.dc1.ncop.no
+debian_debfile: openvox8-release-debian13.deb
+rpmfile_release: openvox8-release-el-9.noarch.rpm
+fix_hosts: true

@@ -23,3 +23,25 @@ my_organization: habbfarm
 #foreman_organization:
 #  - "{{ my_organization }}"
 foreman_organization: habbfarm
+
+puppet_server: hf-puppet1.dc1.ncop.no
+debian_debfile: "openvox8-release-debian{{ ansible_distribution_major_version }}.deb"
+rpmfile: "openvox8-release-el-{{ ansible_distribution_major_version }}.noarch.rpm"
+package: openvox-agent
+service: puppet
+delete_puppet_ssl_dir: false
+apt_purge: false
+yum_purge: false
+run_puppet_agent: true
+fix_hosts: false
+#offline install
+offline_rpmfile: false
+offline_ubuntu_debfile: false
+offline_debain_debfile: false
+# online install
+online_rpmfile: true
+online_ubuntu_debfile: true
+online_debian_debfile: true
+# if having problem with
+# apt update repo proble
+fix_apt_missing: false   

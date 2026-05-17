@@ -1,6 +1,5 @@
 ---
-#debian_debfile: openvox8-release-debian13.deb
-debian_debfile: openvox8-release-debian13.deb
+debian_debfile: "openvox8-release-debian{ ansible_distribution_major_version }}.deb"
 puppet_dnf_gpg_key: https://yum.puppet.com/RPM-GPG-KEY-puppet
 puppet_server_version: 8.7.0
 puppet_agent_version: 8.10.0

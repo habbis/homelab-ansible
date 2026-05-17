@@ -1,9 +1,13 @@
 ---
 - name: setup puppet agent
-  hosts: puppet_agent
+  hosts: vms
   remote_user: ansible
   become: yes
   gather_facts: yes
 
   roles:
-    - role: habbfarm.puppet_agent
+    - role: puppet_agent
+
+  environment:
+    http_proxy: http://hf-proxy.no.habbfarm.net:8888
+    https_proxy: http://hf-proxy.no.habbfarm.net:8888

@@ -25,7 +25,10 @@
 - name: Install puppetserver and puppet-agent
   ansible.builtin.package:
     name:
-      - puppetserver
-      - puppet-agent
+      - openbolt
+      - openvox-agent
+      - openvox-server
+      - openvoxdb
+      - openvoxdb-termini
     state: latest
   when: ansible_pkg_mgr == "apt"

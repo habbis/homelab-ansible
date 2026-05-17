@@ -1,8 +1,9 @@
 ---
-debian_debfile: puppet8-release-bookworm.deb
-puppet_dnf_gpg_key: https://yum.puppet.com/RPM-GPG-KEY-puppet
+debian_debfile: "openvox8-release-debian{{ ansible_distribution_major_version }}.deb"
+puppet_dnf_gpg_key: https://yum.voxpupuli.org/GPG-KEY-openvox.pub
 puppet_agent_version: 8.10.0
 delete_puppet_ssl_dir: false
+package: openvox-agent
 apt_purge: false
 yum_purge: false
 run_puppet_agent: false
