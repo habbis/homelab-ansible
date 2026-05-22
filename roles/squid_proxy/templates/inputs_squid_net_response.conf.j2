@@ -1,0 +1,5 @@
+[[inputs.net_response]]
+  protocol = "tcp"
+  address = "{{ ansible_default_ipv4['address'] }}:{{ squid_http_port }}"
+  [inputs.net_response.tags]
+    targethost = "{{ ansible_fqdn }}"
