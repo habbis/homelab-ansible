@@ -1,6 +1,166 @@
 ---
-- name: restart squid
-  service: name=squid state=restarted
+- name: set proxy env upstream proxy /etc/profile.d
+  ansible.builtin.template:
+    src: proxy.sh.j2
+    dest: /etc/profile.d/proxy.sh
+    owner: root
+    group: root
+    mode: '0755'
 
-- name: restart telegraf
-  service: name=telegraf state=restarted
+- name: install rpm for squid
+  package:
+    name:
+      - squid
+      - git
+    state: present
+
+- name: make a mount point for cache
+  file:
+    path: /var/spool/squid
+    mode: 0750
+    owner: squid
+    group: squid
+    state: directory
+
+- name: create a logical volume for cache
+  lvol:
+    vg: "{{ squid_vg }}"
+    lv: VarSpoolSquid
+    size: "{{ squid_disksize }}"
+  when: lvm_disk
+
+- name: create the cache file system
+  filesystem:
+    fstype: xfs
+    dev: "/dev/{{ squid_vg }}/VarSpoolSquid"
+  when: lvm_disk
+
+- name: mount the cache file system
+  mount:
+    path: /var/spool/squid
+    src: "/dev/mapper/{{ squid_vg }}-VarSpoolSquid"
+    fstype: xfs
+    state: mounted
+  when: lvm_disk
+
+- name: give ownership of cache to squid
+  file:
+    path: /var/spool/squid
+    mode: 0750
+    owner: squid
+    group: squid
+    state: directory
+
+- name: set up the standard config file
+  template:
+    src: templates/squid.conf.j2
+    dest: /etc/squid/squid.conf
+    owner: root
+    group: squid
+    mode: 0640
+  notify: restart squid
+
+- name: create the conf.d subdirectory
+  file:
+    path: /etc/squid/conf.d
+    mode: 0750
+    owner: root
+    group: squid
+    state: directory
+
+- name: put a README.conf in conf.d
+  template:
+    src: templates/README.conf.j2
+    dest: /etc/squid/conf.d/README.conf
+    owner: root
+    group: squid
+    mode: 0640
+
+- name: set up logrotate processing
+  template:
+    src: templates/logrotate.j2
+    dest: /etc/logrotate.d/squid
+    owner: root
+    group: root
+    mode: 0644
+
+- name: create global domain folder
+  file:
+    path: /etc/squid/global
+    mode: 0750
+    owner: root
+    group: squid
+    state: directory
+
+- name: set up global domain file
+  template:
+    src: domains.txt.j2
+    dest: /etc/squid/global/domains.txt
+    owner: root
+    group: root
+    mode: 0644
+
+- name: set custom selinux port for squid
+  seport:
+    ports: "{{ squid_http_port }}"
+    proto: tcp
+    setype: squid_port_t
+    state: present
+
+- name: clone squid proxy domains
+  ansible.builtin.git:
+    repo: 'https://github.com/habbis/squid/habbfarm_squid_config.git'
+    dest: /etc/squid/habbfarm_squid_config
+    update: yes
+
+- name: permissions habbfarm_squid_domains
+  ansible.builtin.file:
+    path: /etc/squid/habbfarm_squid_config
+    recurse: yes
+    owner: root
+    group: squid
+    mode: '0640'
+
+- name: set right selinux label for squid config files
+  sefcontext:
+    target: '/etc/squid/(/.*)?'
+    setype: squid_var_run_t
+    state: present
+
+- name: set right selinux label for squid config files
+  command: restorecon -R -v /etc/squid/
+
+- name: set right selinux label for squid config files
+  sefcontext:
+    target: '/var/spool/squid/(/.*)?'
+    setype: squid_cache_t
+    state: present
+
+- name: set right selinux label for squid cache files
+  command: restorecon -R -v /var/spool/squid/
+
+- name: create our dedicated config directory for telegraf
+  file:
+    path: /etc/telegraf/telegraf.d/squid
+    mode: 0755
+    owner: root
+    group: root
+    state: directory
+
+- name: set up telegraf monitoring
+  template:
+    src: templates/inputs_squid_net_response.conf.j2
+    dest: /etc/telegraf/telegraf.d/squid/inputs_squid_net_response.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart telegraf
+  when: telegraf_installed
+
+- name: configure the squid service
+  service:
+    name: squid
+    state: started
+    enabled: yes
+
+
