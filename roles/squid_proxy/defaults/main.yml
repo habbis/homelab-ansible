@@ -1,2 +1,11 @@
 ---
-# defaults file for roles/squid_proxy
+squid_http_port: "8888"
+squid_disksize: 1024
+squid_vg: "vg0"
+squid_logrotate_interval: "daily"
+squid_logrotate_rotate: 30
+telegraf_installed: false
+upstream_proxy_server: proxy.dc1.ncop.no
+upstream_proxy_port: 8080
+lvm_disk: false
+
