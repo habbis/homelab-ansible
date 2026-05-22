@@ -1,2 +1,6 @@
 ---
-# tasks file for roles/squid_proxy
+- name: restart squid
+  service: name=squid state=restarted
+
+- name: restart telegraf
+  service: name=telegraf state=restarted
