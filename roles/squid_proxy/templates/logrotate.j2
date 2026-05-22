@@ -1,0 +1,19 @@
+/var/log/squid/*.log {
+  {{ squid_logrotate_interval }}
+  rotate {{ squid_logrotate_rotate }}
+  compress
+  notifempty
+  missingok
+  nocreate
+  dateyesterday
+  dateext
+  dateformat .%Y-%m-%d
+  sharedscripts
+  postrotate
+    # Asks squid to reopen its logs. (logfile_rotate 0 is set in squid.conf)
+    # errors redirected to make it silent if squid is not running
+    /usr/sbin/squid -k rotate 2>/dev/null
+    # Wait a little to allow Squid to catch up before the logs is compressed
+    sleep 1
+  endscript
+}
