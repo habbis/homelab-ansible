@@ -1,6 +1,6 @@
 ---
 - name: setup puppet agent
-  hosts: vms
+  hosts: all
   remote_user: ansible
   become: yes
   gather_facts: yes
